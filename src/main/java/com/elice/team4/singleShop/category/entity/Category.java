@@ -1,13 +1,12 @@
 package com.elice.team4.singleShop.category.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
 
 @Entity
 @Getter
@@ -20,13 +19,18 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true, length = 50)
     private String categoryName;
 
+    @Column(length = 100)
     private String categoryContent;
 
+    @Column(nullable = false, length = 50)
     private String categoryTheme;
 
     // TODO: Product 다대일 관계 필드 선언
+//    @OneToMany(mappedBy = "asdasd")
+//    final private List<Product> products = new ArrayList<>();
 
     public Category(String categoryName, String categoryContent, String categoryTheme) {
         this.categoryName = categoryName;
