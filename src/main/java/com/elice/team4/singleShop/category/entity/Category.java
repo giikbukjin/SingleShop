@@ -22,7 +22,7 @@ public class Category {
     @Column(nullable = false, unique = true, length = 50)
     private String categoryName;
 
-    @Column(length = 100)
+    @Column(nullable = false, length = 100)
     private String categoryContent;
 
     @Column(nullable = false, length = 50)
