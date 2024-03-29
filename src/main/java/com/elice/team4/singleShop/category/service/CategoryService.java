@@ -24,10 +24,13 @@ public class CategoryService {
 
     public Category findCategory(Long categoryId) {
         Category foundCategory = categoryRepository.findById(categoryId).orElse(null);
-        // TODO: 카테고리 미조회 예외처리 Exception 클래스 만들기
         if(foundCategory == null) {
             throw new CategoryNotFoundException();
         }
         return foundCategory;
+    }
+
+    public Category createCategory(Category category) {
+        return categoryRepository.save(category);
     }
 }
