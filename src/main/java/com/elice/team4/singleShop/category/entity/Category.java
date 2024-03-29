@@ -25,16 +25,12 @@ public class Category {
     @Column(nullable = false, length = 100)
     private String categoryContent;
 
-    @Column(nullable = false, length = 50)
-    private String categoryTheme;
-
     // TODO: Product 다대일 관계 필드 선언
 //    @OneToMany(mappedBy = "asdasd")
 //    final private List<Product> products = new ArrayList<>();
 
-    public Category(String categoryName, String categoryContent, String categoryTheme) {
+    public Category(String categoryName, String categoryContent) {
         this.categoryName = categoryName;
         this.categoryContent = categoryContent;
-        this.categoryTheme = categoryTheme;
     }
 }
