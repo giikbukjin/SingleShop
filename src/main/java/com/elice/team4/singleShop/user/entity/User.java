@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
@@ -33,6 +34,7 @@ public class User {
     private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
+    @ColumnDefault("CONSUMER") //TODO: 코치님에게 질문하기
     private Role role;
 
 //    TODO: 매핑필요
