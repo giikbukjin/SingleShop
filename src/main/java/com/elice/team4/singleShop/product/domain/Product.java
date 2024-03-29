@@ -8,7 +8,7 @@ import lombok.Setter;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Getter @Setter
-public abstract class Product {
+public class Product {
 
     @Id
     @GeneratedValue
