@@ -26,7 +26,7 @@ public class Category {
     private String categoryContent;
 
     // TODO: Product 다대일 관계 필드 선언
-//    @OneToMany(mappedBy = "asdasd")
+//    @OneToMany(mappedBy = "product")
 //    final private List<Product> products = new ArrayList<>();
 
     public Category(String categoryName, String categoryContent) {
