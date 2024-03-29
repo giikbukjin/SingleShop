@@ -1,4 +1,4 @@
-package com.elice.team4.singleShop.product.exception;
+package com.elice.team4.singleShop.global.exception;
 
 public class NotEnoughStockException extends RuntimeException {
     public NotEnoughStockException() {

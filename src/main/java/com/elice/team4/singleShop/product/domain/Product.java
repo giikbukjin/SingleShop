@@ -1,6 +1,6 @@
 package com.elice.team4.singleShop.product.domain;
 
-import com.elice.team4.singleShop.product.exception.NotEnoughStockException;
+import com.elice.team4.singleShop.global.exception.NotEnoughStockException;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
