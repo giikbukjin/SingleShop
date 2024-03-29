@@ -34,7 +34,7 @@ public class User {
     private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
-    @ColumnDefault("CONSUMER") //TODO: 코치님에게 질문하기
+    @ColumnDefault("CONSUMER") //TODO: 코치님에게 질문하기(Bean Validation 의존성 추가)
     private Role role;
 
 //    TODO: 매핑필요
@@ -48,10 +48,15 @@ public class User {
 //    TODO: 매핑필요
 //    @OneToMany(mappedBy = "user")
 //    private Order order;
-
     public enum Role{
         CONSUMER,
         SELLER,
         ADMIN
+    }
+
+    public void update(String name, String password, String email){
+        this.name = name;
+        this.password = password;
+        this.email = email;
     }
 }
