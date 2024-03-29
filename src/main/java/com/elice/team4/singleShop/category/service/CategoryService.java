@@ -2,9 +2,12 @@ package com.elice.team4.singleShop.category.service;
 
 import com.elice.team4.singleShop.category.entity.Category;
 import com.elice.team4.singleShop.category.repository.CategoryRepository;
+import com.elice.team4.singleShop.global.exception.CategoryNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -15,12 +18,16 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
+    public List<Category> findCategories() {
+        return categoryRepository.findAll();
+    }
+
     public Category findCategory(Long categoryId) {
         Category foundCategory = categoryRepository.findById(categoryId).orElse(null);
         // TODO: 카테고리 미조회 예외처리 Exception 클래스 만들기
-//        if(foundCategory == null) {
-//            throw new CategoryNotFoundException();
-//        }
+        if(foundCategory == null) {
+            throw new CategoryNotFoundException();
+        }
         return foundCategory;
     }
 }
