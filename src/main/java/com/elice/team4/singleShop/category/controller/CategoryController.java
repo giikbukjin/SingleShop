@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -56,4 +57,35 @@ public class CategoryController {
         return "redirect:/";
     }
 
+    @GetMapping("/{id}/edit")
+    public String editCategoryGet(@PathVariable Long categoryId, Model model) {
+        Category category = categoryService.findCategory(categoryId);
+        model.addAttribute("category", category);
+
+        //TODO: category 수정 html 페이지 경로 지정
+        return "";
+    }
+
+    @PostMapping("/{id}/edit")
+    public String editCategoryPost(@PathVariable Long categoryId,
+                                   @ModelAttribute CategoryDto categoryDto,
+                                   RedirectAttributes redirectAttributes) {
+        Category category = categoryMapper.CategoryDtoToCategory(categoryDto);
+        Category updatedCategory = categoryService.updateCategory(category, categoryId);
+
+        redirectAttributes.addAttribute("categoryId", updatedCategory.getId());
+        redirectAttributes.addFlashAttribute("message", "카테고리가 수정되었습니다.");
+
+        //TODO: redirect 경로 지정 - 해당 카테고리 상세 페이지
+        return "redirect:";
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteCategory(@PathVariable Long categoryId, RedirectAttributes redirectAttributes) {
+        categoryService.deleteCategory(categoryId);
+        redirectAttributes.addFlashAttribute("message", "카테고리가 삭제되었습니다.");
+
+        //TODO: redirect 경로 지정 - 카테고리 관리 페이지
+        return "redirect:";
+    }
 }

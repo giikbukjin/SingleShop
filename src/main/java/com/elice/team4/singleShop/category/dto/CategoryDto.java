@@ -10,5 +10,4 @@ import lombok.Setter;
 public class CategoryDto {
     private String categoryName;
     private String categoryContent;
-    private String categoryTheme;
 }
