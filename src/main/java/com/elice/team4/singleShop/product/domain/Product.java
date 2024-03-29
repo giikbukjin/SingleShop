@@ -1,30 +1,46 @@
 package com.elice.team4.singleShop.product.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.elice.team4.singleShop.product.exception.NotEnoughStockException;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Getter @Setter
-@Table (name = "product")
-public class Product {
+public abstract class Product {
 
     @Id
-    private int product_id;
+    @GeneratedValue
+    @Column(name = "product_id")
+    private Long id;
 
-    private String product_name;
+    private String name;
 
-    private String product_category;
+    // todo: ERD 관계 추가 (카테고리)
+    private String category;
 
-    private String product_summary;
+    private String summary;
 
-    private String product_description;
+    private String description;
 
-    private String product_image;
+    private String image;
 
-    private int product_stock;
+    private int stock;
 
-    private int product_price;
+    private int price;
+
+
+    // *** 재고 수량 증가 ***
+    public void addStock(int quantity) {
+        this.stock += quantity;
+    }
+    // *** 재고 수량 감소 ***
+    public void removeStock(int quantity) {
+        int restStock = this.stock - quantity;
+        if (restStock < 0) {
+            throw new NotEnoughStockException("Need More Stock");
+        }
+        this.stock = restStock;
+    }
 }
