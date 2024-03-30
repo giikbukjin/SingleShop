@@ -2,7 +2,7 @@ package com.elice.team4.singleShop.category.service;
 
 import com.elice.team4.singleShop.category.entity.Category;
 import com.elice.team4.singleShop.category.repository.CategoryRepository;
-import com.elice.team4.singleShop.category.exception.CategoryNotFoundException;
+import com.elice.team4.singleShop.global.exception.CategoryNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
