@@ -15,7 +15,6 @@ public class ProductController {
 
     @GetMapping("/view/seller/new")
     public String createForm(Model model) {
-//        model.addAttribute("form", new ProductForm());
         return "products/createProductForm";
     }
 

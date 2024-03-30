@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -15,15 +16,16 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     @Transactional
-    public void saveProduct(Product product) {
-        productRepository.save(product);
+    public Product saveProduct(Product product) {
+        return productRepository.save(product);
     }
 
     public List<Product> findProducts() {
         return productRepository.findAll();
     }
 
-    public Product findOne(Long productId) {
-        return productRepository.findOne(productId);
+    public Optional<Product> findOne(Long productId) {
+        // 상품 ID로 상품 조회, 결과가 없으면 Optional.empty() 반환
+        return productRepository.findById(productId);
     }
 }
