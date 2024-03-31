@@ -33,4 +33,13 @@ public class Category {
         this.categoryName = categoryName;
         this.categoryContent = categoryContent;
     }
+
+    public void update(Category updatedCategory) {
+        if (updatedCategory.getCategoryName() != null) {
+            this.categoryName = updatedCategory.getCategoryName();
+        }
+        if (updatedCategory.getCategoryContent() != null) {
+            this.categoryContent = updatedCategory.getCategoryContent();
+        }
+    }
 }

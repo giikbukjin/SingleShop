@@ -38,10 +38,7 @@ public class CategoryService {
         Category foundCategory = categoryRepository.findById(category.getId())
                 .orElseThrow(() -> new CategoryNotFoundException());
 
-        Optional.ofNullable(category.getCategoryName())
-                .ifPresent(categoryName -> foundCategory.setCategoryName(categoryName));
-        Optional.ofNullable(category.getCategoryContent())
-                .ifPresent(categoryContent -> foundCategory.setCategoryContent(categoryContent));
+        foundCategory.update(category);
 
         return categoryRepository.save(foundCategory);
     }
