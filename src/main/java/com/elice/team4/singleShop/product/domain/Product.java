@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@Getter @Setter
+@Getter
+@Setter
 public class Product {
 
     @Id
@@ -35,6 +35,7 @@ public class Product {
     public void addStock(int quantity) {
         this.stock += quantity;
     }
+
     // *** 재고 수량 감소 ***
     public void removeStock(int quantity) {
         int restStock = this.stock - quantity;
