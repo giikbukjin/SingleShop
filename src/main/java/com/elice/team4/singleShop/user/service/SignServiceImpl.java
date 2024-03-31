@@ -6,6 +6,7 @@ import com.elice.team4.singleShop.user.entity.User;
 import com.elice.team4.singleShop.user.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -16,9 +17,11 @@ public class SignServiceImpl implements SignService{
 
     private final Logger LOGGER = LoggerFactory.getLogger(SignServiceImpl.class);
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public SignServiceImpl(UserRepository userRepository){
+    public SignServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -29,14 +32,14 @@ public class SignServiceImpl implements SignService{
             user = User.builder()
                     .name(name)
                     .email(email)
-//                    .password(passwordEncoder.encode(password)) TODO: passwordEncoder필요
+                    .password(passwordEncoder.encode(password))
 //                    .roles(Collections.singletonList(password))
                     .build();
         } else {
             user = User.builder()
                     .name(name)
                     .email(email)
-//                    .password(passwordEncoder.encode(password)) TODO: passwordEncoder필요
+                    .password(passwordEncoder.encode(password))
 //                    .roles(Collections.singletonList("ROLE_USER"))
                     .build();
         }
