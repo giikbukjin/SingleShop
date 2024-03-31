@@ -23,10 +23,9 @@ public class CategoryService {
     }
 
     public Category findCategory(Long categoryId) {
-        Category foundCategory = categoryRepository.findById(categoryId).orElse(null);
-        if(foundCategory == null) {
-            throw new CategoryNotFoundException();
-        }
+        Category foundCategory = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new CategoryNotFoundException());
+
         return foundCategory;
     }
 
@@ -37,10 +36,7 @@ public class CategoryService {
     public Category updateCategory(Category category, Long categoryId) {
         category.setId(categoryId);
         Category foundCategory = categoryRepository.findById(category.getId())
-                .orElse(null);
-        if(foundCategory == null) {
-            throw new CategoryNotFoundException();
-        }
+                .orElseThrow(() -> new CategoryNotFoundException());
 
         Optional.ofNullable(category.getCategoryName())
                 .ifPresent(categoryName -> foundCategory.setCategoryName(categoryName));
@@ -51,11 +47,8 @@ public class CategoryService {
     }
 
     public void deleteCategory(Long categoryId) {
-        Category foundCategory = categoryRepository.findById(categoryId).orElse(null);
-
-        if(foundCategory == null) {
-            throw new CategoryNotFoundException();
-        }
+        Category foundCategory = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new CategoryNotFoundException());
 
         categoryRepository.delete(foundCategory);
     }
