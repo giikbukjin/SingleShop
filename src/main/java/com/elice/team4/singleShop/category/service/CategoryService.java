@@ -29,10 +29,12 @@ public class CategoryService {
         return foundCategory;
     }
 
+    @Transactional
     public Category createCategory(Category category) {
         return categoryRepository.save(category);
     }
 
+    @Transactional
     public Category updateCategory(Category category, Long categoryId) {
         category.setId(categoryId);
         Category foundCategory = categoryRepository.findById(category.getId())
@@ -43,6 +45,7 @@ public class CategoryService {
         return categoryRepository.save(foundCategory);
     }
 
+    @Transactional
     public void deleteCategory(Long categoryId) {
         Category foundCategory = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CategoryNotFoundException());
