@@ -24,7 +24,8 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Product findOne(Long productId) {
-        return productRepository.findOne(productId);
+    public Optional<Product> findOne(Long productId) {
+        // 상품 ID로 상품 조회, 결과가 없으면 Optional.empty() 반환
+        return productRepository.findById(productId);
     }
 }
