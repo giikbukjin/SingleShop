@@ -11,6 +11,7 @@
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.idea/misc.xml
 
 # AWS User-specific
 .idea/**/aws.xml
@@ -30,6 +31,7 @@
 # Gradle
 .idea/**/gradle.xml
 .idea/**/libraries
+.gradle
 
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,
@@ -55,6 +57,7 @@ cmake-build-*/
 
 # IntelliJ
 out/
+.idea
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
