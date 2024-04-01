@@ -56,15 +56,14 @@ public class User implements UserDetails {
     @ColumnDefault("CONSUMER") //TODO: 코치님에게 질문하기(Bean Validation 의존성 추가)
     private Role role;
 
-
-//    @OneToMany(mappedBy = "user") TODO: 진서님 Product엔티티에 User컬럼 추가 요망
-//    private Product product;
+    @OneToMany(mappedBy = "user")
+    private List<Product> product = new ArrayList<>();
 
     @OneToOne(mappedBy = "user")
     private Cart cart;
 
 //    @OneToMany(mappedBy = "user") TODO: 민상님 Order엔티티 주석 제거 요망
-//    private Order order;
+//    private List<Order> order = new ArrayList<>();
 
     public enum Role{
         CONSUMER,
