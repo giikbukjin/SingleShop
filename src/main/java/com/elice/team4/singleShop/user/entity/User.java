@@ -62,8 +62,8 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "user")
     private Cart cart;
 
-//    @OneToMany(mappedBy = "user") TODO: 민상님 Order엔티티 주석 제거 요망
-//    private List<Order> order = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<Order> order = new ArrayList<>();
 
     public enum Role{
         CONSUMER,
