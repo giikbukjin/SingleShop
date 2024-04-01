@@ -1,5 +1,6 @@
 package com.elice.team4.singleShop.category.entity;
 
+import com.elice.team4.singleShop.product.domain.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -33,9 +35,8 @@ public class Category {
     @Column(nullable = false, updatable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt;
 
-    // TODO: Product 다대일 관계 필드 선언
-//    @OneToMany(mappedBy = "product")
-//    final private List<Product> products = new ArrayList<>();
+    @OneToMany(mappedBy = "product")
+    private List<Product> products = new ArrayList<>();
 
     public Category(String categoryName, String categoryContent) {
         this.categoryName = categoryName;
