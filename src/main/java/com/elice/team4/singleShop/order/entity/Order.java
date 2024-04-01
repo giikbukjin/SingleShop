@@ -1,77 +1,89 @@
 package com.elice.team4.singleShop.order.entity;
 
+import com.elice.team4.singleShop.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-//import javax.annotation.processing.Generated;
-import java.time.LocalDate;
-//import java.time.LocalDateTime;
-//import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Getter
-@Setter
+@Getter @Setter
+@MappedSuperclass
+@EntityListeners(value = {AuditingEntityListener.class})
 public class Order {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id; // order_id
+    private Long id; // order_id
 
-    private String status; // 주문처리현황
+    private LocalDateTime orderDate; // 주문일
 
-    private int price; // 총 금액
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus; // 주문 상태
 
-    //@ManyToOne
-    //@JoinColumn(name = 'user_id')
-    //private User user; // 사용자는 여러 개의 주문내역 존재
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItems = new ArrayList<>();
 
-    //@OneToOne
-    //@JoinColumn(name = "cart_id")
-    //private Cart cart;
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime regTime; // 등록 시간
 
-    //@OneToMany
-    //private List<Product> products = new ArrayList<>(); // 주문은 여러 개의 상품 가질 수 있음
+    @LastModifiedDate
+    private LocalDateTime updateTime; // 수정 시간
 
-    /*@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
-    private LocalDate createDate; // 주문 날짜
+    @CreatedBy
+    @Column(updatable = false)
+    private String createdBy; // 등록자
 
-    @PrePersist
-    public void createDate() {
-        this.createDate = LocalDate.now();
-    } // 현재 날짜로 설정해 생성일 기록 */
+    @LastModifiedDate
+    private String modifiedBy; // 수정자
 
-    /*public void addProduct(Product product) {
-        products.add(product); // 리스트에 상품 추가
-        product.setOrder(this); // 상품에 주문 설정
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user; // 사용자는 여러 개의 주문내역 존재
+
+    public enum OrderStatus {
+        ORDER, CANCEL
     }
 
-    // 사용자가 여러 제품 주문
-    public static Order creatOrder(User user, List<Product> productList) {
-        Order order = new Order(); // 새로운 Order 객체 생성
-        order.setUser(user); // 사용자 설정
-
-        // productList에 있는 각 Product를 주문에 추가
-        for (Product product : productList) {
-            order.addProduct(product);
-        }
-        order.setCreateDate(order.createDate); // 생성 날짜 설정
-        return order;
+    public void addOrderItem(OrderItem orderItem) { // 주문 상품 정보 담기, orderItem 객체를 order 객체의 orderItems에 추가
+        orderItems.add(orderItem);
+        orderItem.setOrder(this); // orderItem 객체에도 order 세팅
     }
 
-    // 사용자가 단일 제품 주문
-    public static Order createOrder(User user) {
+    public static Order createOrder(User user, List<OrderItem> orderItemList) {
         Order order = new Order();
-        order.setUser(user);
-        order.setCreateDate(order.createDate);
+        order.setUser(user); // 상품 주문한 회원 정보 세팅
+        for (OrderItem orderItem : orderItemList) { // 여러 개의 상품 주문 가능
+            order.addOrderItem(orderItem);
+        }
+        order.setOrderStatus(OrderStatus.ORDER); // 주문 상태를 "ORDER"로 세팅
+        order.setOrderDate(LocalDateTime.now()); // 현재 시간을 주문 시간으로 세팅
         return order;
     }
 
-    public int getPrice() {
-        int price = 0;
-        for(Product product : products) {
-            price += product.getPrice();
+    // 총 주문 금액
+    public int getTotalPrice() {
+        int totalPrice = 0;
+        for (OrderItem orderItem : orderItems) {
+            totalPrice += orderItem.getTotalPrice();
         }
-        return price;
-    }*/
+        return totalPrice;
+    }
+
+    // 주문 취소
+    public void cancelOrder() {
+        this.orderStatus = OrderStatus.CANCEL;
+
+        for(OrderItem orderItem : orderItems) {
+            orderItem.cancel();
+        }
+    }
 }
