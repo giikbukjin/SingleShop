@@ -1,5 +1,6 @@
 package com.elice.team4.singleShop.product.domain;
 
+import com.elice.team4.singleShop.cart.entity.Cart;
 import com.elice.team4.singleShop.category.entity.Category;
 import com.elice.team4.singleShop.global.exception.NotEnoughStockException;
 import com.elice.team4.singleShop.user.entity.User;
@@ -17,7 +18,7 @@ public class Product {
     @Id
     @GeneratedValue
     @Column(name = "product_id")
-    private int id;
+    private Long id;
 
     private String name;
 
@@ -47,9 +48,9 @@ public class Product {
     private Cart cart;
 
     // ERD 관계 추가 (order_item)
-    @OneToMany(mappedBy = "product")
-    @JoinColumn(name = "order_item_id")
-    private List<OrderItem> orderItem = new ArrayList<>();
+//    @OneToMany(mappedBy = "product")
+//    @JoinColumn(name = "order_item_id")
+//    private List<OrderItem> orderItem = new ArrayList<>();
 
 
     // *** 재고 수량 증가 ***
@@ -60,6 +61,7 @@ public class Product {
     // *** 재고 수량 감소 ***
     public void removeStock(int quantity) {
         int restStock = this.stock - quantity;
+
         if (restStock < 0) {
             throw new NotEnoughStockException("Need More Stock");
         }
