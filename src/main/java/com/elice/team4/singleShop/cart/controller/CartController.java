@@ -17,7 +17,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/cart")
-public class CartController {
+public class CartController {/*
 
     private final CartService cartService;
     private final UserService userService;
@@ -93,5 +93,5 @@ public class CartController {
             // 사용자가 존재하지 않는 경우에 대한 처리
             return "redirect:/";
         }
-    }
+    }*/
 }

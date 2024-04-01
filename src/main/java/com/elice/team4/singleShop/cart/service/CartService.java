@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CartService {
+public class CartService {/*
 
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
@@ -82,5 +82,5 @@ public class CartService {
             selectedProducts.forEach(selectedProduct -> cart.getProducts().removeIf(p -> p.getId().equals(selectedProduct.getId())));
             cartRepository.save(cart);
         }
-    }
+    }*/
 }
