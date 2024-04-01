@@ -60,6 +60,7 @@ cmake-build-*/
 *.iws
 
 # IntelliJ
+application.properties
 out/
 .idea/modules.xml
 .idea/jarRepositories.xml
