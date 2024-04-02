@@ -1,5 +1,7 @@
 package com.elice.team4.singleShop.global.config;
 
+import com.elice.team4.singleShop.user.jwt.JwtTokenFilter;
+import com.elice.team4.singleShop.user.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -14,11 +16,16 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 public class SecurityConfig{
+    private final JwtTokenProvider jwtTokenProvider;
+
+    public SecurityConfig(JwtTokenProvider jwtTokenProvider){
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -31,15 +38,16 @@ public class SecurityConfig{
         // csrf, http basic 비활성화
         http.csrf(AbstractHttpConfigurer::disable);
         http.formLogin(AbstractHttpConfigurer::disable);
-        http.httpBasic(AbstractHttpConfigurer::disable);
+        http.httpBasic(AbstractHttpConfigurer::disable)
+                .addFilterBefore(new JwtTokenFilter(jwtTokenProvider),
+                        UsernamePasswordAuthenticationFilter.class);
 
         // 세션 사용 안함
         http.setSharedObject(SessionManagementConfigurer.class,
                 new SessionManagementConfigurer<HttpSecurity>().sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         // 페이지 별 권한 설정
-        http
-                .authorizeHttpRequests((auth)->auth
+        http.authorizeHttpRequests((auth)->auth
 //                .requestMatchers("users/signup","/","users/login").permitAll()  // 홈, 로그인, 가입 페이지는 전체 허가
 //                .requestMatchers("/admin").hasRole("ADMIN")   // 관리자 페이지는 관리자만
                                 .anyRequest()
