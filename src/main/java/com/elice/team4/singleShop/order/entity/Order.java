@@ -15,8 +15,8 @@ import java.util.List;
 
 @Entity
 @Getter @Setter
-@MappedSuperclass
-@EntityListeners(value = {AuditingEntityListener.class})
+//@MappedSuperclass
+//@EntityListeners(value = {AuditingEntityListener.class})
 public class Order {
 
     @Id
