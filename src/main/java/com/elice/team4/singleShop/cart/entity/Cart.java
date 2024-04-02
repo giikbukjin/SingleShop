@@ -18,20 +18,13 @@ import java.util.List;
 @NoArgsConstructor
 public class Cart {
 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cartId;
-
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name="product_id")
-    private List<Product> products = new ArrayList<>();     // 1대다
+    private Long id;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="user_id")
     private User user;        //1대1
-
-    @OneToMany
-    @JoinColumn(name= "order_item")
-    private Order order;        //카트와 오더 맵핑 괜찮나?
 
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     private LocalDate createDate;
@@ -47,6 +40,5 @@ public class Cart {
 
         return cart;
     }
-
 
 }
