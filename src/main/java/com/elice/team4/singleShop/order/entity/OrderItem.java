@@ -27,9 +27,9 @@ public class OrderItem {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @ManyToOne
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
+//    @ManyToOne
+//    @JoinColumn(name = "cart_id")
+//    private Cart cart;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
