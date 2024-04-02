@@ -9,7 +9,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,7 +26,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-//@EntityListeners(AuditingEntityListener.class)
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "user_table")
 public class User implements UserDetails {
 
@@ -50,11 +49,12 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String email;
 
+    @Column
     @CreatedDate
     private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
-    @ColumnDefault("CONSUMER") //TODO: 코치님에게 질문하기(Bean Validation 의존성 추가)
+    @Column(columnDefinition = "varchar(255) default 'CONSUMER'")
     private Role role;
 
     @OneToMany(mappedBy = "user")

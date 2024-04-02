@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
-@MappedSuperclass
-@EntityListeners(value = {AuditingEntityListener.class})
+//@MappedSuperclass
+//@EntityListeners(value = {AuditingEntityListener.class})
 public class OrderItem {
 
     @Id @GeneratedValue
