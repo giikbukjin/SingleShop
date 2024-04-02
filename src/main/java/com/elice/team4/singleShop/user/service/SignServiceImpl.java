@@ -1,5 +1,6 @@
 package com.elice.team4.singleShop.user.service;
 
+import com.elice.team4.singleShop.global.response.Response;
 import com.elice.team4.singleShop.user.dto.LogInResultDto;
 import com.elice.team4.singleShop.user.dto.SignUpResultDto;
 import com.elice.team4.singleShop.user.entity.User;
@@ -34,14 +35,14 @@ public class SignServiceImpl implements SignService{
                     .name(name)
                     .email(email)
                     .password(passwordEncoder.encode(password))
-//                    .roles(Collections.singletonList(password))
+                    .role(User.Role.ADMIN)
                     .build();
         } else {
             user = User.builder()
                     .name(name)
                     .email(email)
                     .password(passwordEncoder.encode(password))
-//                    .roles(Collections.singletonList("ROLE_USER"))
+                    .role(User.Role.CONSUMER)
                     .build();
         }
 
@@ -84,11 +85,15 @@ public class SignServiceImpl implements SignService{
         return logInResultDto;
     }
 
-    private void setSuccessResult(SignUpResultDto result){
-        result.setSuccess(true);
+    private void setSuccessResult(SignUpResultDto signUpResult){
+        signUpResult.setSuccess(true);
+        signUpResult.setCode(Response.SUCCESS.getCode());
+        signUpResult.setMessage(Response.SUCCESS.getMessage());
     }
 
-    private void setFailResult(SignUpResultDto result){
-        result.setSuccess(false);
+    private void setFailResult(SignUpResultDto signUpResult){
+        signUpResult.setSuccess(false);
+        signUpResult.setCode(Response.FAIL.getCode());
+        signUpResult.setMessage(Response.FAIL.getMessage());
     }
 }
