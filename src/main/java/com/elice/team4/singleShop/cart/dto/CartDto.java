@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.User;
 public class CartDto {/*
 
     private Long cartId;
-    private Product product;
     private int quantity;
     private User user;
 */
