@@ -35,7 +35,7 @@ public class Category {
     @Column(nullable = false, updatable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "id")
     private List<Product> products = new ArrayList<>();
 
     public Category(String categoryName, String categoryContent) {
