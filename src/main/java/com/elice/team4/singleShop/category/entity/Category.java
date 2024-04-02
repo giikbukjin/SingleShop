@@ -43,6 +43,9 @@ public class Category {
         this.categoryContent = categoryContent;
     }
 
+    public Category(String categoryName) {
+    }
+
     public void update(Category updatedCategory) {
         if (updatedCategory.getCategoryName() != null) {
             this.categoryName = updatedCategory.getCategoryName();
