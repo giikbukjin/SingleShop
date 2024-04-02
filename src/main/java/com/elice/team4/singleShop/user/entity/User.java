@@ -27,7 +27,8 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
+//@EntityListeners(AuditingEntityListener.class)
+@Table(name = "user_table")
 public class User implements UserDetails {
 
     @Id
