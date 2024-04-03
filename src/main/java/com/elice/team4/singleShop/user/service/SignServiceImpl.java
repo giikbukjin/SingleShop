@@ -27,7 +27,7 @@ public class SignServiceImpl implements SignService{
     }
 
     @Override
-    public SignUpResultDto signUp(String password, String name, String email, String role) {
+    public SignUpResultDto signUp(String name, String password, String email, String role) {
         log.info("[getSignUpResult] 회원 가입 정보 전달");
         User user;
         if (role.equalsIgnoreCase("admin")) {

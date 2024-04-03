@@ -40,7 +40,7 @@ public class User implements UserDetails {
     private String name;
 
     @NotBlank(message = "비밀번호는 비어있을 수 없습니다.")
-    @Size(min = 8, max = 15, message = "비밀번호는 8 ~ 15자 이어야 합니다.")
+    @Size(min = 8, max = 225, message = "비밀번호는 8 ~ 15자 이어야 합니다.")
     @Column(nullable = false)
     private String password;
 
