@@ -3,12 +3,14 @@ package com.elice.team4.singleShop.product.domain;
 import com.elice.team4.singleShop.cart.entity.Cart;
 import com.elice.team4.singleShop.category.entity.Category;
 import com.elice.team4.singleShop.global.exception.NotEnoughStockException;
+import com.elice.team4.singleShop.order.entity.OrderItem;
 import com.elice.team4.singleShop.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -48,9 +50,8 @@ public class Product {
     private Cart cart;
 
     // ERD 관계 추가 (order_item)
-//    @OneToMany(mappedBy = "product")
-//    @JoinColumn(name = "order_item_id")
-//    private List<OrderItem> orderItem = new ArrayList<>();
+    @OneToMany(mappedBy = "product")
+    private List<OrderItem> orderItems = new ArrayList<>();
 
 
     // *** 재고 수량 증가 ***

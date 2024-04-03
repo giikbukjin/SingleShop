@@ -1,16 +1,19 @@
-package com.elice.team4.singleShop.product.controller;
+package com.elice.team4.singleShop.product.dto;
 
+import com.elice.team4.singleShop.category.entity.Category;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class ProductForm {
+@AllArgsConstructor
+public class ProductDto {
     private Long id;
 
     private String name;
 
-    private String category;
+    //private Category category;
 
     private String summary;
 

@@ -60,7 +60,7 @@ cmake-build-*/
 *.iws
 
 # IntelliJ
-application.properties
+src/main/resources/application.properties
 out/
 .idea
 
