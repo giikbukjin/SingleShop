@@ -68,6 +68,7 @@
   </div>
 </nav>
 
+
 <!-- 제품 추가 폼(Form) -->
 <section class="section">
   <div class="container">
@@ -75,7 +76,7 @@
       <h1 class="subtitle is-4">제품 등록</h1>
     </div>
     <div class="register-product-form-container">
-      <form class="box register-product-form-box" id="registerProductForm">
+      <form class="box register-product-form-box" id="registerProductForm" action="/seller/new" method="post">
         <p class="title is-5 has-text-primary">제품을 판매해 보세요</p>
         <div class="field">
           <label class="label" for="titleInput">제품 이름</label>
@@ -225,7 +226,7 @@
         ></div>
 
         <div class="mt-5">
-          <button class="button is-primary is-fullwidth" id="submitButton">
+          <button type="submit" class="button is-primary is-fullwidth" id="submitButton">
             제품 판매하기
           </button>
         </div>

@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -50,10 +51,12 @@ public class SecurityConfig{
         http.authorizeHttpRequests((auth)->auth
 //                .requestMatchers("users/signup","/","users/login").permitAll()  // 홈, 로그인, 가입 페이지는 전체 허가
 //                .requestMatchers("/admin").hasRole("ADMIN")   // 관리자 페이지는 관리자만
-                                .anyRequest()
-                                .permitAll()
-//                    .authenticated()   //인증된 사용자만 접근 허용
-                );
+//                                .anyRequest()
+//                                .permitAll()
+//                                .authenticated()   //인증된 사용자만 접근 허용
+            .requestMatchers("/seller/new").permitAll()  // POST 메서드로 /seller/new에 접근하는 경우 전체 허가
+                        .anyRequest().authenticated() // 그 외의 모든 요청은 인증 필요
+        );
 
         return http.build();
     }
