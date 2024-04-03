@@ -1,5 +1,6 @@
 package com.elice.team4.singleShop.user.controller;
 
+import com.elice.team4.singleShop.user.dto.LogInRequestDto;
 import com.elice.team4.singleShop.user.dto.LogInResultDto;
 import com.elice.team4.singleShop.user.dto.SignUpRequestDto;
 import com.elice.team4.singleShop.user.dto.SignUpResultDto;
@@ -18,17 +19,19 @@ public class UserController {
         this.signService = signService;
     }
 
-    @PostMapping(value = "/sign-in")
-    public LogInResultDto signIn(@Valid @RequestBody String id, @Valid @RequestBody String password)
+    @PostMapping(value = "/log-in")
+    public LogInResultDto logIn(@Valid @RequestBody LogInRequestDto logInRequestDto)
             throws RuntimeException {
-        log.info("[signIn] 로그인을 시도하고 있습니다. id : {}, pw : ****", id);
-        LogInResultDto signInResultDto = signService.logIn(id, password);
+        String name = logInRequestDto.getName();
+        String password = logInRequestDto.getPassword();
+        log.info("[logIn] 로그인을 시도하고 있습니다. id : {}, pw : ****", name);
+        LogInResultDto logInResultDto = signService.logIn(name, password);
 
-        if (signInResultDto.getCode() == 0) {
-            log.info("[signIn] 정상적으로 로그인되었습니다. id : {}, token : {}", id,
-                    signInResultDto.getToken());
+        if (logInResultDto.getCode() == 0) {
+            log.info("[logIn] 정상적으로 로그인되었습니다. id : {}, token : {}", name,
+                    logInResultDto.getToken());
         }
-        return signInResultDto;
+        return logInResultDto;
     }
 
     @PostMapping(value = "/sign-up")
