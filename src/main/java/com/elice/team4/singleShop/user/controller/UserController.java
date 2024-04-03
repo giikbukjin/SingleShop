@@ -7,7 +7,13 @@ import com.elice.team4.singleShop.user.dto.SignUpResultDto;
 import com.elice.team4.singleShop.user.service.SignService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -47,6 +53,21 @@ public class UserController {
 
         log.info("[signUp] 회원가입을 완료했습니다. id : {}", name);
         return signUpResultDto;
+    }
+
+    @ExceptionHandler(value = RuntimeException.class)
+    public ResponseEntity<Map<String, String>> ExceptionHandler(RuntimeException e) {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+
+        log.error("ExceptionHandler 호출, {}, {}", e.getCause(), e.getMessage());
+
+        Map<String, String> map = new HashMap<>();
+        map.put("error type", httpStatus.getReasonPhrase());
+        map.put("code", "400");
+        map.put("message", "에러 발생");
+
+        return new ResponseEntity<>(map, responseHeaders, httpStatus);
     }
 
 }
