@@ -28,7 +28,6 @@ public class JwtTokenProvider {
     @Value("${key.salt}")
     private  String salt;
 
-    @Value("spring.jwt.secret")
     private Key secretKey;
 
     private final UserDetailsService userDetailsService;
