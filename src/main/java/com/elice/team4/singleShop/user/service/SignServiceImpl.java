@@ -4,7 +4,7 @@ import com.elice.team4.singleShop.global.response.Response;
 import com.elice.team4.singleShop.user.dto.LogInResultDto;
 import com.elice.team4.singleShop.user.dto.SignUpResultDto;
 import com.elice.team4.singleShop.user.entity.User;
-import com.elice.team4.singleShop.user.jwt.JwtTokenProvider;
+//import com.elice.team4.singleShop.user.jwt.JwtTokenProvider;
 import com.elice.team4.singleShop.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -18,12 +18,12 @@ import org.springframework.stereotype.Service;
 public class SignServiceImpl implements SignService{
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtTokenProvider jwtTokenProvider;
+//    private final JwtTokenProvider jwtTokenProvider;
 
-    public SignServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider){
+    public SignServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder/*, JwtTokenProvider jwtTokenProvider*/){
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.jwtTokenProvider = jwtTokenProvider;
+//        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @Override
@@ -75,8 +75,8 @@ public class SignServiceImpl implements SignService{
 
         log.info("[getSignInResult] SignInResultDto 객체 생성");
         LogInResultDto logInResultDto = LogInResultDto.builder()
-                .token(jwtTokenProvider.createToken(String.valueOf(user.getName()),
-                        user.getRole()))
+//                .token(jwtTokenProvider.createToken(String.valueOf(user.getName()),
+//                        user.getRole()))
                 .build();
 
         log.info("[getSignInResult] SignInResultDto 객체에 값 주입");

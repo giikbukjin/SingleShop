@@ -14,7 +14,7 @@ import java.util.List;
 
 @Controller
 @AllArgsConstructor
-@RequestMapping("/admin/category")
+@RequestMapping("/category")
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -24,8 +24,7 @@ public class CategoryController {
     public String getCategories(Model model) {
         List<Category> categories = categoryService.findCategories();
         model.addAttribute("categories", categories);
-        // TODO: categories 를 쏘아 줄 html 페이지 경로 지정. home 화면.
-        return "";
+        return "home/home";
     }
 
     @GetMapping("/{id}")
@@ -34,13 +33,13 @@ public class CategoryController {
 
         model.addAttribute("category", foundCategory);
         //TODO: category 를 쏘아 줄 html 페이지 경로 지정
-        return "";
+        return "category/category";
     }
 
     @GetMapping("/add")
     public String createCategoryGet(Model model) {
         //TODO: category 생성 html 페이지 경로 지정
-        return "";
+        return "category-add/category-add";
     }
 
     @PostMapping("/add")
@@ -49,8 +48,8 @@ public class CategoryController {
 
         Category savedCategory = categoryService.createCategory(category);
 
-        //TODO: redirect 경로 지정 - 카테고리 관리 페이지
-        return "redirect:/";
+        //TODO: redirect 경로 지정 - 카테고리 관리 페이지 URI
+        return "redirect:/admin";
     }
 
     @GetMapping("/{id}/edit")
@@ -59,7 +58,7 @@ public class CategoryController {
         model.addAttribute("category", category);
 
         //TODO: category 수정 html 페이지 경로 지정
-        return "";
+        return "category-edit/category-edit";
     }
 
     @PostMapping("/{id}/edit")
@@ -73,7 +72,7 @@ public class CategoryController {
         redirectAttributes.addFlashAttribute("message", "카테고리가 수정되었습니다.");
 
         //TODO: redirect 경로 지정 - 해당 카테고리 상세 페이지
-        return "redirect:";
+        return "redirect:/admin/category/{id}";
     }
 
     @DeleteMapping("/{id}")
@@ -82,6 +81,6 @@ public class CategoryController {
         redirectAttributes.addFlashAttribute("message", "카테고리가 삭제되었습니다.");
 
         //TODO: redirect 경로 지정 - 카테고리 관리 페이지
-        return "redirect:";
+        return "redirect:/admin";
     }
 }
