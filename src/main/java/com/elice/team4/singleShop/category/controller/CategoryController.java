@@ -7,6 +7,7 @@ import com.elice.team4.singleShop.category.service.CategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -43,7 +44,7 @@ public class CategoryController {
     }
 
     @PostMapping("/add")
-    public String createCategoryPost(@ModelAttribute CategoryDto categoryDto) {
+    public String createCategoryPost(@ModelAttribute @Validated CategoryDto categoryDto) {
         Category category = categoryMapper.CategoryDtoToCategory(categoryDto);
 
         Category savedCategory = categoryService.createCategory(category);
@@ -63,7 +64,7 @@ public class CategoryController {
 
     @PostMapping("/{id}/edit")
     public String editCategoryPost(@PathVariable Long id,
-                                   @ModelAttribute CategoryDto categoryDto,
+                                   @ModelAttribute @Validated CategoryDto categoryDto,
                                    RedirectAttributes redirectAttributes) {
         Category category = categoryMapper.CategoryDtoToCategory(categoryDto);
         Category updatedCategory = categoryService.updateCategory(category, id);

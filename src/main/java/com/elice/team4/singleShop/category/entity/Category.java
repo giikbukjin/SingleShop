@@ -2,7 +2,6 @@ package com.elice.team4.singleShop.category.entity;
 
 import com.elice.team4.singleShop.product.domain.Product;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,11 +25,9 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "카테고리 이름은 공백일 수 없습니다.")
     @Column(nullable = false, unique = true, length = 20)
     private String categoryName;
 
-    @NotBlank(message = "카테고리 설명은 공백일 수 없습니다.")
     @Column(nullable = false, length = 200)
     private String categoryContent;
 
