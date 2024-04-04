@@ -76,17 +76,18 @@
         </div>
         <div class="register-category-form-container">
           <form
-            th:action="@{admin/category/{id}/edit(id=${category.id})}" method="post"
+            th:action="@{/admin/category/{id}/edit(id=${category.id})}" method="post"
             class="box register-category-form-box"
             id="registerCategoryForm"
           >
             <p class="title is-5 has-text-primary">카테고리 수정하기</p>
             <div class="field">
-              <label class="label" for="titleInput">카테고리 이름</label>
+              <label class="label" for="categoryName">카테고리 이름</label>
               <div class="control">
                 <input
                   class="input"
-                  id="titleInput"
+                  id="categoryName"
+                  name="categoryName"
                   type="text"
                   placeholder="수정할 제목으로 입력하세요."
                   autocomplete="on"
@@ -96,15 +97,16 @@
             </div>
 
             <div class="field">
-              <label class="label" for="descriptionInput">카테고리 설명</label>
+              <label class="label" for="categoryContent">카테고리 설명</label>
               <div class="control">
                 <input
                   class="input"
-                  id="descriptionInput"
+                  id="categoryContent"
+                  name="categoryContent"
                   type="text"
                   placeholder="수정할 설명으로 입력하세요."
                   autocomplete="on"
-                  th:text="${category.categoryContent}"
+                  th:value="${category.categoryContent}"
                 />
               </div>
             </div>
@@ -138,8 +140,7 @@
             >
               카테고리 수정하기
             </button>
-          </form
-            th:      >
+          </form>
         </div>
       </div>
     </section>

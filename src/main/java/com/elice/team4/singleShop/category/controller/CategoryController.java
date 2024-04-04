@@ -14,7 +14,7 @@ import java.util.List;
 
 @Controller
 @AllArgsConstructor
-@RequestMapping("/category")
+@RequestMapping("/admin/category")
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -28,8 +28,8 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public String getCategory(@PathVariable Long categoryId, Model model) {
-        Category foundCategory = categoryService.findCategory(categoryId);
+    public String getCategory(@PathVariable Long id, Model model) {
+        Category foundCategory = categoryService.findCategory(id);
 
         model.addAttribute("category", foundCategory);
         //TODO: category 를 쏘아 줄 html 페이지 경로 지정
@@ -53,8 +53,8 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}/edit")
-    public String editCategoryGet(@PathVariable Long categoryId, Model model) {
-        Category category = categoryService.findCategory(categoryId);
+    public String editCategoryGet(@PathVariable Long id, Model model) {
+        Category category = categoryService.findCategory(id);
         model.addAttribute("category", category);
 
         //TODO: category 수정 html 페이지 경로 지정
@@ -62,11 +62,11 @@ public class CategoryController {
     }
 
     @PostMapping("/{id}/edit")
-    public String editCategoryPost(@PathVariable Long categoryId,
+    public String editCategoryPost(@PathVariable Long id,
                                    @ModelAttribute CategoryDto categoryDto,
                                    RedirectAttributes redirectAttributes) {
         Category category = categoryMapper.CategoryDtoToCategory(categoryDto);
-        Category updatedCategory = categoryService.updateCategory(category, categoryId);
+        Category updatedCategory = categoryService.updateCategory(category, id);
 
         redirectAttributes.addAttribute("categoryId", updatedCategory.getId());
         redirectAttributes.addFlashAttribute("message", "카테고리가 수정되었습니다.");
@@ -76,8 +76,8 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteCategory(@PathVariable Long categoryId, RedirectAttributes redirectAttributes) {
-        categoryService.deleteCategory(categoryId);
+    public String deleteCategory(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        categoryService.deleteCategory(id);
         redirectAttributes.addFlashAttribute("message", "카테고리가 삭제되었습니다.");
 
         //TODO: redirect 경로 지정 - 카테고리 관리 페이지
