@@ -26,8 +26,8 @@ public class CategoryController {
     public String getCategories(Model model) {
         List<Category> categories = categoryService.findCategories();
         model.addAttribute("categories", categories);
-        // TODO: admin/admin 페이지 수정해야 함.
-        return "redirect:/admin/admin.html";
+
+        return "categories/admin-categories";
     }
 
     @GetMapping("/{id}")
@@ -56,8 +56,7 @@ public class CategoryController {
 
         Category savedCategory = categoryService.createCategory(category);
 
-        //TODO: redirect 경로 지정 - 카테고리 관리 페이지 URI
-        return "redirect:/admin";
+        return "redirect:/admin/category";
     }
 
     @GetMapping("/{id}/edit")
@@ -90,7 +89,6 @@ public class CategoryController {
         // Modal 창을 사용할 경우
         redirectAttributes.addFlashAttribute("message", "카테고리가 삭제되었습니다.");
 
-        //TODO: redirect 경로 지정 - 카테고리 관리 페이지
         return "redirect:/admin/category";
     }
 }
