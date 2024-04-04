@@ -27,11 +27,11 @@ public class Category {
     private Long id;
 
     @NotBlank(message = "카테고리 이름은 공백일 수 없습니다.")
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(nullable = false, unique = true, length = 20)
     private String categoryName;
 
     @NotBlank(message = "카테고리 설명은 공백일 수 없습니다.")
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 200)
     private String categoryContent;
 
     @CreatedDate
