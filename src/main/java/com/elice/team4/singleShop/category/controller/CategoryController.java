@@ -79,7 +79,8 @@ public class CategoryController {
         Category category = categoryMapper.CategoryDtoToCategory(categoryDto);
         Category updatedCategory = categoryService.updateCategory(category, id);
 
-        return "redirect:/admin/category/{id}";
+        // TODO: admin/category/{id} 로 할지?
+        return "redirect:/admin/category";
     }
 
     @DeleteMapping("/{id}")

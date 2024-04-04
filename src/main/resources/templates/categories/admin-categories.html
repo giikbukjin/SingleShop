@@ -34,18 +34,13 @@
                             class="board-item pe-auto p-3 link-underline link-underline-opacity-0 d-flex"
                             th:href="@{/admin/category/{id}(id=${category.id})}"
                     >
-                        <img
-                                class="img-thumbnail w-50 h-50 me-3"
-                                src="hellobit.png"
-                                alt="hellobit"
-                        />
                         <div>
-                            <h4
+                            <h6
                                     class="card-title fw-bold text-dark"
                                     th:text="${category.categoryName}"
                             >
                                 카테고리 이름
-                            </h4>
+                            </h6>
                             <span
                                     class="card-text text-secondary text-wrap"
                                     th:text="${category.categoryContent}"
