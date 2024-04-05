@@ -18,7 +18,6 @@ import java.util.List;
 @Table(name = "orders")
 //@MappedSuperclass
 //@EntityListeners(value = {AuditingEntityListener.class})
-@Table(name = "orders")
 public class Order {
 
     @Id
