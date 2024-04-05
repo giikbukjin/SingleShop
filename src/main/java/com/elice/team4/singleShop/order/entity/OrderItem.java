@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
+@Table(name = "orders_item")
 //@MappedSuperclass
 //@EntityListeners(value = {AuditingEntityListener.class})
 public class OrderItem {
@@ -26,10 +27,6 @@ public class OrderItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
-
-//    @ManyToOne
-//    @JoinColumn(name = "cart_id")
-//    private Cart cart;
 
     @ManyToOne
     @JoinColumn(name = "order_id")

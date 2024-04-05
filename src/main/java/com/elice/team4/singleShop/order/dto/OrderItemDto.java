@@ -8,11 +8,11 @@ import lombok.Setter;
 @Getter @Setter
 public class OrderItemDto {
 
-    public OrderItemDto(OrderItem orderItem, String imgUrl) {
+    public OrderItemDto(OrderItem orderItem, String imageUrl) {
         this.itemName = orderItem.getProduct().getName();
         this.count = orderItem.getCount();
         this.orderPrice = orderItem.getOrderPrice();
-        this.imgUrl = imgUrl;
+        this.image = image;
     }
 
     private String itemName; // 상품명
@@ -21,5 +21,17 @@ public class OrderItemDto {
 
     private int orderPrice; // 주문 금액
 
-    private String imgUrl; // 상품 이미지 경로
+    private String image; // 상품 이미지 경로
+
+    private String receiverName;
+
+    private String receiverPhoneNumber;
+
+    private String postalCode;
+
+    private String address1;
+
+    private String address2;
+
+    private String deliveryRequest;
 }
