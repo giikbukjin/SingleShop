@@ -2,7 +2,6 @@ package com.elice.team4.singleShop.global.config;
 
 import com.elice.team4.singleShop.user.jwt.JwtTokenFilter;
 import com.elice.team4.singleShop.user.jwt.JwtTokenProvider;
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -37,14 +36,12 @@ public class SecurityConfig{
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         // csrf, http basic 비활성화
-        http.csrf(AbstractHttpConfigurer::disable);
-        http.formLogin(AbstractHttpConfigurer::disable);
-        http.httpBasic(AbstractHttpConfigurer::disable)
+        http.csrf(AbstractHttpConfigurer::disable)
+            .formLogin(AbstractHttpConfigurer::disable)
+            .httpBasic(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new JwtTokenFilter(jwtTokenProvider),
-                        UsernamePasswordAuthenticationFilter.class);
-
-        // 세션 사용 안함
-        http.setSharedObject(SessionManagementConfigurer.class,
+                        UsernamePasswordAuthenticationFilter.class)
+                .setSharedObject(SessionManagementConfigurer.class,
                 new SessionManagementConfigurer<HttpSecurity>().sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         // 페이지 별 권한 설정

@@ -27,10 +27,10 @@ public class SignServiceImpl implements SignService{
     }
 
     @Override
-    public SignUpResultDto signUp(String password, String name, String email, String role) {
+    public SignUpResultDto signUp(String name, String password, String email, String role) {
         log.info("[getSignUpResult] 회원 가입 정보 전달");
         User user;
-        if (role.equalsIgnoreCase("admin")) {
+        if (role.equalsIgnoreCase("ADMIN")) {
             user = User.builder()
                     .name(name)
                     .email(email)
@@ -62,24 +62,24 @@ public class SignServiceImpl implements SignService{
 
     @Override
     public LogInResultDto logIn(String name, String password) throws RuntimeException {
-        log.info("[getSignInResult] signDataHandler로 회원 정보 요청");
+        log.info("[getLogInResult] signDataHandler로 회원 정보 요청");
         User user = userRepository.getByName(name);
         log.info("[getSignInResult] Id : {}", name);
 
-        log.info("[getSignInResult] 패스워드 비교 수행");
+        log.info("[getLogInResult] 패스워드 비교 수행");
         if(!passwordEncoder.matches(password, user.getPassword())){
             throw new RuntimeException();
         }
 
-        log.info("[getSignInResult] 패스워드 일치");
+        log.info("[getLogInResult] 패스워드 일치");
 
-        log.info("[getSignInResult] SignInResultDto 객체 생성");
+        log.info("[getLogInResult] LogInResultDto 객체 생성");
         LogInResultDto logInResultDto = LogInResultDto.builder()
                 .token(jwtTokenProvider.createToken(String.valueOf(user.getName()),
                         user.getRole()))
                 .build();
 
-        log.info("[getSignInResult] SignInResultDto 객체에 값 주입");
+        log.info("[getLogInResult] LogInResultDto 객체에 값 주입");
         setSuccessResult(logInResultDto);
 
         return logInResultDto;
