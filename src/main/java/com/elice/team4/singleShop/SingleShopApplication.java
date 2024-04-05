@@ -31,10 +31,4 @@ public class SingleShopApplication {
 		return new DataInit(userRepository, categoryRepository, productRepository, orderRepository, cartRepository,
 				cartItemRepository);
 	}
-
-
-
-
-
-
 }
