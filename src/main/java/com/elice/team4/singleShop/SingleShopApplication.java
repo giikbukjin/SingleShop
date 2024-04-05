@@ -1,5 +1,10 @@
 package com.elice.team4.singleShop;
 
+import com.elice.team4.singleShop.cart.repository.CartItemRepository;
+import com.elice.team4.singleShop.cart.repository.CartRepository;
+import com.elice.team4.singleShop.category.repository.CategoryRepository;
+import com.elice.team4.singleShop.order.repository.OrderRepository;
+import com.elice.team4.singleShop.product.repository.ProductRepository;
 import com.elice.team4.singleShop.user.repository.UserRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,8 +22,19 @@ public class SingleShopApplication {
 
 	@Bean
 	@Profile(value = {"local", "test", "default"})
-	public DataInit stubDataInit(UserRepository userRepository) {
-		return new DataInit(userRepository);
+	public DataInit stubDataInit(UserRepository userRepository,
+								 CategoryRepository categoryRepository,
+								 ProductRepository productRepository,
+								 OrderRepository orderRepository,
+								 CartRepository cartRepository,
+								 CartItemRepository cartItemRepository) {
+		return new DataInit(userRepository, categoryRepository, productRepository, orderRepository, cartRepository,
+				cartItemRepository);
 	}
+
+
+
+
+
 
 }
