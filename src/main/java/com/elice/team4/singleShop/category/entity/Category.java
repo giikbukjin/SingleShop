@@ -25,10 +25,10 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = true, unique = true, length = 50)
+    @Column(nullable = false, unique = true, length = 20)
     private String categoryName;
 
-    @Column(nullable = true, length = 100)
+    @Column(nullable = true, length = 200)
     private String categoryContent;
 
     @CreatedDate

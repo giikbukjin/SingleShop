@@ -20,8 +20,8 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
-    public Category findCategory(Long categoryId) {
-        Category foundCategory = categoryRepository.findById(categoryId)
+    public Category findCategory(Long id) {
+        Category foundCategory = categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException());
 
         return foundCategory;
