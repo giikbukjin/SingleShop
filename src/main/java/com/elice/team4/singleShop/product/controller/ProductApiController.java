@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class ProductApiController {
     private final ProductService productService;
 
-    @PostMapping("/seller/new")
+    @PostMapping("/products")
     public String create(@ModelAttribute ProductDto productDto, RedirectAttributes redirectAttributes) {
         productService.saveProduct(productDto); // Save the product
         redirectAttributes.addFlashAttribute("success", "Product registered successfully!"); // Optional: Add success message

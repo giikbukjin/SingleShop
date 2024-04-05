@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 public class ProductService {
@@ -25,5 +27,10 @@ public class ProductService {
     public Product saveProduct(ProductDto productDto) {
         Product product = productMapper.productDtoToProduct(productDto); // DTO를 엔티티로 변환
         return productRepository.save(product);
+    }
+
+    // 모든 제품 조회
+    public List<Product> findAllProducts() {
+        return productRepository.findAll();
     }
 }
