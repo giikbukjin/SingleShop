@@ -11,19 +11,19 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Slf4j
 @Component
-public class LoggingAspect {
+public class CategoryLoggingAspect {
 
-    @Pointcut("execution(* com.elice.team4.singleShop.*.*(..))")
-    public void targetMethod(){ }
+    @Pointcut("execution(* com.elice.team4.singleShop.category.controller.CategoryController.*(..))")
+    public void controllerMethod(){ }
 
-    @Before("targetMethod()")
+    @Before("controllerMethod()")
     public void logBefore(JoinPoint joinPoint) {
-        log.info("[메서드 호출 전] 호출 메서드: {}", joinPoint.getSignature().getName());
+        log.info("[Before]: {}", joinPoint.getSignature().getName());
     }
 
-    @After("targetMethod()")
+    @After("controllerMethod()")
     public void logAfter(JoinPoint joinPoint) {
 
-        log.info("[메서드 호출 후] 호출 메서드: {}", joinPoint.getSignature().getName());
+        log.info("[After]: {}", joinPoint.getSignature().getName());
     }
 }
