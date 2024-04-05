@@ -2,12 +2,10 @@ package com.elice.team4.singleShop.global.config;
 
 import com.elice.team4.singleShop.user.jwt.JwtTokenFilter;
 import com.elice.team4.singleShop.user.jwt.JwtTokenProvider;
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -54,8 +52,7 @@ public class SecurityConfig{
 //                                .anyRequest()
 //                                .permitAll()
 //                                .authenticated()   //인증된 사용자만 접근 허용
-            .requestMatchers("/seller/new").permitAll()  // POST 메서드로 /seller/new에 접근하는 경우 전체 허가
-                        .anyRequest().authenticated() // 그 외의 모든 요청은 인증 필요
+                        .anyRequest().permitAll() // 그 외의 모든 요청은 인증 필요
         );
 
         return http.build();

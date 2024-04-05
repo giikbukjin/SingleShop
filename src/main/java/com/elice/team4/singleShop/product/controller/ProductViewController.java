@@ -15,6 +15,7 @@ public class ProductViewController {
     @GetMapping("/seller/new")
     public String createForm(Model model) {
         model.addAttribute("productDto", new ProductDto());
-        return "products/createProductForm";
+        // If you're using redirect attributes for messages, add them to the model here if present
+        return "products/add/product-add"; // Make sure this is the correct path to your product registration page
     }
 }
