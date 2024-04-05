@@ -23,6 +23,8 @@ import org.thymeleaf.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -32,9 +34,8 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
-    //private final CartRepository cartRepository;
 
-    /*public Long order(OrderDto orderDto, String email) {
+    public Long order(OrderDto orderDto, String email) {
         Product product = productRepository.findById(orderDto.getProductId()) // 주문할 상품 조회
                 .orElseThrow(EntityNotFoundException::new);
         User user = userRepository.findByEmail(email); // 로그인한 회원의 이메일을 이용해 회원 조회
@@ -48,10 +49,10 @@ public class OrderService {
         orderRepository.save(order); // 생성한 주문 저장
 
         return order.getId();
-    }*/
+    }
 
     // 주문 목록 조회
-    /*@Transactional
+    @Transactional
     public Page<OrderHistDto> getOrderList(String email, Pageable pageable) {
 
         List<Order> orders = orderRepository.findOrders(email, pageable); // 유저 이메일, 페이징 조건 이용해 주문 목록 조회
@@ -64,17 +65,17 @@ public class OrderService {
             OrderHistDto orderHistDto = new OrderHistDto(order);
             List<OrderItem> orderItems = order.getOrderItems();
             for (OrderItem orderItem : orderItems) {
-                // 상품이미지 코드
-                OrderItemDto orderItemDto = new OrderItemDto(orderItem, 상품이미지 url); // 주문 상품 이미지 조회
+                String imageUrl = orderItem.getProduct().getImage(); // Product에서 이미지 경로 가져오기
+                OrderItemDto orderItemDto = new OrderItemDto(orderItem, imageUrl); // 주문 상품 이미지 조회
                 orderHistDto.addOrderItemDto(orderItemDto);
             }
             orderHistDtos.add(orderHistDto);
         }
         return new PageImpl<OrderHistDto>(orderHistDtos, pageable, totalCount); // 페이지 구현
-    }*/
+    }
 
     // 주문 취소
-    /*@Transactional
+    @Transactional
     public boolean validateOrder(Long orderId, String email) {
 
         User curUser = userRepository.findByEmail(email); // 현재 로그인한 사용자 정보 조회
@@ -115,5 +116,36 @@ public class OrderService {
         orderRepository.save(order); // 주문 데이터 저장
 
         return order.getId(); // 생성된 주문 ID
-    }*/
+    }
+
+    // 주문 내역 조회 - 관리자
+    public List<OrderDto> getAllOrders() {
+        List<Order> orders = orderRepository.findAll(); // DB에서 모든 주문 내역 조회
+        return orders.stream().map(order -> new OrderDto()).collect(Collectors.toList()); // 조회된 주문을 OrderDto로 변환
+    }
+
+    // 주문 상태 수정 - 관리자
+    public boolean updateOrderStatus(Long orderId, Order.OrderStatus newStatus) {
+        Optional<Order> optionalOrder = orderRepository.findById(orderId); // 주문 ID 사용해 주문 조회
+        if (optionalOrder.isPresent()) {
+            // 주문 존재하면 새로운 주문 상태로 업데이트 & 저장
+            Order order = optionalOrder.get();
+            order.setOrderStatus(newStatus);
+            orderRepository.save(order);
+            return true;
+        }
+        return false;
+    }
+
+    // 주문 내역 삭제 - 관리자
+    public boolean deleteOrder(Long orderId) {
+        Optional<Order> optionalOrder = orderRepository.findById(orderId); // 주문 ID 사용해 주문 조회
+        if (optionalOrder.isPresent()) {
+            // 주문 존재하면 해당 주문 삭제
+            Order order = optionalOrder.get();
+            orderRepository.delete(order);
+            return true;
+        }
+        return false;
+    }
 }
