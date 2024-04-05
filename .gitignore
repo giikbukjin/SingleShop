@@ -8,6 +8,7 @@
 build
 src/main/resources/application.properties
 .idea
+application.yml
 
 # User-specific stuff
 .idea/**/workspace.xml
