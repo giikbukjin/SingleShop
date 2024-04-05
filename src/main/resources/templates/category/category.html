@@ -125,31 +125,31 @@
         <div class="list-group position-relative mb-3">
             <a
                     class="board-item list-group-item p-3 list-group-item-action"
-                    th:unless="${postPage.isEmpty()}"
-                    th:each="post : ${postPage}"
+                    th:unless="${productPage.isEmpty()}"
+                    th:each="product : ${productPage}"
                     th:href="@{/posts/{postId}(postId=${post.id})}"
             >
-                <h4 class="fw-bold mb-1" th:text="${post.title}">상품명</h4>
-                <small class="text-secondary" th:text="${post.createdAt}"
-                >게시글 생성일</small
+                <h4 class="fw-bold mb-1" th:text="${product.name}">상품명</h4>
+                <small class="text-secondary" th:text="${product.createdAt}"
+                >상품 등록일</small
                 >
             </a>
             <span
-                    th:if="${postPage.isEmpty()}"
+                    th:if="${productPage.isEmpty()}"
                     class="text-center"
-                    th:text="${keyword != null ? '`' + keyword + '` 키워드에 해당하는 게시글이 없습니다.' : '올라온 게시글이 없습니다.'}"
+                    th:text="${keyword != null ? '`' + keyword + '` 키워드에 해당하는 상품이 없습니다.' : '올라온 상품이 없습니다.'}"
             ></span>
         </div>
         <div class="w-100 d-flex justify-content-center">
             <ul class="pagination">
                 <li
-                        th:each="i : ${postPage.totalPages > 1 ? #numbers.sequence(0, postPage.totalPages - 1) : #numbers.sequence(0, 0)}"
+                        th:each="i : ${productPage.totalPages > 1 ? #numbers.sequence(0, productPage.totalPages - 1) : #numbers.sequence(0, 0)}"
                         class="page-item"
-                        th:classappend="${i == postPage.number ? 'active' : ''}"
+                        th:classappend="${i == productPage.number ? 'active' : ''}"
                 >
                     <a
                             class="page-link"
-                            th:href="@{/boards/{boardId}(page=${i}, size=${postPage.size}, boardId=${board.id}, keyword=${keyword})}"
+                            th:href="@{/admin/category/{id}(page=${i}, size=${productPage.size}, id=${category.id}, keyword=${keyword})}"
                             th:text="${i + 1}"
                     >0</a
                     >
