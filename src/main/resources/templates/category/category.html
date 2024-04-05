@@ -3,7 +3,27 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Title</title>
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+            crossorigin="anonymous"
+    />
+    <link
+            href="https://font.elice.io/css?family=Elice+DX+Neolli"
+            rel="stylesheet"
+    />
+    <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <style>
+        html,
+        body {
+          font-family: "Elice DX Neolli", sans-serif;
+        }
+    </style>
+    <title th:text="${category.categoryName} + ' 카테고리 상세'">카테고리 상세</title>
     <!-- 아이콘 -->
     <link
             rel="icon"
@@ -11,11 +31,12 @@
             sizes="16x16"
             href="/elice-rabbit-favicon.png"
     />
-    <!-- bulma css 관련 -->
+    <!-- css 관련 -->
     <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
     />
+
     <!-- 폰트 어썸: 아이콘 -->
     <script
             defer
@@ -66,5 +87,82 @@
             </div>
         </div>
     </nav>
+
+    <div class="container my-5">
+        <a
+                class="link link-offset-1 link-offset-2-hover text-sm fs-6 mb-2 d-block"
+                style="transition: all 0.1s ease-in-out"
+                th:href="@{/admin/category}"
+        >&larr; 카테고리 관리 페이지</a
+        >
+        <div class="header mb-5">
+            <h1 class="text-center" th:text="${category.categoryName}">카테고리 제목</h1>
+            <p
+                    class="text-center text-secondary"
+                    th:text="${category.categoryContent}"
+            ></p>
+        </div>
+        <div class="d-flex w-100 justify-content-between mb-3">
+            <form>
+                <div class="input-group">
+                    <input
+                            class="form-control"
+                            name="keyword"
+                            placeholder="키워드 검색"
+                            th:value="${keyword}"
+                    />
+                    <button class="btn btn-primary lh-1 p-0 px-2">
+                        <span class="material-symbols-outlined"> search </span>
+                    </button>
+                </div>
+            </form>
+            <a
+                    th:href="@{/posts/create(boardId=${board.id})}"
+                    class="btn btn-primary"
+            >상품 추가</a
+            >
+        </div>
+        <div class="list-group position-relative mb-3">
+            <a
+                    class="board-item list-group-item p-3 list-group-item-action"
+                    th:unless="${postPage.isEmpty()}"
+                    th:each="post : ${postPage}"
+                    th:href="@{/posts/{postId}(postId=${post.id})}"
+            >
+                <h4 class="fw-bold mb-1" th:text="${post.title}">상품명</h4>
+                <small class="text-secondary" th:text="${post.createdAt}"
+                >게시글 생성일</small
+                >
+            </a>
+            <span
+                    th:if="${postPage.isEmpty()}"
+                    class="text-center"
+                    th:text="${keyword != null ? '`' + keyword + '` 키워드에 해당하는 게시글이 없습니다.' : '올라온 게시글이 없습니다.'}"
+            ></span>
+        </div>
+        <div class="w-100 d-flex justify-content-center">
+            <ul class="pagination">
+                <li
+                        th:each="i : ${postPage.totalPages > 1 ? #numbers.sequence(0, postPage.totalPages - 1) : #numbers.sequence(0, 0)}"
+                        class="page-item"
+                        th:classappend="${i == postPage.number ? 'active' : ''}"
+                >
+                    <a
+                            class="page-link"
+                            th:href="@{/boards/{boardId}(page=${i}, size=${postPage.size}, boardId=${board.id}, keyword=${keyword})}"
+                            th:text="${i + 1}"
+                    >0</a
+                    >
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 부트스트랩 JS 추가 -->
+    <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"
+    ></script>
 </body>
 </html>
