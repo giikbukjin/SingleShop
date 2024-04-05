@@ -28,7 +28,7 @@ public class Category {
     @Column(nullable = false, unique = true, length = 20)
     private String categoryName;
 
-    @Column(nullable = false, length = 200)
+    @Column(nullable = true, length = 200)
     private String categoryContent;
 
     @CreatedDate

@@ -35,8 +35,8 @@ public class Product {
     private int price;
 
     // ERD 관계 추가 (category)
-    @ManyToOne
-    @JoinColumn(name = "category_id")
+    @ManyToOne(optional = true, cascade = CascadeType.ALL)
+    @JoinColumn(name = "category_id", nullable = true)
     private Category category;
 
     // ERD 관계 추가 (user)
@@ -52,6 +52,10 @@ public class Product {
     // ERD 관계 추가 (order_item)
     @OneToMany(mappedBy = "product")
     private List<OrderItem> orderItems = new ArrayList<>();
+
+//    @OneToMany
+//    @JoinColumn(name = "cartitem_id")
+//    private List<CartItem> cartItems = new ArrayList<>();
 
 
     // *** 재고 수량 증가 ***

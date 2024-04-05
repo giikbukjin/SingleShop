@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <html>
 <head>
   <meta charset="utf-8" />
@@ -72,11 +73,21 @@
 <!-- 제품 추가 폼(Form) -->
 <section class="section">
   <div class="container">
+    <div th:if="${success}">
+      <div class="notification is-primary">
+        <button class="delete"></button>
+        <p th:text="${success}"></p>
+      </div>
+    </div>
+
     <div class="block account-header">
       <h1 class="subtitle is-4">제품 등록</h1>
     </div>
     <div class="register-product-form-container">
-      <form class="box register-product-form-box" id="registerProductForm" action="/seller/new" method="post">
+      <form class="box register-product-form-box"
+            id="registerProductForm"
+            th:action="@{/seller/new}"
+            method="post">
         <p class="title is-5 has-text-primary">제품을 판매해 보세요</p>
         <div class="field">
           <label class="label" for="titleInput">제품 이름</label>
@@ -96,14 +107,17 @@
           <label class="label" for="categorySelectBox">카테고리</label>
           <div class="control">
             <div class="select is-fullwidth">
-              <select id="categorySelectBox">
+              <select id="categorySelectBox" name="category">
                 <option value="">카테고리를 선택해 주세요.</option>
+                <th:block th:each="category : ${categories}">
+                  <option th:value="${category.id}" th:text="${category.name}">Category Name</option>
+                </th:block>
               </select>
             </div>
           </div>
         </div>
 
-<!--        <div class="field">-->
+        <!--        <div class="field">-->
 <!--          <label class="label" for="manufacturerInput">제조사</label>-->
 <!--          <div class="control">-->
 <!--            <input-->
