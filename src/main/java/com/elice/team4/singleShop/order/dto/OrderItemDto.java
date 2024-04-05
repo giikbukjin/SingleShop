@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter @Setter
 public class OrderItemDto {
 
-    public OrderItemDto(OrderItem orderItem, String imgUrl) {
+    public OrderItemDto(OrderItem orderItem, String imageUrl) {
         this.itemName = orderItem.getProduct().getName();
         this.count = orderItem.getCount();
         this.orderPrice = orderItem.getOrderPrice();
