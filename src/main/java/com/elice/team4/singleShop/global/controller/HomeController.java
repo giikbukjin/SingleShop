@@ -1,4 +1,4 @@
-package com.elice.team4.singleShop.global.home.controller;
+package com.elice.team4.singleShop.global.controller;
 
 import com.elice.team4.singleShop.category.entity.Category;
 import com.elice.team4.singleShop.category.service.CategoryService;

@@ -1,4 +1,4 @@
-package com.elice.team4.singleShop.global.admin.controller;
+package com.elice.team4.singleShop.global.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
