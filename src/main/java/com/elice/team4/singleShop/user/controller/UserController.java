@@ -5,18 +5,20 @@ import com.elice.team4.singleShop.user.dto.LogInResultDto;
 import com.elice.team4.singleShop.user.dto.SignUpRequestDto;
 import com.elice.team4.singleShop.user.dto.SignUpResultDto;
 import com.elice.team4.singleShop.user.service.SignService;
+import com.elice.team4.singleShop.user.service.UserDetailsServiceImpl;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/auth")
 @Slf4j
 public class UserController {
     private final SignService signService;
@@ -25,7 +27,7 @@ public class UserController {
         this.signService = signService;
     }
 
-    @PostMapping(value = "/log-in")
+    @PostMapping(value = "/login")
     public LogInResultDto logIn(@Valid @RequestBody LogInRequestDto logInRequestDto)
             throws RuntimeException {
         String name = logInRequestDto.getName();
@@ -40,7 +42,7 @@ public class UserController {
         return logInResultDto;
     }
 
-    @PostMapping(value = "/sign-up")
+    @PostMapping(value = "/signup")
     public SignUpResultDto signUp(@Valid @RequestBody SignUpRequestDto requestDto) {
         String name = requestDto.getName();
         String password = requestDto.getPassword();
@@ -53,6 +55,19 @@ public class UserController {
 
         log.info("[signUp] 회원가입을 완료했습니다. id : {}", name);
         return signUpResultDto;
+    }
+
+    @PostMapping(value = "/user/{id}/edit")
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody SignUpRequestDto requestDto) {
+        String name = requestDto.getName();
+        String password = requestDto.getPassword();
+        String email = requestDto.getEmail();
+
+        log.info("[updateUser] 회원 정보를 수정합니다. id : {}", id);
+        signService.updateUser(id, name, password, email);
+
+        log.info("[updateUser] 회원 정보 수정이 완료되었습니다. id : {}", id);
+        return ResponseEntity.ok().body("회원 정보가 수정되었습니다.");
     }
 
     @ExceptionHandler(value = RuntimeException.class)
