@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @AllArgsConstructor
 @RequestMapping("/admin")
-public class AdminController {
+public class AdminPageController {
 
     @GetMapping
     public String adminPage() {
