@@ -2,10 +2,8 @@ package com.elice.team4.singleShop.global.aop;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
+import org.hibernate.mapping.Join;
 import org.springframework.stereotype.Component;
 
 @Aspect
@@ -14,16 +12,38 @@ import org.springframework.stereotype.Component;
 public class CategoryLoggingAspect {
 
     @Pointcut("execution(* com.elice.team4.singleShop.category.controller.CategoryController.*(..))")
-    public void controllerMethod(){ }
+    public void controllerMethods(){ }
 
-    @Before("controllerMethod()")
-    public void logBefore(JoinPoint joinPoint) {
+    @Before("controllerMethods()")
+    public void controllerLogBefore(JoinPoint joinPoint) {
         log.info("[Before]: {}", joinPoint.getSignature().getName());
     }
 
-    @After("controllerMethod()")
-    public void logAfter(JoinPoint joinPoint) {
+    @After("controllerMethods()")
+    public void controllerLogAfter(JoinPoint joinPoint) {
 
         log.info("[After]: {}", joinPoint.getSignature().getName());
+    }
+
+
+
+    @Pointcut("execution(* com.elice.team4.singleShop.category.service.CategoryService.*(..))")
+    public void serviceMethods(){ }
+
+    @Before("serviceMethods()")
+    public void serviceLogBefore(JoinPoint joinPoint) {
+        log.info("[Before]: {}", joinPoint.getSignature().getName());
+    }
+
+    @After("serviceMethods()")
+    public void serviceLogAfter(JoinPoint joinPoint) {
+
+        log.info("[After]: {}", joinPoint.getSignature().getName());
+    }
+
+    @AfterThrowing(pointcut = "execution(* com.elice.team4.singleShop.category.service.CategoryService.*(..))",
+                    throwing = "exception")
+    public void serviceLogException(JoinPoint joinPoint, Exception exception) {
+        log.error("Exception occurred in {}(): {}", joinPoint.getSignature().getName(), exception.getMessage());
     }
 }
