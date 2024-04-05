@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
+@Table(name = "orders_item")
 //@MappedSuperclass
 //@EntityListeners(value = {AuditingEntityListener.class})
 public class OrderItem {
