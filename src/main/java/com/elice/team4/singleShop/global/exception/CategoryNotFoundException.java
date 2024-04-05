@@ -2,6 +2,6 @@ package com.elice.team4.singleShop.global.exception;
 
 public class CategoryNotFoundException extends RuntimeException {
     public CategoryNotFoundException() {
-        super("카테고리를 찾을 수 없습니다.");
+        super("Cannot find the category.");
     }
 }

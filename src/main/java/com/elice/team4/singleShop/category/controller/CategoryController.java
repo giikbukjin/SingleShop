@@ -4,7 +4,11 @@ import com.elice.team4.singleShop.category.dto.CategoryDto;
 import com.elice.team4.singleShop.category.entity.Category;
 import com.elice.team4.singleShop.category.mapper.CategoryMapper;
 import com.elice.team4.singleShop.category.service.CategoryService;
+import com.elice.team4.singleShop.product.domain.Product;
+import com.elice.team4.singleShop.product.service.ProductService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,6 +25,7 @@ public class CategoryController {
 
     private final CategoryService categoryService;
     private final CategoryMapper categoryMapper;
+    private final ProductService productService;
 
     @GetMapping
     public String getCategories(Model model) {
@@ -31,11 +36,22 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public String getCategory(@PathVariable Long id, Model model) {
+    public String getCategory(@PathVariable Long id,
+                              @RequestParam(defaultValue = "0") int page,
+                              @RequestParam(defaultValue = "10") int size,
+                              @RequestParam(required = false) String keyword,
+                              Model model) {
         Category foundCategory = categoryService.findCategory(id);
+        PageRequest pageRequest = PageRequest.of(page, size);
+
+        // TODO : Page<Product> 타입 객체 얻어오기, ProductService 메서드
+//        Page<Product> productPage = productService.메서드명(foundCategory, keyword, pageRequest);
 
         model.addAttribute("category", foundCategory);
+        model.addAttribute("keyword", keyword);
+//        model.addAttribute("productPage", productPage);
 
+        // TODO: category.html 타임리프 작업 미완성, 'th:' 검색하여 수정할 것
         return "category/category";
     }
 
