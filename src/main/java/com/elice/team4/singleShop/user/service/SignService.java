@@ -7,4 +7,6 @@ public interface SignService {
     SignUpResultDto signUp(String name, String password, String email, String role);
 
     LogInResultDto logIn(String name, String password) throws RuntimeException;
+
+    void updateUser(Long id, String name, String password, String email);
 }

@@ -7,8 +7,6 @@ import com.elice.team4.singleShop.user.entity.User;
 import com.elice.team4.singleShop.user.jwt.JwtTokenProvider;
 import com.elice.team4.singleShop.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -83,6 +81,35 @@ public class SignServiceImpl implements SignService{
         setSuccessResult(logInResultDto);
 
         return logInResultDto;
+    }
+
+    public void updateUser(Long id, String name, String password, String email) {
+        log.info("[updateUser] 회원 정보 수정 시작. ID: {}", id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다. ID: " + id));
+
+        log.info("[updateUser] 기존 회원 정보: {}", user);
+
+        boolean passwordChanged = !passwordEncoder.matches(password, user.getPassword());
+        if (passwordChanged) {
+            log.info("[updateUser] 비밀번호가 변경되었습니다. 새로운 JWT 토큰 발급합니다.");
+        }
+
+        user.setName(name);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setEmail(email);
+
+        userRepository.save(user);
+        LogInResultDto logInResultDto = new LogInResultDto();
+
+        SignUpResultDto signUpResultDto = new SignUpResultDto();
+        if (passwordChanged) {
+            String newToken = jwtTokenProvider.createToken(String.valueOf(user.getName()), user.getRole());
+            logInResultDto.setToken(newToken);
+        }
+        log.info("[updateUser] 회원 정보 업데이트 완료. ID: {}", id);
+        setSuccessResult(signUpResultDto);
+
     }
 
     private void setSuccessResult(SignUpResultDto signUpResult){
