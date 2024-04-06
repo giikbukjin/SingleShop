@@ -13,4 +13,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     // 상품 이름으로 상품 조회
     List<Product> findByName(String name);
+
+    // Category Paging
+//    Page<Product> findAllByCategoryOrderByCreatedAtDesc(Category category, Pageable pageable);
+//    Page<Product> findAllByCategoryAndNameContaining(Category category, String keyword, Pageable pageable);
 }

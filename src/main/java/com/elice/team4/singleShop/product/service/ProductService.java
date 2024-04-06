@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -22,7 +23,7 @@ public class ProductService {
         this.productMapper = productMapper;
     }
 
-    // 제품 저장 또는 업데이트
+    // 제품 저장
     @Transactional
     public Product saveProduct(ProductDto productDto) {
         Product product = productMapper.productDtoToProduct(productDto); // DTO를 엔티티로 변환
@@ -32,5 +33,19 @@ public class ProductService {
     // 모든 제품 조회
     public List<Product> findAllProducts() {
         return productRepository.findAll();
+    }
+
+    // 아이디로 제품 조회
+    public Optional<Product> findProductById(Long productId) {
+        return productRepository.findById(productId);
+    }
+
+    // 제품 정보 수정
+    @Transactional
+    public void updateProduct(Long productId, ProductDto productDto) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid product ID: " + productId));
+        productMapper.updateProductFromDto(productDto, product);
+        productRepository.save(product);
     }
 }
