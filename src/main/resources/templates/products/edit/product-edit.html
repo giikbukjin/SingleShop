@@ -81,14 +81,14 @@
     </div>
 
     <div class="block account-header">
-      <h1 class="subtitle is-4">제품 등록</h1>
+      <h1 class="subtitle is-4">제품 수정</h1>
     </div>
     <div class="register-product-form-container">
       <form class="box register-product-form-box"
             id="registerProductForm"
-            th:action="@{/seller/new}"
+            th:action="@{/seller/{productId}(productId=${productDto.id})}"
             method="post">
-        <p class="title is-5 has-text-primary">제품을 판매해 보세요</p>
+        <p class="title is-5 has-text-primary">제품 정보를 수정하세요</p>
         <div class="field">
           <label class="label" for="titleInput">제품 이름</label>
           <div class="control">
@@ -96,9 +96,9 @@
                     class="input"
                     id="titleInput"
                     type="text"
-                    placeholder="아이보리 티셔츠"
                     autocomplete="on"
                     name="name"
+                    th:value="${productDto.name}"
             />
           </div>
         </div>
@@ -124,9 +124,9 @@
                         class="textarea"
                         id="shortDescriptionInput"
                         rows="3"
-                        placeholder="제품에 대한 1~2문장의 설명을 적어 주세요."
                         autocomplete="on"
                         name="summary"
+                        th:text="${productDto.summary}"
                 ></textarea>
           </div>
         </div>
@@ -140,15 +140,18 @@
                         class="textarea"
                         id="detailDescriptionInput"
                         rows="8"
-                        placeholder="제품에 대한 상세 설명을 적어 주세요."
                         autocomplete="on"
                         name="description"
+                        th:text="${productDto.description}"
                 ></textarea>
           </div>
         </div>
 
         <div class="field is-fullwidth">
           <label class="label" for="imageInput">제품 사진</label>
+          <figure class="image is-128x128">
+            <img id="currentImage" th:src="@{${productDto.image}}" alt="Current Product Image"> <!-- Display current image -->
+          </figure>
           <div class="file has-name is-fullwidth">
             <label class="file-label">
               <input
@@ -162,10 +165,10 @@
                     <span class="file-icon">
                       <i class="fas fa-upload"></i>
                     </span>
-                    <span class="file-label"> 사진 업로드 </span>
+                    <span class="file-label"> 사진 변경 </span>
                   </span>
               <span class="file-name" id="fileNameSpan">
-                    사진파일 (png, jpg, jpeg)
+                    새 사진 파일 선택 (png, jpg, jpeg)
                   </span>
             </label>
           </div>
@@ -178,9 +181,9 @@
                     class="input"
                     id="inventoryInput"
                     type="number"
-                    placeholder="10"
                     autocomplete="on"
                     name="stock"
+                    th:value="${productDto.stock}"
             />
           </div>
         </div>
@@ -193,9 +196,9 @@
                       class="input"
                       id="priceInput"
                       type="number"
-                      placeholder="10000"
                       autocomplete="on"
                       name="price"
+                      th:value="${productDto.price}"
               />
               <span class="icon is-small is-right"> 원 </span>
             </div>
@@ -209,7 +212,7 @@
 
         <div class="mt-5">
           <button type="submit" class="button is-primary is-fullwidth" id="submitButton">
-            제품 판매하기
+            제품 정보 업데이트
           </button>
         </div>
       </form>
