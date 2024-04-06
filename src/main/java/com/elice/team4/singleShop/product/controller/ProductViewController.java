@@ -1,5 +1,7 @@
 package com.elice.team4.singleShop.product.controller;
 
+import com.elice.team4.singleShop.category.entity.Category;
+import com.elice.team4.singleShop.category.service.CategoryService;
 import com.elice.team4.singleShop.product.domain.Product;
 import com.elice.team4.singleShop.product.dto.ProductDto;
 import com.elice.team4.singleShop.product.mapper.ProductMapper;
@@ -18,9 +20,12 @@ import java.util.Optional;
 public class ProductViewController {
     private final ProductService productService;
     private final ProductMapper productMapper;
+    private final CategoryService categoryService;
 
     @GetMapping("/seller/new")
     public String createForm(Model model) {
+        List<Category> categories = categoryService.findCategories();
+        model.addAttribute("categories", categories);
         model.addAttribute("productDto", new ProductDto());
         return "products/add/product-add";
     }
@@ -35,11 +40,17 @@ public class ProductViewController {
     @GetMapping("/seller/{productId}")
     public String updateProductForm(@PathVariable("productId") Long productId, Model model) {
         Optional<Product> productOptional = productService.findProductById(productId);
-
         if (productOptional.isPresent()) {
             Product product = productOptional.get();
             ProductDto productDto = productMapper.productToProductDto(product);
+
+            // 기존 상품의 카테고리 정보를 유지하기 위해 categoryId 설정
+            productDto.setId(product.getCategory().getId());
+
+            List<Category> categories = categoryService.findCategories();
+            model.addAttribute("categories", categories);
             model.addAttribute("productDto", productDto);
+
             return "products/edit/product-edit";
         } else {
             return "redirect:/products";

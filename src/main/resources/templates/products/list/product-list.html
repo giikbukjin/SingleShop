@@ -88,7 +88,7 @@
             <td th:text="${product.description}"></td>
             <td th:text="${product.image}"></td>
             <td th:text="${product.price}"></td>
-            <td th:text="${product.category}"></td>
+            <td th:text="${product.category?.categoryName}"></td>
             <td>
               <a href="#" th:href="@{/seller/{productId} (productId=${product.id})}" class="btn btn-primary" role="button">수정</a>
             </td>

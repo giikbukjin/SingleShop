@@ -73,12 +73,12 @@
 <!-- 제품 추가 폼(Form) -->
 <section class="section">
   <div class="container">
-    <div th:if="${success}">
-      <div class="notification is-primary">
-        <button class="delete"></button>
-        <p th:text="${success}"></p>
-      </div>
-    </div>
+<!--    <div th:if="${success}">-->
+<!--      <div class="notification is-primary">-->
+<!--        <button class="delete"></button>-->
+<!--        <p th:text="${success}"></p>-->
+<!--      </div>-->
+<!--    </div>-->
 
     <div class="block account-header">
       <h1 class="subtitle is-4">제품 수정</h1>
@@ -107,10 +107,12 @@
           <label class="label" for="categorySelectBox">카테고리</label>
           <div class="control">
             <div class="select is-fullwidth">
-              <select id="categorySelectBox" name="category">
+              <select id="categorySelectBox" name="category.id">
                 <option value="">카테고리를 선택해 주세요.</option>
                 <th:block th:each="category : ${categories}">
-                  <option th:value="${category.id}" th:text="${category.name}">Category Name</option>
+                  <option th:value="${category.id}"
+                          th:selected="${productDto.category != null and category.id == productDto.category.id}"
+                          th:text="${category.categoryName}">Category Name</option>
                 </th:block>
               </select>
             </div>
