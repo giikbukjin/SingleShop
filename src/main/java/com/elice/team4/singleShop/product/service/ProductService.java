@@ -31,6 +31,12 @@ public class ProductService {
     // 제품 저장
     @Transactional
     public Product saveProduct(ProductDto productDto) {
+        // 카테고리 정보가 있다면 카테고리 엔티티 병합
+        if (productDto.getCategory() != null && productDto.getCategory().getId() != null) {
+            Category category = categoryService.findCategory(productDto.getCategory().getId());
+            productDto.setCategory(category);
+        }
+
         Product product = productMapper.productDtoToProduct(productDto); // DTO를 엔티티로 변환
         return productRepository.save(product);
     }
