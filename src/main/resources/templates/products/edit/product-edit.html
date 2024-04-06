@@ -111,7 +111,7 @@
                 <option value="">카테고리를 선택해 주세요.</option>
                 <th:block th:each="category : ${categories}">
                   <option th:value="${category.id}"
-                          th:selected="${productDto.category != null and category.id == productDto.category.id}"
+                          th:selected="${productDto.categoryId != null and category.id.equals(productDto.categoryId)}"
                           th:text="${category.categoryName}">Category Name</option>
                 </th:block>
               </select>
