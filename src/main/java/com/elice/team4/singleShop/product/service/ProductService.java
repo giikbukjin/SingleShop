@@ -71,13 +71,13 @@ public class ProductService {
         // 상품 정보 업데이트
         productMapper.updateProductFromDto(productDto, product);
 
-        // 카테고리 업데이트 (카테고리가 null이 아닐 경우에만 처리)
+        // 카테고리 업데이트
         if (productDto.getCategoryId() != null) {
             Category category = categoryRepository.findById(productDto.getCategoryId())
                     .orElseThrow(() -> new IllegalArgumentException("Invalid category ID: " + productDto.getCategoryId()));
             product.setCategory(category);
         } else {
-            product.setCategory(null); // 기존에 설정된 카테고리를 제거하려면 이 부분을 추가
+            product.setCategory(null); // 카테고리가 선택되지 않은 경우
         }
 
         productRepository.save(product);

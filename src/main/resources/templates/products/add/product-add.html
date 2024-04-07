@@ -112,7 +112,7 @@
                 <th:block th:each="category : ${categories}">
                   <option th:value="${category.id}"
                           th:selected="${productDto.categoryId != null and category.id == productDto.categoryId}"
-                          th:text="${category != null ? category.categoryName : '없음'}">카테고리</option>
+                          th:text="${category.categoryName}">카테고리 이름</option>
                 </th:block>
               </select>
             </div>

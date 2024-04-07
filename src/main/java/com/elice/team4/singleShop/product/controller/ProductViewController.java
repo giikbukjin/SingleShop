@@ -45,11 +45,14 @@ public class ProductViewController {
             ProductDto productDto = productMapper.productToProductDto(product);
 
             // 카테고리 ID 설정
-            productDto.setCategoryId(product.getCategory().getId());
+            if (product.getCategory() != null) {
+                productDto.setCategoryId(product.getCategory().getId());
+            }
 
             List<Category> categories = categoryService.findCategories();
             model.addAttribute("categories", categories);
             model.addAttribute("productDto", productDto);
+            model.addAttribute("product", product);
 
             return "products/edit/product-edit";
         } else {

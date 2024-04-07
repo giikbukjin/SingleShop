@@ -34,9 +34,13 @@ public class Product {
 
     private int price;
 
+
+    @Column(name = "category_id", nullable = true)
+    private Long categoryId;
+
     // ERD 관계 추가 (category)
-    @ManyToOne(optional = true, cascade = CascadeType.ALL)
-    @JoinColumn(name = "category_id", nullable = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", insertable = false, updatable = false)
     private Category category;
 
     // ERD 관계 추가 (user)
@@ -57,6 +61,20 @@ public class Product {
 //    @JoinColumn(name = "cartitem_id")
 //    private List<CartItem> cartItems = new ArrayList<>();
 
+
+    public Product() {
+
+    }
+
+    public Product(String name, Long categoryId, String summary, String description, String image, int stock, int price) {
+        this.name = name;
+        this.summary = summary;
+        this.description = description;
+        this.image = image;
+        this.stock = stock;
+        this.price = price;
+        this.categoryId = categoryId;
+    }
 
     // *** 재고 수량 증가 ***
     public void addStock(int quantity) {
