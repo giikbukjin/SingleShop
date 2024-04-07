@@ -89,7 +89,7 @@
             <td th:text="${product.image}">이미지 URL</td>
             <td th:text="${product.price}">가격</td>
             <!-- 조건 연산자 사용 -->
-<!--            <td th:text="${product.category != null ? product.category.categoryName : '없음'}">카테고리</td>-->
+            <td th:text="${product.category != null ? product.category.categoryName : '없음'}">카테고리</td>
             <td>
               <a href="#" th:href="@{/seller/{productId}(productId=${product.id})}" class="btn btn-primary" role="button">수정</a>
             </td>
