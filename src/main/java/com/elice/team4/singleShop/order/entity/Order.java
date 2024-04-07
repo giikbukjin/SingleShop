@@ -32,6 +32,10 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "delivery_info_id")
+    private DeliveryInfo deliveryInfo;
+
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime regTime; // 등록 시간

@@ -1,8 +1,10 @@
 package com.elice.team4.singleShop.order.service;
 
+import com.elice.team4.singleShop.order.dto.DeliveryInfoDto;
 import com.elice.team4.singleShop.order.dto.OrderDto;
 import com.elice.team4.singleShop.order.dto.OrderHistDto;
 import com.elice.team4.singleShop.order.dto.OrderItemDto;
+import com.elice.team4.singleShop.order.entity.DeliveryInfo;
 import com.elice.team4.singleShop.order.entity.Order;
 import com.elice.team4.singleShop.order.entity.OrderItem;
 import com.elice.team4.singleShop.product.domain.Product;
@@ -39,14 +41,12 @@ public class OrderService {
                 .orElseThrow(EntityNotFoundException::new);
         User user = userRepository.findByEmail(email); // 로그인한 회원의 이메일을 이용해 회원 조회
 
-        // 배송 정보를 Order 엔티티로 매핑하여 저장
-
         List<OrderItem> orderItemList = new ArrayList<>();
         OrderItem orderItem = OrderItem.createOrderItem(product, orderDto.getCount()); // 주문할 상품과 주문 수량 이용해 주문 상품 생성
 
         orderItemList.add(orderItem);
 
-        // 회원 정보와 주문 상품 리스트 이용해 주문 엔티티 생성, 배송 정보를 함께 저장
+        // 회원 정보와 주문 상품 리스트 이용해 주문 엔티티 생성
         Order order = Order.createOrder(user, orderItemList);
         orderRepository.save(order); // 생성한 주문 저장
 
