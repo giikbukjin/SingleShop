@@ -25,6 +25,7 @@ public class DeliveryInfo {
 
     private String deliveryRequest; // 배송 요청 사항
 
-    @OneToOne(mappedBy = "deliveryInfo", cascade = CascadeType.ALL)
+    @OneToOne
+    @JoinColumn(name = "order_id")
     private Order order;
 }
