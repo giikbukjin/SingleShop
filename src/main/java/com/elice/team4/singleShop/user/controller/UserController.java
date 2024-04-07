@@ -3,21 +3,20 @@ package com.elice.team4.singleShop.user.controller;
 import com.elice.team4.singleShop.user.dto.LogInRequestDto;
 import com.elice.team4.singleShop.user.dto.LogInResultDto;
 import com.elice.team4.singleShop.user.dto.SignUpRequestDto;
-import com.elice.team4.singleShop.user.dto.SignUpResultDto;
 import com.elice.team4.singleShop.user.service.SignService;
-import com.elice.team4.singleShop.user.service.UserDetailsServiceImpl;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController
+@Controller
 @RequestMapping("/auth")
 @Slf4j
 public class UserController {
@@ -27,34 +26,48 @@ public class UserController {
         this.signService = signService;
     }
 
+    @GetMapping("/login")
+    public String showLogInForm(Model model) {
+        LogInRequestDto logInRequestDto = new LogInRequestDto();
+        model.addAttribute("login", logInRequestDto);
+        return "login/login";
+    }
+
+    @GetMapping("/signup")
+    public String showSignUpForm(Model model) {
+        SignUpRequestDto signUpRequestDto = new SignUpRequestDto();
+        model.addAttribute("signup", signUpRequestDto);
+        return "register/register";
+    }
+
     @PostMapping(value = "/login")
-    public LogInResultDto logIn(@Valid @RequestBody LogInRequestDto logInRequestDto)
+    public String logIn(@Valid @ModelAttribute LogInRequestDto logInRequestDto)
             throws RuntimeException {
-        String name = logInRequestDto.getName();
+        String id = logInRequestDto.getEmail();
         String password = logInRequestDto.getPassword();
-        log.info("[logIn] 로그인을 시도하고 있습니다. id : {}, pw : ****", name);
-        LogInResultDto logInResultDto = signService.logIn(name, password);
+        log.info("[logIn] 로그인을 시도하고 있습니다. id : {}, pw : ****", id);
+        LogInResultDto logInResultDto = signService.logIn(id, password);
 
         if (logInResultDto.getCode() == 0) {
-            log.info("[logIn] 정상적으로 로그인되었습니다. id : {}, token : {}", name,
+            log.info("[logIn] 정상적으로 로그인되었습니다. id : {}, token : {}", id,
                     logInResultDto.getToken());
         }
-        return logInResultDto;
+        return "home/home";
     }
 
     @PostMapping(value = "/signup")
-    public SignUpResultDto signUp(@Valid @RequestBody SignUpRequestDto requestDto) {
+    public String signUp(@Valid @ModelAttribute SignUpRequestDto requestDto) {
         String name = requestDto.getName();
         String password = requestDto.getPassword();
         String email = requestDto.getEmail();
-        String role = requestDto.getRole();
+        String role = "";
 
         log.info("[signUp] 회원가입을 수행합니다. id : {}, password : ****, name : {}, role : {}", name,
                 name, role);
-        SignUpResultDto signUpResultDto = signService.signUp(name, password, email, role);
+        signService.signUp(name, password, email, role);
 
         log.info("[signUp] 회원가입을 완료했습니다. id : {}", name);
-        return signUpResultDto;
+        return "redirect:/auth/signup";
     }
 
     @PostMapping(value = "/user/{id}/edit")

@@ -59,10 +59,10 @@ public class SignServiceImpl implements SignService{
     }
 
     @Override
-    public LogInResultDto logIn(String name, String password) throws RuntimeException {
+    public LogInResultDto logIn(String email, String password) throws RuntimeException {
         log.info("[getLogInResult] signDataHandler로 회원 정보 요청");
-        User user = userRepository.getByName(name);
-        log.info("[getSignInResult] Id : {}", name);
+        User user = userRepository.findByEmail(email);
+        log.info("[getSignInResult] Id : {}", email);
 
         log.info("[getLogInResult] 패스워드 비교 수행");
         if(!passwordEncoder.matches(password, user.getPassword())){
@@ -91,19 +91,18 @@ public class SignServiceImpl implements SignService{
         log.info("[updateUser] 기존 회원 정보: {}", user);
 
         boolean passwordChanged = !passwordEncoder.matches(password, user.getPassword());
-        if (passwordChanged) {
-            log.info("[updateUser] 비밀번호가 변경되었습니다. 새로운 JWT 토큰 발급합니다.");
+        if(!userRepository.existsByEmail(email) && !userRepository.existsByName(name)){
+            user.update(name, passwordEncoder.encode(password), email);
+        }else{
+            throw new RuntimeException();
         }
-
-        user.setName(name);
-        user.setPassword(passwordEncoder.encode(password));
-        user.setEmail(email);
 
         userRepository.save(user);
         LogInResultDto logInResultDto = new LogInResultDto();
 
         SignUpResultDto signUpResultDto = new SignUpResultDto();
         if (passwordChanged) {
+            log.info("[updateUser] 비밀번호가 변경되었습니다. 새로운 JWT 토큰 발급합니다.");
             String newToken = jwtTokenProvider.createToken(String.valueOf(user.getName()), user.getRole());
             logInResultDto.setToken(newToken);
         }

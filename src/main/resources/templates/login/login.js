@@ -1,10 +1,10 @@
-import * as Api from "../api.js";
+import * as Api from "../../static/api.js";
 import {
   blockIfLogin,
   getUrlParams,
   validateEmail,
   createNavbar,
-} from "../useful-functions.js";
+} from "../../static/useful-functions.js";
 
 // 요소(element), input 혹은 상수
 const emailInput = document.querySelector("#emailInput");
@@ -46,7 +46,7 @@ async function handleSubmit(e) {
   try {
     const data = { email, password };
 
-    const result = await Api.post("/login", data);
+    const result = await Api.post("auth/login", data);
     const { token, isAdmin } = result;
 
     // 로그인 성공, 토큰을 세션 스토리지에 저장
