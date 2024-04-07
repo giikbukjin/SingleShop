@@ -20,11 +20,14 @@ public class DeliveryInfoController {
     private final DeliveryInfoService deliveryInfoService;
 
     @PostMapping
-    public ResponseEntity<?> createDeliveryInfo(@RequestBody @Valid DeliveryInfoDto deliveryInfoDto, BindingResult bindingResult) {
+    public ResponseEntity<?> createDeliveryInfo(@RequestBody @Valid DeliveryInfoDto deliveryInfoDto,
+                                                BindingResult bindingResult) { // 요청 본문을 Dto 객체로 매핑, 전달된 Dto 객체 유효성 검사
+        // 유효성 검사 결과 오류 있는 경우
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
 
+        // 배송 정보 생성 & 저장
         DeliveryInfo savedDeliveryInfo = deliveryInfoService.createDeliveryInfo(deliveryInfoDto);
         return ResponseEntity.ok(savedDeliveryInfo);
     }
