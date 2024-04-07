@@ -43,8 +43,8 @@ public class JwtTokenProvider {
         log.info("[init] JwtTokenProvider 내 SecretKey 초기화 완료");
     }
 
-    public String createToken(String userPk, User.Role roles) {
-        Claims claims = Jwts.claims().setSubject(userPk);
+    public String createToken(String name, User.Role roles) {
+        Claims claims = Jwts.claims().setSubject(name);
         claims.put("roles", roles);
         Date now = new Date();
         log.info("[createToken] 토큰 생성 완료");
@@ -67,11 +67,6 @@ public class JwtTokenProvider {
         log.info("[getUsername] 토큰 기반 회원 구별 정보 추출");
         return Jwts.parserBuilder().setSigningKey(secretKey).build()
                 .parseClaimsJws(token).getBody().getSubject();
-    }
-
-    public String resolveToken(HttpServletRequest req) {
-        log.info("[resolveToken] HTTP 헤더에서 Token 값 추출");
-        return req.getHeader("X-AUTH-TOKEN");
     }
 
     public boolean validateToken(String jwtToken) {
