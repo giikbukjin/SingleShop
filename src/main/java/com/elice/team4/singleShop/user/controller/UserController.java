@@ -4,6 +4,7 @@ import com.elice.team4.singleShop.user.dto.LogInRequestDto;
 import com.elice.team4.singleShop.user.dto.LogInResultDto;
 import com.elice.team4.singleShop.user.dto.SignUpRequestDto;
 import com.elice.team4.singleShop.user.service.SignService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -41,7 +42,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/login")
-    public String logIn(@Valid @ModelAttribute LogInRequestDto logInRequestDto)
+    public String logIn(@Valid @ModelAttribute LogInRequestDto logInRequestDto, HttpServletResponse response)
             throws RuntimeException {
         String id = logInRequestDto.getEmail();
         String password = logInRequestDto.getPassword();
@@ -52,8 +53,11 @@ public class UserController {
             log.info("[logIn] 정상적으로 로그인되었습니다. id : {}, token : {}", id,
                     logInResultDto.getToken());
         }
+        response.setHeader("Authorization", "Bearer " + logInResultDto.getToken());
+
         return "home/home";
     }
+
 
     @PostMapping(value = "/signup")
     public String signUp(@Valid @ModelAttribute SignUpRequestDto requestDto) {
