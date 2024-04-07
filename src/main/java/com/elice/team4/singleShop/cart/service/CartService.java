@@ -4,8 +4,9 @@ import com.elice.team4.singleShop.cart.entity.CartItem;
 import com.elice.team4.singleShop.cart.repository.CartItemRepository;
 import com.elice.team4.singleShop.global.exception.NotEnoughStockException;
 import com.elice.team4.singleShop.order.service.OrderService;
+import com.elice.team4.singleShop.product.repository.ProductRepository;
 import com.elice.team4.singleShop.user.repository.UserRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import com.elice.team4.singleShop.cart.entity.Cart;
 import com.elice.team4.singleShop.cart.repository.CartRepository;
@@ -26,100 +27,81 @@ public class CartService {
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final UserRepository userRepository;
-    private final OrderService orderService;
+    private final ProductRepository productRepository;
 
-    public Cart findByUserId(Long userId) {
-        return cartRepository.findByUserId(userId);
-    }
-
-    //장바구니 생성
+    // 사용자의 장바구니 생성
     @Transactional
-    public void createCart(User user) {
+    public void createCart(Long userId) {
+        User user = userRepository.findById(userId).orElse(null); // 사용자 아이디로부터 사용자를 조회
+        if (user == null) {
+            throw new IllegalArgumentException("Invalid user");
+        }
         Cart cart = Cart.createCart(user);
         cartRepository.save(cart);
     }
-    //장바구니 추가
+
+    // 장바구니에 상품 추가
+// Service
     @Transactional
-    public void addCart(User user, Product product, int count) {
-        Cart cart = cartRepository.findByUserId(user.getId());
+    public void addCart(Long userId, Long productId, int count) {
+        // 사용자 ID로 사용자를 조회합니다.
+        User user = userRepository.findById(userId).orElse(null);
+        // 상품 ID로 상품을 조회합니다.
+        Product product = productRepository.findById(productId).orElse(null);
+
+        if (user == null || product == null) {
+            // 사용자나 상품이 존재하지 않으면 예외 처리 또는 적절한 오류 처리를 합니다.
+            throw new IllegalArgumentException("Invalid user or product");
+        }
+
+        // 사용자의 장바구니를 조회합니다.
+        Cart cart = cartRepository.findByUserId(userId);
 
         if (cart == null) {
+            // 사용자의 장바구니가 없으면 생성합니다.
             cart = Cart.createCart(user);
             cartRepository.save(cart);
         }
 
-        CartItem cartItem = cartItemRepository.findByCartIdAndProductId(cart.getId(), product.getId());
+        // 장바구니에 상품을 추가합니다.
+        CartItem cartItem = cartItemRepository.findByCartIdAndProductId(cart.getId(), productId);
         if (cartItem == null) {
+            // 장바구니에 해당 상품이 없으면 새로운 CartItem을 생성하여 추가합니다.
             cartItem = CartItem.createCartItem(cart, product, count);
-            cartItemRepository.save(cartItem);
         } else {
+            // 장바구니에 이미 해당 상품이 있으면 수량을 증가시킵니다.
             cartItem.addCount(count);
         }
+        cartItemRepository.save(cartItem);
     }
 
-    // 장바구니 조회
+    // 사용자의 장바구니 조회
+    @Transactional(readOnly = true)
+    public List<CartItem> viewCart(Long userId) {
+        Cart cart = cartRepository.findByUserId(userId);
+        return cartItemRepository.findByCart(cart);
+    }
+
+    // 장바구니에서 상품 삭제
     @Transactional
-    public List<CartItem> userCartView(Cart cart){
-        List<CartItem> cartItems = cartItemRepository.findAll();
-        List<CartItem> userItems = new ArrayList<>();
-
-        for(CartItem cartItem : cartItems){
-            if(cartItem.getCart().getId() == cart.getId()){
-                userItems.add(cartItem);
-            }
-        }
-
-        return userItems;
+    public void deleteCartItem(Long cartItemId) {
+        cartItemRepository.deleteById(cartItemId);
     }
 
-    // 장바구니 특정 아이템 삭제
+    // 장바구니에서 결제
     @Transactional
-    public void cartItemDelete(long id){
-        cartItemRepository.deleteById(id);
-    }
-
-    // 장바구니 아이템 전체 삭제
-    @Transactional
-    public void cartDelete(int id){
-        List<CartItem> cartItems = cartItemRepository.findAll(); // 전체 cartItem 찾기
-
-        // 반복문을 이용하여 접속 User의 CartItem 만 찾아서 삭제
-        for(CartItem cartItem : cartItems){
-            if(cartItem.getCart().getUser().getId() == id){
-                cartItem.getCart().setCount(cartItem.getCart().getCount() - 1);
-                cartItemRepository.deleteById(cartItem.getId());
+    public void checkoutCart(Long userId) {
+        Cart cart = cartRepository.findByUserId(userId);
+        List<CartItem> cartItems = cartItemRepository.findByCart(cart);
+        for (CartItem cartItem : cartItems) {
+            int stock = cartItem.getProduct().getStock();
+            if (stock < cartItem.getCount()) {
+                throw new NotEnoughStockException("Not enough stock for product: " + cartItem.getProduct().getName());
             }
+            stock -= cartItem.getCount();
+            cartItem.getProduct().setStock(stock);
         }
+        // 결제 후 장바구니 비우기
+        cartItemRepository.deleteByCart(cart);
     }
-
-    // 장바구니 결제
-    @Transactional
-    public void cartPayment(long id){
-        List<CartItem> cartItems = cartItemRepository.findAll(); // 전체 cartItem 찾기
-        List<CartItem> userCartItems = new ArrayList<>();
-        User buyer = userRepository.findById(id).get();
-
-        // 반복문을 이용하여 접속 User의 CartItem만 찾아서 저장
-        for(CartItem cartItem : cartItems){
-            if(cartItem.getCart().getUser().getId() == buyer.getId()){
-                userCartItems.add(cartItem);
-            }
-        }
-
-
-        // 반복문을 이용하여 접속 User의 CartItem 만 찾아서 삭제
-        for(CartItem cartItem : userCartItems){
-            // 재고 변경
-            int stock = cartItem.getProduct().getStock(); // 현재 재고를 변수에 저장
-            if(stock < cartItem.getCount()){
-                throw new NotEnoughStockException("상품의 재고가 부족합니다. ( 현재 재고 수량 : " + stock + ")");
-            }
-            stock = stock - cartItem.getCount(); // 저장된 변수를 결제한 갯수만큼 빼준다
-            cartItem.getProduct().setStock(stock); // 재고갯수 변경
-
-
-        }
-
-    }
-
 }

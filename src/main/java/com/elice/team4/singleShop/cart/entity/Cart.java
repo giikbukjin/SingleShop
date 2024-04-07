@@ -27,14 +27,12 @@ public class Cart {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="user_id")
     @NotNull
-    private User user;        //1대1
+    private User user;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CartItem> cartItems = new ArrayList<>(); // 카트 항목
+    private List<CartItem> cartItems = new ArrayList<>();
 
-    private int count;
-
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate createDate;
 
     @PrePersist
