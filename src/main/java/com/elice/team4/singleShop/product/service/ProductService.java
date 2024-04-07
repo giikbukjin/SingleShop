@@ -1,6 +1,7 @@
 package com.elice.team4.singleShop.product.service;
 
 import com.elice.team4.singleShop.category.entity.Category;
+import com.elice.team4.singleShop.category.repository.CategoryRepository;
 import com.elice.team4.singleShop.category.service.CategoryService;
 import com.elice.team4.singleShop.product.domain.Product;
 import com.elice.team4.singleShop.product.dto.ProductDto;
@@ -20,26 +21,36 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper; // ProductMapper 의존성 주입
     private final CategoryService categoryService;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
-    public ProductService(ProductRepository productRepository, ProductMapper productMapper, CategoryService categoryService) {
+    public ProductService(ProductRepository productRepository, ProductMapper productMapper, CategoryService categoryService, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.productMapper = productMapper;
         this.categoryService = categoryService;
+        this.categoryRepository = categoryRepository;
     }
 
     // 제품 저장
     @Transactional
     public Product saveProduct(ProductDto productDto) {
-        // 카테고리 정보가 있다면 카테고리 엔티티 병합
-        if (productDto.getCategory() != null && productDto.getCategory().getId() != null) {
-            Category category = categoryService.findCategory(productDto.getCategory().getId());
-            productDto.setCategory(category);
+        // 카테고리 ID를 통해 카테고리 엔티티 조회
+        Category category = null;
+        if (productDto.getCategoryId() != null) {
+            category = categoryRepository.findById(productDto.getCategoryId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid category ID: " + productDto.getCategoryId()));
         }
 
-        Product product = productMapper.productDtoToProduct(productDto); // DTO를 엔티티로 변환
+        // DTO를 상품 엔티티로 변환
+        Product product = productMapper.productDtoToProduct(productDto);
+
+        // 변환된 상품 엔티티에 카테고리 설정
+        product.setCategory(category);
+
+        // 상품 엔티티 저장
         return productRepository.save(product);
     }
+
 
     // 모든 제품 조회
     public List<Product> findAllProducts() {
@@ -56,7 +67,19 @@ public class ProductService {
     public void updateProduct(Long productId, ProductDto productDto) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid product ID: " + productId));
+
+        // 상품 정보 업데이트
         productMapper.updateProductFromDto(productDto, product);
+
+        // 카테고리 업데이트
+        if (productDto.getCategoryId() != null) {
+            Category category = categoryRepository.findById(productDto.getCategoryId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid category ID: " + productDto.getCategoryId()));
+            product.setCategory(category);
+        } else {
+            product.setCategory(null); // 카테고리가 선택되지 않은 경우
+        }
+
         productRepository.save(product);
     }
 

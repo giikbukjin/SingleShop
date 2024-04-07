@@ -1,6 +1,5 @@
 package com.elice.team4.singleShop.product.dto;
 
-import com.elice.team4.singleShop.category.entity.Category;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +10,7 @@ public class ProductDto {
 
     private String name;
 
-    private Category category;
+    private Long categoryId;
 
     private String summary;
 

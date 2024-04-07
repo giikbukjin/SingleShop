@@ -108,11 +108,11 @@
           <div class="control">
             <div class="select is-fullwidth">
               <select id="categorySelectBox" name="category.id">
-                <option value="">카테고리를 선택해 주세요.</option>
+                <option value="">없음</option>
                 <th:block th:each="category : ${categories}">
                   <option th:value="${category.id}"
-                          th:selected="${productDto.category != null and category.id == productDto.category.id}"
-                          th:text="${category.categoryName}">Category Name</option>
+                          th:selected="${productDto.categoryId != null and category.id == productDto.categoryId}"
+                          th:text="${category.categoryName}">카테고리 이름</option>
                 </th:block>
               </select>
             </div>
