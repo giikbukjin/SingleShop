@@ -1,7 +1,9 @@
 package com.elice.team4.singleShop.order.repository;
 
 import com.elice.team4.singleShop.order.entity.Order;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.domain.Pageable;
@@ -20,4 +22,11 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("select count(o) from Order o " +
             "where o.user.email = :email")
     Long countOrder(@Param("email") String email); // 현재 로그인한 회원의 주문 개수 조회
+
+    // 주문 삭제 시 연관된 배송 정보도 삭제
+    @Transactional
+    @Modifying
+    @Query("delete from DeliveryInfo d " +
+            "where d.order.id = :orderId")
+    void deleteDeliveryInfoByOrderId(@Param("orderId") Long orderId);
 }
