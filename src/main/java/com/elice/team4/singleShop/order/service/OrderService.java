@@ -35,6 +35,7 @@ public class OrderService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
 
+
     // 하나의 상품 주문 생성 & 저장
     public Long order(OrderDto orderDto, String email) {
         Product product = productRepository.findById(orderDto.getProductId()) // 주문할 상품 조회
