@@ -29,7 +29,7 @@ public class DeliveryInfoService {
         return deliveryInfoRepository.save(deliveryInfo); // 생성된 배송 정보 저장
     }
 
-    // 배송 정보 수정
+    /*// 배송 정보 수정
     public DeliveryInfo updateDeliveryInfo(Long deliveryInfoId, DeliveryInfoDto deliveryInfoDto) {
         DeliveryInfo deliveryInfo = deliveryInfoRepository.findById(deliveryInfoId)
                 .orElseThrow(EntityNotFoundException::new);
@@ -41,5 +41,5 @@ public class DeliveryInfoService {
         deliveryInfo.setDeliveryRequest(deliveryInfoDto.getDeliveryRequest());
 
         return deliveryInfoRepository.save(deliveryInfo);
-    }
+    }*/
 }
