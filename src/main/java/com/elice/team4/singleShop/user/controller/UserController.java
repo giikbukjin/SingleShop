@@ -4,6 +4,7 @@ import com.elice.team4.singleShop.user.dto.LogInRequestDto;
 import com.elice.team4.singleShop.user.dto.LogInResultDto;
 import com.elice.team4.singleShop.user.dto.SignUpRequestDto;
 import com.elice.team4.singleShop.user.service.SignService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,7 +46,7 @@ public class UserController {
 
     @PostMapping(value = "/login")
     public String logIn(@Valid @ModelAttribute LogInRequestDto logInRequestDto, HttpServletResponse response)
-            throws RuntimeException {
+            throws RuntimeException, UnsupportedEncodingException {
         String id = logInRequestDto.getEmail();
         String password = logInRequestDto.getPassword();
         log.info("[logIn] 로그인을 시도하고 있습니다. id : {}, pw : ****", id);
@@ -53,7 +56,7 @@ public class UserController {
             log.info("[logIn] 정상적으로 로그인되었습니다. id : {}, token : {}", id,
                     logInResultDto.getToken());
         }
-        response.setHeader("Authorization", "Bearer " + logInResultDto.getToken());
+        response.addCookie(new Cookie("Authorization", URLEncoder.encode("Bearer " + logInResultDto.getToken(), "UTF-8")));
 
         return "home/home";
     }

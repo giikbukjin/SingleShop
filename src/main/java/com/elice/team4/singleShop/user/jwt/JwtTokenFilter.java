@@ -2,6 +2,7 @@ package com.elice.team4.singleShop.user.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.Arrays;
+import java.util.Optional;
 
 @Slf4j
 public class JwtTokenFilter extends OncePerRequestFilter {
@@ -36,10 +41,20 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private String getJwtFromRequest(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
+    private String getJwtFromRequest(HttpServletRequest request) throws UnsupportedEncodingException {
+        if (request.getCookies() != null) {
+            Optional<Cookie> authorizationCookie = Arrays.stream(request.getCookies())
+                    .filter(
+                            cookie -> cookie.getName().equals("Authorization")
+                    ).findFirst();
+
+            if (authorizationCookie.isPresent()) {
+                String token = URLDecoder.decode(authorizationCookie.get().getValue(), "UTF-8");
+                if (token != null && token.startsWith("Bearer ")) {
+                    return token.substring(7);
+                }
+                log.info(token);
+            }
         }
         return null;
     }
