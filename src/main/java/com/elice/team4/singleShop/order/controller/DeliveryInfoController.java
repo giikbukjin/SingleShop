@@ -7,10 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/delivery")
@@ -30,5 +27,19 @@ public class DeliveryInfoController {
         // 배송 정보 생성 & 저장
         DeliveryInfo savedDeliveryInfo = deliveryInfoService.createDeliveryInfo(deliveryInfoDto);
         return ResponseEntity.ok(savedDeliveryInfo);
+    }
+
+    @PutMapping("/{deliveryInfoId}")
+    public ResponseEntity<?> updateDeliveryInfo(@PathVariable Long deliveryInfoId,
+                                                @RequestBody @Valid DeliveryInfoDto deliveryInfoDto,
+                                                BindingResult bindingResult) {
+        // 데이터 바인딩 시 에러 유무 검사
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+        }
+
+        // 배송 정보 수정
+        DeliveryInfo updateDeliveryInfo = deliveryInfoService.updateDeliveryInfo(deliveryInfoId, deliveryInfoDto);
+        return ResponseEntity.ok(updateDeliveryInfo);
     }
 }
