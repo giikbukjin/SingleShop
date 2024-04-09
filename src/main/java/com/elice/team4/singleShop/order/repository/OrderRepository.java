@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -22,6 +24,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("select count(o) from Order o " +
             "where o.user.email = :email")
     Long countOrder(@Param("email") String email); // 현재 로그인한 회원의 주문 개수 조회
+
+    List<Order> findByUserEmail(String email); // 사용자 이메일로 주문 내역 조회
 
     // 주문 삭제 시 연관된 배송 정보도 삭제
     @Transactional
