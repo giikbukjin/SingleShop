@@ -1,4 +1,4 @@
-import { checkAdmin, createNavbar } from "../useful-functions.js";
+import { checkAdmin, createNavbar } from "../js/useful-functions.js";
 
 checkAdmin();
 createNavbar();

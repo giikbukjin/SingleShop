@@ -1,12 +1,12 @@
-import { getImageUrl } from "../aws-s3.js";
+import { getImageUrl } from "../js/aws-s3.js";
 import {
   addCommas,
   convertToNumber,
   navigate,
   compressString,
   createNavbar,
-} from "../useful-functions.js";
-import { deleteFromDb, getFromDb, putToDb } from "../indexed-db.js";
+} from "../js/useful-functions.js";
+import { deleteFromDb, getFromDb, putToDb } from "../js/indexed-db.js";
 
 // 요소(element), input 혹은 상수
 const cartProductsContainer = document.querySelector("#cartProductsContainer");

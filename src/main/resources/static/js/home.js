@@ -1,6 +1,6 @@
-import * as Api from "../api.js";
-import { getImageUrl } from "../aws-s3.js";
-import { navigate, createNavbar } from "../useful-functions.js";
+import * as Api from "./api.js";
+import { getImageUrl } from "./aws-s3.js";
+import { navigate, createNavbar } from "./useful-functions.js";
 // import {attach} from "bulma-carousel/src/js";
 
 
@@ -24,7 +24,7 @@ function addAllEvents() {}
 
 // api에서 카테고리 정보 및 사진 가져와서 슬라이드 카드로 사용
 async function addImageCardsToSlider() {
-    const categories = await Api.get("/categories");
+    const categories = await Api.get("");
     console.log(categories)
 
     for (const category of categories) {

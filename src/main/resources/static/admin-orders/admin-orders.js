@@ -1,5 +1,5 @@
-import { addCommas, checkAdmin, createNavbar } from "../useful-functions.js";
-import * as Api from "../api.js";
+import { addCommas, checkAdmin, createNavbar } from "../js/useful-functions.js";
+import * as Api from "../js/api.js";
 // import {
 //   title
 // } from "../../../../../../../../Library/Application Support/JetBrains/IntelliJIdea2023.3/javascript/extLibs/http_sdk.amazonaws.com_js_aws-sdk-2.410.0";
