@@ -60,7 +60,7 @@ public class UserController {
         var cookie = new Cookie("Authorization", URLEncoder.encode("Bearer " + logInResultDto.getToken(), StandardCharsets.UTF_8));
         cookie.setPath("/");
         response.addCookie(cookie);
-        return "home/home";
+        return "redirect:/home";
     }
 
 
