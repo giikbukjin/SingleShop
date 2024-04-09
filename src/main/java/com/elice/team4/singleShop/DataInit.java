@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,11 +25,29 @@ public class DataInit {
     private final OrderRepository orderRepository;
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @EventListener(ApplicationReadyEvent.class)
     public void init() {
         log.info("init stub data");
-//        userRepository.save(new User());
+        userRepository.save(User.builder()
+                .name("admin1")
+                .email("admin1@gmail.com")
+                .password(passwordEncoder.encode("password1"))
+                .role(User.Role.ADMIN)
+                .build());
+        userRepository.save(User.builder()
+                .name("seller1")
+                .email("seller1@gmail.com")
+                .password(passwordEncoder.encode("password2"))
+                .role(User.Role.SELLER)
+                .build());
+        userRepository.save(User.builder()
+                .name("consumer1")
+                .email("consumer1@gmail.com")
+                .password(passwordEncoder.encode("password3"))
+                .role(User.Role.CONSUMER)
+                .build());
         categoryRepository.save(new Category("간편조리식품", "신속하고 편리하게 조리할 수 있는 식품으로, 빠른 시간에 요리를 완성할 수 있도록 가공된 제품입니다."));
         categoryRepository.save(new Category("소포장 반찬", "작은 포장에 담긴 편리한 반찬으로, 한끼 식사나 간편한 식사 준비에 사용됩니다."));
         categoryRepository.save(new Category("소포장 야채", "신선한 야채를 통해 건강한 삶과 풍부한 음식을 즐겨보세요."));

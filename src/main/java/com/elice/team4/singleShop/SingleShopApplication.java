@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 @EnableJpaAuditing
@@ -27,8 +28,9 @@ public class SingleShopApplication {
 								 ProductRepository productRepository,
 								 OrderRepository orderRepository,
 								 CartRepository cartRepository,
-								 CartItemRepository cartItemRepository) {
+								 CartItemRepository cartItemRepository,
+								 PasswordEncoder passwordEncoder) {
 		return new DataInit(userRepository, categoryRepository, productRepository, orderRepository, cartRepository,
-				cartItemRepository);
+				cartItemRepository, passwordEncoder);
 	}
 }
