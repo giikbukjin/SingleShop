@@ -26,7 +26,7 @@ public class JwtTokenProvider {
     private final long TOKEN_VALID_MILISECOND = 1000L * 60 * 60 * 10;
 
     @Value("${key.salt}")
-    private  String salt;
+    private String salt;
 
     private Key secretKey;
 
