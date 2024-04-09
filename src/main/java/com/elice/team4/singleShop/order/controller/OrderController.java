@@ -76,8 +76,8 @@ public class OrderController {
 
     // 주문 내역 조회
     @GetMapping(value = {"/orders", "/orders/{page}"})
-    public String orderHist(@PathVariable("page")Optional<Integer> page, Principal principal, Model model) {
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 4);
+    public String orderHist(@PathVariable(value = "page", required = false) Integer page, Principal principal, Model model) {
+        Pageable pageable = PageRequest.of(page != null ? page : 0, 4);
 
         Page<OrderHistDto> orderHistDtoList = orderService.getOrderList(principal.getName(), pageable);
 
