@@ -2,6 +2,7 @@ package com.elice.team4.singleShop.global.config;
 
 import com.elice.team4.singleShop.user.jwt.JwtTokenFilter;
 import com.elice.team4.singleShop.user.jwt.JwtTokenProvider;
+import jakarta.servlet.http.Cookie;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -52,6 +53,19 @@ public class SecurityConfig{
 //                                .authenticated()   //인증된 사용자만 접근 허용
                         .anyRequest().permitAll() // 그 외의 모든 요청은 인증 필요
         );
+
+//        http
+//                .logout((logout) -> logout.logoutUrl("/auth/logout")
+//                        .addLogoutHandler((request, response, auth) -> {
+//                            for (Cookie cookie : request.getCookies()) {
+//                                String cookieName = cookie.getName();
+//                                Cookie cookieToDelete = new Cookie(cookieName, null);
+//                                cookieToDelete.setMaxAge(0);
+//                                response.addCookie(cookieToDelete);
+//                            }
+//                        })
+//                        .logoutSuccessUrl("/auth/login")
+//                ); TODO: 로그아웃 로직(윤기형님 나중에 참고 바람요)
 
         return http.build();
     }
