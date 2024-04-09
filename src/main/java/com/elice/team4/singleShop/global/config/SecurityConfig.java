@@ -35,37 +35,41 @@ public class SecurityConfig{
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
+        http.setSharedObject(SessionManagementConfigurer.class,
+                new SessionManagementConfigurer<HttpSecurity>().sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         // csrf, http basic 비활성화
         http.csrf(AbstractHttpConfigurer::disable)
             .formLogin(AbstractHttpConfigurer::disable)
             .httpBasic(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new JwtTokenFilter(jwtTokenProvider),
-                        UsernamePasswordAuthenticationFilter.class)
-                .setSharedObject(SessionManagementConfigurer.class,
-                new SessionManagementConfigurer<HttpSecurity>().sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                        UsernamePasswordAuthenticationFilter.class);
+
+
 
         // 페이지 별 권한 설정
         http.authorizeHttpRequests((auth)->auth
 //                .requestMatchers("users/signup","/","users/login").permitAll()  // 홈, 로그인, 가입 페이지는 전체 허가
-//                .requestMatchers("/admin").hasRole("ADMIN")   // 관리자 페이지는 관리자만
+                .requestMatchers("/admin").hasRole("ADMIN")   // 관리자 페이지는 관리자만
 //                                .anyRequest()
 //                                .permitAll()
 //                                .authenticated()   //인증된 사용자만 접근 허용
-                        .anyRequest().permitAll() // 그 외의 모든 요청은 인증 필요
+                        .anyRequest().permitAll()
+                // 그 외의 모든 요청은 인증 필요
         );
 
-//        http
-//                .logout((logout) -> logout.logoutUrl("/auth/logout")
-//                        .addLogoutHandler((request, response, auth) -> {
-//                            for (Cookie cookie : request.getCookies()) {
-//                                String cookieName = cookie.getName();
-//                                Cookie cookieToDelete = new Cookie(cookieName, null);
-//                                cookieToDelete.setMaxAge(0);
-//                                response.addCookie(cookieToDelete);
-//                            }
-//                        })
-//                        .logoutSuccessUrl("/auth/login")
-//                ); TODO: 로그아웃 로직(윤기형님 나중에 참고 바람요)
+        http
+                .logout((logout) -> logout.logoutUrl("/auth/logout")
+                        .addLogoutHandler((request, response, auth) -> {
+                            for (Cookie cookie : request.getCookies()) {
+                                String cookieName = cookie.getName();
+                                Cookie cookieToDelete = new Cookie(cookieName, null);
+                                cookieToDelete.setMaxAge(0);
+                                cookieToDelete.setPath("/");
+                                response.addCookie(cookieToDelete);
+                            }
+                        })
+                        .logoutSuccessUrl("/auth/login")
+                );
 
         return http.build();
     }

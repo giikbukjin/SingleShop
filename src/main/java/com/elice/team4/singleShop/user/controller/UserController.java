@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,8 +57,9 @@ public class UserController {
             log.info("[logIn] 정상적으로 로그인되었습니다. id : {}, token : {}", id,
                     logInResultDto.getToken());
         }
-        response.addCookie(new Cookie("Authorization", URLEncoder.encode("Bearer " + logInResultDto.getToken(), "UTF-8")));
-
+        var cookie = new Cookie("Authorization", URLEncoder.encode("Bearer " + logInResultDto.getToken(), StandardCharsets.UTF_8));
+        cookie.setPath("/");
+        response.addCookie(cookie);
         return "home/home";
     }
 
