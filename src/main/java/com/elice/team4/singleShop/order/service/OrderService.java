@@ -188,6 +188,15 @@ public class OrderService {
         return orderDto;
     }
 
+    // 특정 사용자의 주문 내역 조회 - 관리자
+    @Transactional
+    public List<OrderDto> getUserOrders(String email) {
+        List<Order> orders = orderRepository.findByUserEmail(email);
+        return orders.stream()
+                .map(this::mapToOrderDto)
+                .collect(Collectors.toList());
+    }
+
     // 주문 상태 수정 - 관리자
     public boolean updateOrderStatus(Long orderId, Order.OrderStatus newStatus) {
         Optional<Order> optionalOrder = orderRepository.findById(orderId); // 주문 ID 사용해 주문 조회
