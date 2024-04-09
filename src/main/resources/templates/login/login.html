@@ -10,9 +10,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"/>
   <!-- 폰트 어썸: 아이콘 -->
   <script defer src="https://kit.fontawesome.com/9daa42bcef.js" crossorigin="anonymous"></script>
-  <!-- 커스텀 css, js -->
+  <!-- 커스텀 css -->
   <link rel="stylesheet" href="/templates/login/login.css"/>
-  <script src="/templates/login/login.js" type="module" defer></script>
 </head>
 <body>
 <!-- 헤더 -->
@@ -37,9 +36,9 @@
         <ul id="navbar">
           <li>
             <a href="/cart" aria-current="page">
-                            <span class="icon">
-                                <i class="fas fa-cart-shopping"></i>
-                            </span>
+              <span class="icon">
+                <i class="fas fa-cart-shopping"></i>
+              </span>
               <span>카트</span>
             </a>
           </li>
@@ -70,5 +69,44 @@
     <button class="button is-info is-fullwidth" id="submitButton" type="submit">로그인하기</button>
   </form>
 </div>
+
+<!-- JavaScript 코드 -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const loginForm = document.getElementById('loginForm');
+    const emailInput = document.getElementById('emailInput');
+    const passwordInput = document.getElementById('passwordInput');
+
+    loginForm.addEventListener('submit', function (event) {
+      event.preventDefault(); // Prevent form submission
+
+      // Validate email
+      if (!validateEmail(emailInput.value.trim())) {
+        alert('유효한 이메일을 입력하세요.');
+        return;
+      }
+
+      // Validate password
+      if (!validatePassword(passwordInput.value.trim())) {
+        alert('비밀번호는 6자 이상이어야 합니다.');
+        return;
+      }
+
+      // If both email and password are valid, submit the form
+      loginForm.submit();
+    });
+
+    // Function to validate email
+    function validateEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(String(email).toLowerCase());
+    }
+
+    // Function to validate password
+    function validatePassword(password) {
+      return password.length >= 8 && password.length <= 15;
+    }
+  });
+</script>
 </body>
 </html>
