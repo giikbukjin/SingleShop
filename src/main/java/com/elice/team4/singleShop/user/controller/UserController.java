@@ -92,6 +92,11 @@ public class UserController {
         return ResponseEntity.ok().body("회원 정보가 수정되었습니다.");
     }
 
+    @GetMapping("/logout")
+    public String logout() {
+        return "redirect:/auth/login";
+    }
+
     @ExceptionHandler(value = RuntimeException.class)
     public ResponseEntity<Map<String, String>> ExceptionHandler(RuntimeException e) {
         HttpHeaders responseHeaders = new HttpHeaders();

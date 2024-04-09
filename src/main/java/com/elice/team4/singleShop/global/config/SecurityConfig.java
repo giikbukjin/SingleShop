@@ -20,27 +20,32 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig{
+public class SecurityConfig {
+    // JwtTokenProvider : AuthenticationProvider, 인증 전 authentication -> 인증 후 authentication 으로 바꿔 주는 것
     private final JwtTokenProvider jwtTokenProvider;
 
-    public SecurityConfig(JwtTokenProvider jwtTokenProvider){
+    public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
+    // 정적 리소스를 이용할 때, 권한을 무시하는 코드 ( 다만, 디렉토리 구조까지 설정 되어 있음 )
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
+    // 패스워드 부호화
     @Bean
     public PasswordEncoder passwordEncoder(){
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
+    // 필터체인?
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
+        // 무상태성 설정
         http.setSharedObject(SessionManagementConfigurer.class,
                 new SessionManagementConfigurer<HttpSecurity>().sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         // csrf, http basic 비활성화
