@@ -56,7 +56,12 @@ public class Order {
     private User user; // 사용자는 여러 개의 주문내역 존재
 
     public enum OrderStatus {
-        ORDER, CANCEL
+        ORDER,
+        ORDER_COMPLETE,
+        CANCEL,
+        DELIVERY_READY,
+        DELIVERING,
+        DELIVERY_COMPLETE
     }
 
     public void addOrderItem(OrderItem orderItem) { // 주문 상품 정보 담기, orderItem 객체를 order 객체의 orderItems에 추가
