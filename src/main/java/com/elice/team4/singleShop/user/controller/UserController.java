@@ -59,6 +59,7 @@ public class UserController {
         }
         var cookie = new Cookie("Authorization", URLEncoder.encode("Bearer " + logInResultDto.getToken(), StandardCharsets.UTF_8));
         cookie.setPath("/");
+        cookie.setMaxAge(60 * 60);
         response.addCookie(cookie);
         return "redirect:/home";
     }
