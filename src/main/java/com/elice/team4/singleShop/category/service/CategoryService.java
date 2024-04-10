@@ -27,6 +27,11 @@ public class CategoryService {
         return foundCategory;
     }
 
+    public Category findCategoryByName(String categoryName) {
+        Category foundCategory = categoryRepository.findByCategoryName(categoryName);
+        return foundCategory;
+    }
+
     @Transactional
     public Category createCategory(Category category) {
         return categoryRepository.save(category);
