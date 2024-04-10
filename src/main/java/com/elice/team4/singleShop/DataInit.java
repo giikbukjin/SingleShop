@@ -15,9 +15,6 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.List;
-import java.util.Optional;
-
 @Slf4j
 @RequiredArgsConstructor
 public class DataInit {

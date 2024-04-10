@@ -93,6 +93,12 @@
             <td>
               <a href="#" th:href="@{/seller/{productId}(productId=${product.id})}" class="btn btn-primary" role="button">수정</a>
             </td>
+            <td>
+              <form th:action="@{/seller/{productId}/delete(productId=${product.id})}" method="post">
+                <input type="hidden" name="_method" value="DELETE">
+                <button type="submit" class="btn btn-danger">삭제</button>
+              </form>
+            </td>
           </tr>
           </tbody>
         </table>

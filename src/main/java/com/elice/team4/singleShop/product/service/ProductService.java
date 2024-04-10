@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.List;
 import java.util.Optional;
@@ -93,5 +92,13 @@ public class ProductService {
         }
 
         productRepository.save(product);
+    }
+
+    @Transactional
+    public void deleteProduct(Long productId) {
+        // 상품이 존재하는지 확인하고, 존재한다면 삭제
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid product ID: " + productId));
+        productRepository.delete(product);
     }
 }
