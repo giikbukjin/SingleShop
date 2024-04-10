@@ -88,16 +88,10 @@ public class ProductService {
                     .orElseThrow(() -> new IllegalArgumentException("Invalid category ID: " + productDto.getCategoryId()));
             product.setCategory(category);
         } else {
-            product.setCategory(null); // 카테고리가 선택되지 않은 경우
+            // 카테고리 ID가 null이거나 "없음"으로 선택된 경우
+            product.setCategory(null);
         }
 
         productRepository.save(product);
-    }
-
-
-    // 카테고리 서비스에서 모든 카테고리 조회
-    @ModelAttribute("categories")
-    public List<Category> categories() {
-        return categoryService.findCategories();
     }
 }
