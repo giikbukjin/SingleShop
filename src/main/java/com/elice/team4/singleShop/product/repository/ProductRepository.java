@@ -1,6 +1,9 @@
 package com.elice.team4.singleShop.product.repository;
 
+import com.elice.team4.singleShop.category.entity.Category;
 import com.elice.team4.singleShop.product.domain.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +18,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByName(String name);
 
     // Category Paging
-//    Page<Product> findAllByCategoryOrderByCreatedAtDesc(Category category, Pageable pageable);
-//    Page<Product> findAllByCategoryAndNameContaining(Category category, String keyword, Pageable pageable);
+    Page<Product> findAllByCategoryOrderByCreatedAtDesc(Category category, Pageable pageable);
+    Page<Product> findAllByCategoryAndNameContaining(Category category, String keyword, Pageable pageable);
 }

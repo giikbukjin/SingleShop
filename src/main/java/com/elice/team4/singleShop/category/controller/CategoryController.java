@@ -45,11 +45,11 @@ public class CategoryController {
         PageRequest pageRequest = PageRequest.of(page, size);
 
         // TODO : Page<Product> 타입 객체 얻어오기, ProductService 메서드
-//        Page<Product> productPage = productService.메서드명(foundCategory, keyword, pageRequest);
+        Page<Product> productPage = productService.findProductsByCategoryAndKeyword(foundCategory, keyword, pageRequest);
 
         model.addAttribute("category", foundCategory);
         model.addAttribute("keyword", keyword);
-//        model.addAttribute("productPage", productPage);
+        model.addAttribute("productPage", productPage);
 
         // TODO: category.html 타임리프 작업 미완성, 'th:' 검색하여 수정할 것
         return "category/category";
@@ -95,7 +95,7 @@ public class CategoryController {
         Category category = categoryMapper.CategoryDtoToCategory(categoryDto);
         Category updatedCategory = categoryService.updateCategory(category, id);
 
-        // TODO: admin/category/{id} 로 할지?
+        // TODO: category.html 완성 후 admin/category/{id} 로 변경
         return "redirect:/admin/category";
     }
 

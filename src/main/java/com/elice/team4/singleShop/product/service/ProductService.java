@@ -8,6 +8,8 @@ import com.elice.team4.singleShop.product.dto.ProductDto;
 import com.elice.team4.singleShop.product.mapper.ProductMapper;
 import com.elice.team4.singleShop.product.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -60,6 +62,15 @@ public class ProductService {
     // 아이디로 제품 조회
     public Optional<Product> findProductById(Long productId) {
         return productRepository.findById(productId);
+    }
+
+    // 카테고리 페이지에서 키워드로 제품 조회
+    public Page<Product> findProductsByCategoryAndKeyword(Category category, String keyword, PageRequest pageRequest) {
+        if (keyword != null && !keyword.isEmpty()) {
+            return productRepository.findAllByCategoryAndNameContaining(category, keyword, pageRequest);
+        } else {
+            return productRepository.findAllByCategoryOrderByCreatedAtDesc(category, pageRequest);
+        }
     }
 
     // 제품 정보 수정
