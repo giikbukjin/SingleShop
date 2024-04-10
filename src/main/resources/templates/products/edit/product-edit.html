@@ -107,7 +107,7 @@
           <label class="label" for="categorySelectBox">카테고리</label>
           <div class="control">
             <div class="select is-fullwidth">
-              <select id="categorySelectBox" name="category.id">
+              <select id="categorySelectBox" name="categoryId">
                 <option value="">없음</option>
                 <th:block th:each="category : ${categories}">
                   <option th:value="${category.id}"
