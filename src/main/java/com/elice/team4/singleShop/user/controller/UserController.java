@@ -81,7 +81,7 @@ public class UserController {
         signService.signUp(name, password, email, role);
 
         log.info("[signUp] 회원가입을 완료했습니다. id : {}", name);
-        return "redirect:/auth/signup";
+        return "redirect:/auth/login";
     }
 
     @PostMapping(value = "/user/{id}/edit")
