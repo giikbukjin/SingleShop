@@ -61,6 +61,10 @@ public class UserController {
         cookie.setPath("/");
         cookie.setMaxAge(60 * 60);
         response.addCookie(cookie);
+
+        if(String.valueOf(logInResultDto.getRole()).equals("ADMIN")){
+            return "redirect:/admin";
+        }
         return "redirect:/home";
     }
 
