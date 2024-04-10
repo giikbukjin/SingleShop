@@ -27,4 +27,11 @@ public class ProductApiController {
         redirectAttributes.addFlashAttribute("success", "Product updated successfully!");
         return "redirect:/products";
     }
+
+    @PostMapping("/seller/{productId}/delete")
+    public String deleteProduct(@PathVariable Long productId, RedirectAttributes redirectAttributes) {
+        productService.deleteProduct(productId);
+        redirectAttributes.addFlashAttribute("successMessage", "Product deleted successfully");
+        return "redirect:/products";
+    }
 }
