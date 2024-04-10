@@ -1,4 +1,4 @@
-import * as Api from "../js/api.js";
+import * as Api from "./api.js";
 import {
   checkLogin,
   addCommas,
@@ -6,8 +6,8 @@ import {
   navigate,
   randomPick,
   createNavbar,
-} from "../js/useful-functions.js";
-import { deleteFromDb, getFromDb, putToDb } from "../js/indexed-db.js";
+} from "./useful-functions.js";
+import { deleteFromDb, getFromDb, putToDb } from "./indexed-db.js";
 
 // 요소(element), input 혹은 상수
 const subtitleCart = document.querySelector("#subtitleCart");
