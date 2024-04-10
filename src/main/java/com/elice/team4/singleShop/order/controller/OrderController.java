@@ -1,7 +1,10 @@
 package com.elice.team4.singleShop.order.controller;
 
+import com.elice.team4.singleShop.order.dto.DeliveryInfoDto;
 import com.elice.team4.singleShop.order.dto.OrderDto;
 import com.elice.team4.singleShop.order.dto.OrderHistDto;
+import com.elice.team4.singleShop.order.entity.DeliveryInfo;
+import com.elice.team4.singleShop.order.service.DeliveryInfoService;
 import com.elice.team4.singleShop.order.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,8 @@ import java.util.Optional;
 public class OrderController {
 
     private final OrderService orderService;
+    private final DeliveryInfoService deliveryInfoService;
+
 
     // 주문 처리
     @PostMapping(value = "/order")
@@ -51,10 +56,28 @@ public class OrderController {
         return new ResponseEntity<Long>(orderId, HttpStatus.OK); // 생성된 주문 번호와 요청 성공 HTTP 응답 상태 코드
     }
 
+    // 주문에 배송 정보 추가 API
+    @PutMapping("/{orderId}/delivery")
+    public ResponseEntity<?> addDeliveryInfoToOrder(@PathVariable Long orderId,
+                                                    @RequestBody @Valid DeliveryInfoDto deliveryInfoDto,
+                                                    BindingResult bindingResult) {
+        // 데이터 바인딩 시 에러 유무 검사
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+        }
+
+        // 주문에 배송 정보 추가
+        DeliveryInfo createdDeliveryInfo = deliveryInfoService.createDeliveryInfo(deliveryInfoDto);
+        // 주문에 새로운 배송 정보 연결
+        orderService.addDeliveryInfo(orderId, createdDeliveryInfo);
+
+        return ResponseEntity.ok("Delivery information added to order successfully.");
+    }
+
     // 주문 내역 조회
     @GetMapping(value = {"/orders", "/orders/{page}"})
-    public String orderHist(@PathVariable("page")Optional<Integer> page, Principal principal, Model model) {
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 4);
+    public String orderHist(@PathVariable(value = "page", required = false) Integer page, Principal principal, Model model) {
+        Pageable pageable = PageRequest.of(page != null ? page : 0, 4);
 
         Page<OrderHistDto> orderHistDtoList = orderService.getOrderList(principal.getName(), pageable);
 

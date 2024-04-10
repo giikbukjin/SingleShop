@@ -1,9 +1,12 @@
 package com.elice.team4.singleShop.order.controller;
 
 import com.elice.team4.singleShop.order.dto.OrderDto;
+import com.elice.team4.singleShop.order.dto.OrderHistDto;
 import com.elice.team4.singleShop.order.entity.Order;
 import com.elice.team4.singleShop.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +25,16 @@ public class AdminController {
     public ResponseEntity<List<OrderDto>> getAllOrders() {
         List<OrderDto> orders = orderService.getAllOrders(); // 모든 주문 내역 조회
         return ResponseEntity.ok(orders); // 조회 주문 내역 반환
+    }
+
+    @GetMapping("/user/{email}")
+    public ResponseEntity<List<OrderDto>> getUserOrders(@PathVariable String email) {
+        List<OrderDto> orders = orderService.getUserOrders(email);
+
+        if (orders.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(orders);
     }
 
     // 배송 상태 수정

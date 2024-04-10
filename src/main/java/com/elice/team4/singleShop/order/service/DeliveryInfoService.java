@@ -3,6 +3,8 @@ package com.elice.team4.singleShop.order.service;
 import com.elice.team4.singleShop.order.dto.DeliveryInfoDto;
 import com.elice.team4.singleShop.order.entity.DeliveryInfo;
 import com.elice.team4.singleShop.order.repository.DeliveryInfoRepository;
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,4 +28,18 @@ public class DeliveryInfoService {
 
         return deliveryInfoRepository.save(deliveryInfo); // 생성된 배송 정보 저장
     }
+
+    /*// 배송 정보 수정
+    public DeliveryInfo updateDeliveryInfo(Long deliveryInfoId, DeliveryInfoDto deliveryInfoDto) {
+        DeliveryInfo deliveryInfo = deliveryInfoRepository.findById(deliveryInfoId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        deliveryInfo.setReceiverPhoneNumber(deliveryInfoDto.getReceiverPhoneNumber());
+        deliveryInfo.setPostalCode(deliveryInfoDto.getPostalCode());
+        deliveryInfo.setAddress1(deliveryInfoDto.getAddress1());
+        deliveryInfo.setAddress2(deliveryInfoDto.getAddress2());
+        deliveryInfo.setDeliveryRequest(deliveryInfoDto.getDeliveryRequest());
+
+        return deliveryInfoRepository.save(deliveryInfo);
+    }*/
 }
