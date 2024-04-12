@@ -28,18 +28,4 @@ public class DeliveryInfoService {
 
         return deliveryInfoRepository.save(deliveryInfo); // 생성된 배송 정보 저장
     }
-
-    /*// 배송 정보 수정
-    public DeliveryInfo updateDeliveryInfo(Long deliveryInfoId, DeliveryInfoDto deliveryInfoDto) {
-        DeliveryInfo deliveryInfo = deliveryInfoRepository.findById(deliveryInfoId)
-                .orElseThrow(EntityNotFoundException::new);
-
-        deliveryInfo.setReceiverPhoneNumber(deliveryInfoDto.getReceiverPhoneNumber());
-        deliveryInfo.setPostalCode(deliveryInfoDto.getPostalCode());
-        deliveryInfo.setAddress1(deliveryInfoDto.getAddress1());
-        deliveryInfo.setAddress2(deliveryInfoDto.getAddress2());
-        deliveryInfo.setDeliveryRequest(deliveryInfoDto.getDeliveryRequest());
-
-        return deliveryInfoRepository.save(deliveryInfo);
-    }*/
 }
