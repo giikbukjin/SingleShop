@@ -127,7 +127,7 @@
                     class="board-item list-group-item p-3 list-group-item-action"
                     th:unless="${productPage.isEmpty()}"
                     th:each="product : ${productPage}"
-                    th:href="@{/seller/{productId}(productId=${product.id})}"
+                    th:href="@{/products/{productId}(productId=${product.id})}"
             >
                 <h4 class="fw-bold mb-1" th:text="${product.name}">상품명</h4>
                 <small class="text-secondary" th:text="${product.createdAt}"
