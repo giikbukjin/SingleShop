@@ -56,7 +56,7 @@ public class ProductViewController {
 
             return "products/edit/product-edit";
         } else {
-            return "redirect:/products";
+            return "redirect:/seller/products";
         }
     }
 
