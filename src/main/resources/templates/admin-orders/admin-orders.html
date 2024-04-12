@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -112,8 +112,34 @@
           </div>
         </div>
       </div>
+      <!-- 주문 데이터 반복 처리 -->
+      <div class="columns orders-item" th:each="order : ${orders}">
+        <div class="column is-2" th:text="${order.createdAt}">-</div>
+        <div class="column is-4" th:text="${order.orderItems[0].product.name}">-</div>
+        <div class="column is-2" th:text="${order.totalPrice}">-</div>
+        <div class="column is-2">
+          <div class="select">
+            <select th:id="'statusSelectBox-' + ${order.id}">
+              <option th:selected="${order.orderStatus == 'ORDER_COMPLETE'}"
+                      value="ORDER_COMPLETE">주문 완료</option>
+              <option th:selected="${order.orderStatus == 'CANCEL'}"
+                      value="CANCEL">주문 취소</option>
+              <option th:selected="${order.orderStatus == 'DELIVERY_READY'}"
+                      value="DELIVERY_READY">상품 준비중</option>
+              <option th:selected="${order.orderStatus == 'DELIVERING'}"
+                      value="DELIVERING">상품 배송중</option>
+              <option th:selected="${order.orderStatus == 'DELIVERY_COMPLETE'}"
+                      value="DELIVERY_COMPLETE">배송완료</option>
+            </select>
+          </div>
+        </div>
+        <div class="column is-2">
+          <button class="button" th:id="'deleteButton-' + ${order.id}">주문 취소</button>
+        </div>
+      </div>
+      </div>
+      </div>
     </section>
-
     <!-- 주문을 정말 취소할 지 묻는 Modal 창 -->
     <div id="modal" class="modal">
       <div class="modal-background" id="modalBackground"></div>
