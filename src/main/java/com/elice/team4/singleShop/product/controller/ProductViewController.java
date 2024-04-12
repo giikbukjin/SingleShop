@@ -30,7 +30,7 @@ public class ProductViewController {
         return "products/add/product-add";
     }
 
-    @GetMapping("/products")
+    @GetMapping("/seller/products")
     public String list(Model model) {
         List<Product> products = productService.findAllProducts();
         model.addAttribute("products", products);
