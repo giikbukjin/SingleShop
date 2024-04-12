@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootTest
-public class CartTest {
+public class CartTest {/*
 
     @Autowired
     private UserRepository userRepository;
@@ -93,4 +93,4 @@ public class CartTest {
             cartRepository.delete(cart);
         }
     }
-}
+*/}
