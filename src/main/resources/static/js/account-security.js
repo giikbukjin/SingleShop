@@ -1,5 +1,5 @@
-import { checkLogin, createNavbar } from "../../useful-functions.js";
-import * as Api from "../../api.js";
+import { checkLogin, createNavbar } from "./useful-functions.js";
+import * as Api from "./api.js";
 
 // 요소(element), input 혹은 상수
 const securityTitle = document.querySelector("#securityTitle");
@@ -102,17 +102,17 @@ function toggleTargets(e) {
 // 나중에 사용자가 데이터를 변경했는지 확인하기 위해, 전역 변수로 userData 설정
 let userData;
 async function insertUserData() {
-  userData = await Api.get("/users");
+  userData = await Api.get("/api/users");
 
   // 객체 destructuring
-  const { fullName, email, address, phoneNumber } = userData;
+  const { name, email, address, phoneNumber } = userData;
 
   // 서버에서 온 비밀번호는 해쉬 문자열인데, 이를 빈 문자열로 바꿈
   // 나중에 사용자가 비밀번호 변경을 위해 입력했는지 확인하기 위함임.
   userData.password = "";
 
   securityTitle.innerText = `회원정보 관리 (${email})`;
-  fullNameInput.value = fullName;
+  fullNameInput.value = name;
 
   if (address) {
     const { postalCode, address1, address2 } = address;
@@ -192,7 +192,7 @@ function searchAddress(e) {
 async function saveUserData(e) {
   e.preventDefault();
 
-  const fullName = fullNameInput.value;
+  const name = fullNameInput.value;
   const password = passwordInput.value;
   const passwordConfirm = passwordConfirmInput.value;
   const postalCode = postalCodeInput.value;
@@ -221,8 +221,8 @@ async function saveUserData(e) {
   const data = { currentPassword };
 
   // 초기값과 다를 경우 api 요청에 사용할 data 객체에 넣어줌
-  if (fullName !== userData.fullName) {
-    data.fullName = fullName;
+  if (name !== userData.name) {
+    data.name = name;
   }
 
   if (password !== userData.password) {
@@ -259,7 +259,7 @@ async function saveUserData(e) {
     const { id } = userData;
     console.log(data)
     // db에 수정된 정보 저장
-    await Api.patch("/users", id, data);
+    await Api.patch("/api/users", id, data);
 
     alert("회원정보가 안전하게 저장되었습니다.");
     disableForm();

@@ -66,7 +66,7 @@ async function patch(endpoint, params = "", data) {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+//      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
     },
     body: bodyData,
   });

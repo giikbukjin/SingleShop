@@ -1,22 +1,19 @@
 package com.elice.team4.singleShop.global.controller;
 
-import com.elice.team4.singleShop.global.exception.UserNotFoundException;
-import com.elice.team4.singleShop.user.dto.UserDto;
 import com.elice.team4.singleShop.user.entity.User;
 import com.elice.team4.singleShop.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
 @Slf4j
+@CrossOrigin(origins = "*")
 public class JsApiController {
 
     private final UserRepository userRepository;
@@ -27,18 +24,18 @@ public class JsApiController {
         return ResponseEntity.ok(users);
     }
 
-    // TODO : PATCHMAPPING("/users") : 역할 바뀌었을때 api 요청 > js
-    // TODO : DELETEMAPPING("/users") : 삭제 시 api 요청 > js
-    @PatchMapping("/users")
-    public ResponseEntity<User> updateUsersRole(@RequestParam Long id, @RequestParam User.Role data) {
+    // TODO : PATCHMAPPING("/users") : POSTMAN으로 했을 때 된다, JS로 잘 넘기면 끝
+    // TODO : DELETEMAPPING("/users") : POSTMAN으로 했을 때 된다, JS로 잘 넘기면 끝
+    @PatchMapping("/users/{id}")
+    public ResponseEntity<User> updateUsersRole(@PathVariable Long id, @RequestParam(value = "role") User.Role role) {
         User findUser = userRepository.findById(id).orElseThrow();
-        findUser.setRole(data);
+        findUser.setRole(role);
         userRepository.save(findUser);
         return ResponseEntity.ok(findUser);
     }
 
-    @DeleteMapping("/users")
-    public ResponseEntity deleteUser(@RequestParam Long id) {
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity deleteUser(@PathVariable Long id) {
         userRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }
