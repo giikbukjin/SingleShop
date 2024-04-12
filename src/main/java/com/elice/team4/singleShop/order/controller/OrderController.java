@@ -30,7 +30,6 @@ public class OrderController {
     private final OrderService orderService;
     private final DeliveryInfoService deliveryInfoService;
 
-
     // 주문 처리
     @PostMapping(value = "/order")
     public @ResponseBody ResponseEntity order (@RequestBody @Valid OrderDto orderDto,
@@ -64,17 +63,17 @@ public class OrderController {
     }
 
     // 주문 내역 조회
-    @GetMapping(value = {"/account/orders", "/orders/{page}"})
+    @GetMapping(value = {"/order", "/order/{page}"})
     public String orderHist(@PathVariable(value = "page", required = false) Integer page, Principal principal, Model model) {
         Pageable pageable = PageRequest.of(page != null ? page : 0, 4);
 
         Page<OrderHistDto> orderHistDtoList = orderService.getOrderList(principal.getName(), pageable);
 
-        model.addAttribute("orders", orderHistDtoList);
+        model.addAttribute("order", orderHistDtoList);
         model.addAttribute("page", pageable.getPageNumber());
         model.addAttribute("maxPage", 5);
 
-        return "order/orderHist";
+        return "account-orders/account-orders";
     }
 
     // 주문 취소 처리
