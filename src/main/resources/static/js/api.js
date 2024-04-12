@@ -62,7 +62,16 @@ async function patch(endpoint, params = "", data) {
   console.log(`%cPATCH 요청: ${apiUrl}`, "color: #059c4b;");
   console.log(`%cPATCH 요청 데이터: ${bodyData}`, "color: #059c4b;");
 
-  const res = await fetch(apiUrl, {
+  const queryParams = new URLSearchParams();
+
+  for (const key in data) {
+      queryParams.append(key, data[key]);
+  }
+
+  const queryString = queryParams.toString();
+//  console.log(${queryString});
+
+  const res = await fetch(apiUrl + '?' + queryString, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -93,11 +102,19 @@ async function del(endpoint, params = "", data = {}) {
   console.log(`DELETE 요청 ${apiUrl}`, "color: #059c4b;");
   console.log(`DELETE 요청 데이터: ${bodyData}`, "color: #059c4b;");
 
-  const res = await fetch(apiUrl, {
+  const queryParams = new URLSearchParams();
+
+    for (const key in data) {
+        queryParams.append(key, data[key]);
+    }
+
+    const queryString = queryParams.toString();
+
+  const res = await fetch(apiUrl + '?' + queryString, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+//      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
     },
     body: bodyData,
   });

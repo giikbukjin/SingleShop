@@ -4,6 +4,7 @@ import com.elice.team4.singleShop.user.entity.User;
 import com.elice.team4.singleShop.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,7 @@ public class JsApiController {
     // TODO : PATCHMAPPING("/users") : POSTMAN으로 했을 때 된다, JS로 잘 넘기면 끝
     // TODO : DELETEMAPPING("/users") : POSTMAN으로 했을 때 된다, JS로 잘 넘기면 끝
     @PatchMapping("/users/{id}")
-    public ResponseEntity<User> updateUsersRole(@PathVariable Long id, @RequestParam(value = "role") User.Role role) {
+    public ResponseEntity<User> updateUsersRole(@PathVariable(name="id") Long id, @RequestParam(name = "role") User.Role role) {
         User findUser = userRepository.findById(id).orElseThrow();
         findUser.setRole(role);
         userRepository.save(findUser);
@@ -35,8 +36,8 @@ public class JsApiController {
     }
 
     @DeleteMapping("/users/{id}")
-    public ResponseEntity deleteUser(@PathVariable Long id) {
+    public ResponseEntity deleteUser(@PathVariable(name="id") Long id) {
         userRepository.deleteById(id);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
