@@ -1,9 +1,10 @@
-import { addCommas, checkAdmin, createNavbar } from "../../useful-functions.js";
-import * as Api from "../../api.js";
+import { addCommas, createNavbar } from "./useful-functions.js"; // TODO : checkAdmin, 추가 예정
+import * as Api from "./api.js";
 
 // 요소(element), input 혹은 상수
 const usersCount = document.querySelector("#usersCount");
-const adminCount = document.querySelector("#adminCount");
+const consumersCount = document.querySelector("#consumersCount");
+const sellersCount = document.querySelector("#sellersCount");
 const usersContainer = document.querySelector("#usersContainer");
 const modal = document.querySelector("#modal");
 const modalBackground = document.querySelector("#modalBackground");
@@ -11,7 +12,7 @@ const modalCloseButton = document.querySelector("#modalCloseButton");
 const deleteCompleteButton = document.querySelector("#deleteCompleteButton");
 const deleteCancelButton = document.querySelector("#deleteCancelButton");
 
-checkAdmin();
+//checkAdmin();
 addAllElements();
 addAllEvents();
 
@@ -33,22 +34,27 @@ function addAllEvents() {
 // 페이지 로드 시 실행, 삭제할 회원 id를 전역변수로 관리함
 let userIdToDelete;
 async function insertUsers() {
-  const users = await Api.get("/users/all");
+  const users = await Api.get("/api/users");
 
   // 총 요약에 활용
   const summary = {
     usersCount: 0,
-    adminCount: 0,
+    consumersCount: 0,
+    sellersCount: 0,
   };
 
   for (const user of users) {
-    const { id, email, fullName, roles, createdAt } = user;
+    const { id, email, name, role, createdAt } = user;
     const date = createdAt;
 
     summary.usersCount += 1;
 
-    if (roles.includes('ADMIN')) {
-      summary.adminCount += 1;
+    if (role.includes('CONSUMER')) {
+      summary.consumersCount += 1;
+        }
+
+    if (role.includes('SELLER')) {
+      summary.sellersCount += 1;
     }
 
     usersContainer.insertAdjacentHTML(
@@ -57,21 +63,21 @@ async function insertUsers() {
         <div class="columns orders-item" id="user-${id}">
           <div class="column is-2">${date}</div>
           <div class="column is-2">${email}</div>
-          <div class="column is-2">${fullName}</div>
+          <div class="column is-2">${name}</div>
           <div class="column is-2">
             <div class="select" >
               <select id="roleSelectBox-${id}">
                 <option 
                   class="has-background-link-light has-text-link"
-                  ${roles.includes('ADMIN') === false ? "selected" : ""} 
-                  value="USER">
-                  일반사용자
+                  ${role.includes('CONSUMER') === true ? "selected" : ""}
+                  value="CONSUMER">
+                  소비자
                 </option>
                 <option 
                   class="has-background-danger-light has-text-danger"
-                  ${roles.includes('ADMIN') === true ? "selected" : ""} 
-                  value="ADMIN">
-                  관리자
+                  ${role.includes('SELLER') === true ? "selected" : ""}
+                  value="SELLER">
+                  판매자
                 </option>
               </select>
             </div>
@@ -94,14 +100,14 @@ async function insertUsers() {
     // 이벤트 - 권한관리 박스 수정 시 바로 db 반영
     roleSelectBox.addEventListener("change", async () => {
       const newRole = roleSelectBox.value;
-      const data = { roles: newRole };
+      const data = { role: newRole };
 
       // 선택한 옵션의 배경색 반영
       const index = roleSelectBox.selectedIndex;
       roleSelectBox.className = roleSelectBox[index].className;
 
       // api 요청
-      await Api.patch("/users", id, data);
+      await Api.patch("/api/users", id, data);
     });
 
     // 이벤트 - 삭제버튼 클릭 시 Modal 창 띄우고, 동시에, 전역변수에 해당 주문의 id 할당
@@ -113,7 +119,8 @@ async function insertUsers() {
 
   // 총 요약에 값 삽입
   usersCount.innerText = addCommas(summary.usersCount);
-  adminCount.innerText = addCommas(summary.adminCount);
+  consumersCount.innerText = addCommas(summary.consumersCount);
+  sellersCount.innerText = addCommas(summary.sellersCount);
 }
 
 // db에서 회원정보 삭제
@@ -121,7 +128,7 @@ async function deleteUserData(e) {
   e.preventDefault();
 
   try {
-    await Api.delete("/users", userIdToDelete);
+    await Api.delete("/api/users", userIdToDelete);
 
     // 삭제 성공
     alert("회원 정보가 삭제되었습니다.");

@@ -1,16 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Shopping Mall</title>
-    <!-- 아이콘 -->
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="/images/elice-rabbit-favicon.png"
-    />
+    <!-- 파비콘 -->
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/images/elice-rabbit-favicon.png}"/>
     <!-- bulma css -->
     <link
       rel="stylesheet"
@@ -23,17 +18,17 @@
       crossorigin="anonymous"
     ></script>
     <!-- 커스텀 css, js -->
-    <link rel="stylesheet" href="/templates/admin-usersdmin-users/admin-users.css" />
-    <script src="/templates/admin-usersdmin-users/admin-users.js" type="module" defer></script>
+    <link rel="stylesheet" th:href="@{/css/admin-users.css}" />
+    <script th:src="@{/js/admin-users.js}" type="module" defer></script>
   </head>
   <body>
     <!-- 헤더 -->
     <nav class="navbar" role="navigation" aria-label="main navigation">
       <div class="container mt-3">
         <div class="navbar-brand">
-          <a class="navbar-item" href="/static">
-            <img src="/templates/products/img/elice-rabbit.png" width="30" height="30" />
-            <span class="has-text-link">Shopping Mall</span>
+          <a class="navbar-item" th:href="@{/home}">
+            <img th:src="@{/images/elice-rabbit.png}" width="30" height="30" />
+            <span class="has-text-link">SINGLE SHOP</span>
           </a>
 
           <a
@@ -59,6 +54,13 @@
                 <span>카트</span>
               </a>
             </li>
+            <li>
+              <a th:href="@{/admin/logout}" aria-current="page">
+                <span>
+                  로그아웃
+                </span>
+              </a>
+            </li>
           </ul>
         </div>
       </div>
@@ -76,16 +78,23 @@
         <nav class="level">
           <div class="level-item has-text-centered">
             <div>
-              <p class="heading">총회원수</p>
+              <p class="heading">총 회원수</p>
               <p class="title" id="usersCount">-</p>
             </div>
           </div>
           <div class="level-item has-text-centered">
             <div>
-              <p class="heading">관리자수</p>
-              <p class="title" id="adminCount">-</p>
+              <p class="heading">소비자 수</p>
+              <p class="title" id="consumersCount">-</p>
             </div>
           </div>
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">판매자 수</p>
+              <p class="title" id="sellersCount">-</p>
+            </div>
+          </div>
+
         </nav>
 
         <!-- 회원 목록 -->
@@ -100,6 +109,13 @@
             <div class="column is-2">관리</div>
           </div>
         </div>
+<!--        <div th:if="${!userList.isEmpty}">-->
+<!--          <nav th:with="pageSize=${userList.pageable.pageSize},-->
+<!--                        start=${(userList.number/pageSize) * pageSize + 1-->
+<!--                        end=(${(userList.totalPages == 0) ? 1 : (start + (pageSize - 1) < userList.totalPages ? start + (pageSize - 1) : userList.totalPages)})">-->
+
+<!--          </nav>-->
+<!--        </div>-->
       </div>
     </section>
 
