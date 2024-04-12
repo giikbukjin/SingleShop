@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Single Shop</title>
+  <title>SINGLE SHOP</title>
   <!-- 아이콘 -->
   <link
           rel="icon"
@@ -50,7 +50,7 @@
     <div class="navbar-brand">
       <a class="navbar-item" href="/">
         <img src="/images/elice-rabbit.png" width="30" height="30" />
-        <span class="has-text-link">Single Shop</span>
+        <span class="has-text-link">SINGLE SHOP</span>
       </a>
 
       <a
@@ -74,6 +74,13 @@
                   <i class="fas fa-cart-shopping"></i>
                 </span>
             <span>카트</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/admin/logout}" aria-current="page">
+                <span>
+                  로그아웃
+                </span>
           </a>
         </li>
       </ul>
@@ -104,9 +111,6 @@
           get("/users/admin-check")
         }
       </script>
-      <button th:onclick="location.href='auth/logout'">
-        로그아웃
-      </button>
     </div>
   </div>
 </nav>
@@ -129,6 +133,7 @@
 
     <div id="slider"></div>
   </div>
+  <h1 class="text-center">SINGLE SHOP</h1>
 </section>
 <div class="container my-5">
 <ul class="nav nav-pills mb-5" id="pills-tab" role="tablist">
@@ -159,7 +164,6 @@
   <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
     <div class="container my-5">
       <div class="header mb-5">
-        <h1 class="text-center">Single Shop</h1>
       </div>
       <div class="container p-0">
         <div class="row row-cols-3 position-relative">
@@ -173,7 +177,7 @@
             >
               <a
                       class="board-item pe-auto p-3 link-underline link-underline-opacity-0 d-flex"
-                      th:href="@{/}"
+                      th:href="@{/products/{productId}(productId = ${product.id})}"
               >
                 <div>
                   <h6
@@ -203,7 +207,6 @@
   <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
     <div class="container my-5">
       <div class="header mb-5">
-        <h1 class="text-center">Single Shop</h1>
       </div>
       <div class="container p-0">
         <div class="row row-cols-3 position-relative">
@@ -217,7 +220,7 @@
             >
               <a
                       class="board-item pe-auto p-3 link-underline link-underline-opacity-0 d-flex"
-                      th:href="@{/}"
+                      th:href="@{/products/{productId}(productId = ${product.id})}"
               >
                 <div>
                   <h6
@@ -247,7 +250,6 @@
   <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">
     <div class="container my-5">
       <div class="header mb-5">
-        <h1 class="text-center">Single Shop</h1>
       </div>
       <div class="container p-0">
         <div class="row row-cols-3 position-relative">
@@ -261,7 +263,7 @@
             >
               <a
                       class="board-item pe-auto p-3 link-underline link-underline-opacity-0 d-flex"
-                      th:href="@{/}"
+                      th:href="@{/products/{productId}(productId = ${product.id})}"
               >
                 <div>
                   <h6
