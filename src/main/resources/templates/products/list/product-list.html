@@ -82,7 +82,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr th:each="product : ${products}">
+          <tr th:each="product : ${products}" th:data-product-id="${product.id}" class="clickable-row">
             <td th:text="${product.name}">상품명</td>
             <td th:text="${product.summary}">요약</td>
             <td th:text="${product.description}">설명</td>
@@ -104,5 +104,17 @@
         </table>
       </div>
     </section>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const rows = document.querySelectorAll(".clickable-row");
+        rows.forEach(row => {
+          row.addEventListener("click", function() {
+            const productId = this.getAttribute("data-product-id");
+            window.location.href = `/products/${productId}`;
+          });
+        });
+      });
+    </script>
   </body>
 </html>
