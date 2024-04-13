@@ -38,6 +38,11 @@ public class UserController {
         return "login/login";
     }
 
+    @GetMapping("/logout")
+    public String logout() {
+        return "redirect:/auth/login";
+    }
+
     @GetMapping("/signup")
     public String showSignUpForm(Model model) {
         SignUpRequestDto signUpRequestDto = new SignUpRequestDto();
@@ -99,11 +104,6 @@ public class UserController {
 
         log.info("[updateUser] 회원 정보 수정이 완료되었습니다. id : {}", id);
         return ResponseEntity.ok().body("회원 정보가 수정되었습니다.");
-    }
-
-    @GetMapping("/logout")
-    public String logout() {
-        return "redirect:/auth/login";
     }
 
     @ExceptionHandler(value = RuntimeException.class)
