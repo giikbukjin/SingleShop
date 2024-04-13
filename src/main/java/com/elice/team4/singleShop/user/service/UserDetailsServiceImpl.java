@@ -1,5 +1,6 @@
 package com.elice.team4.singleShop.user.service;
 
+import com.elice.team4.singleShop.user.entity.User;
 import com.elice.team4.singleShop.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username){
+        log.info("[loadUserByUsername] loadUserByUsername 수행. username : {}", username);
+        return userRepository.getByName(username);
+    }
+
+    public User loadUserInfoByUsername(String username) {
         log.info("[loadUserByUsername] loadUserByUsername 수행. username : {}", username);
         return userRepository.getByName(username);
     }

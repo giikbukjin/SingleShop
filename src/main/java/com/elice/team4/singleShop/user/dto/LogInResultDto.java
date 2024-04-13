@@ -9,12 +9,14 @@ import lombok.*;
 @ToString
 public class LogInResultDto extends SignUpResultDto{
     private String token;
+    private String refreshToken;
     private User.Role role;
 
-    @Builder
-    public LogInResultDto(boolean success, int code, String message, String token, User.Role role) {
+    @Builder //확인하기
+    public LogInResultDto(boolean success, int code, String message, String token, String refreshToken, User.Role role) {
         super(success, code, message);
         this.token = token;
+        this.refreshToken = refreshToken;
         this.role = role;
     }
 }

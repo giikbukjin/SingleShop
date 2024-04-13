@@ -75,6 +75,7 @@ public class SignServiceImpl implements SignService{
         LogInResultDto logInResultDto = LogInResultDto.builder()
                 .token(jwtTokenProvider.createToken(user.getName(),
                         user.getRole()))
+                .refreshToken(jwtTokenProvider.createRefreshToken(user.getName()))
                 .role(user.getRole())
                 .build();
 
