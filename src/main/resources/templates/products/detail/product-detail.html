@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -25,8 +25,8 @@
     <!-- AWS S3 사용하기 위한 파일 -->
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.410.0.min.js"></script>
     <!-- 커스텀 css, js -->
-    <link rel="stylesheet" href="/templates/products/detail/product-detail.css" />
-    <script src="/templates/products/detail/product-detail.js" type="module" defer></script>
+    <link rel="stylesheet" href="/css/product-detail.css" />
+    <script src="/js/product-detail.js" type="module" defer></script>
   </head>
   <body>
     <!-- 헤더 -->
@@ -73,25 +73,19 @@
           <div class="tile is-6 is-parent">
             <div class="tile is-child box product-image">
               <figure class="image is-sqaure">
-                <img id="productImageTag" src="../img/elice-rabbit.png" />
+                <img th:src="@{${product.image}}" alt="Product Image" id="productImageTag"/>
               </figure>
             </div>
           </div>
           <div class="tile is-parent is-vertical">
             <div class="tile is-child box product-detail">
               <div class="tabs">
-                <ul>
-                  <li id="manufacturerTag">마지막 남은 청정지역 페로 제도의 슈페리어급 연어</li>
-                </ul>
+                <p class="detail-description" th:text="${product.summary}" id="manufacturerTag"></p>
               </div>
               <div class="content">
-                <p class="subtitle is-3 is-family-monospace" id="titleTag">
-                  혼자 먹기 딱 좋은 숙성 연어회 150g
-                </p>
-                <h1 id="priceTag">11,900원</h1>
-                <p class="detail-description" id="detailDescriptionTag">
-                  혼자 먹기 딱 좋은 숙성 연어회예요. 소스 3종이 함께 들어있어 젓가락만 준비하면 한상 뚝딱!
-                </p>
+                <p class="subtitle is-3 is-family-monospace" th:text="${product.name}" id="titleTag"></p>
+                <h1 th:text="${product.price + '원'}" id="priceTag"></h1>
+                <p class="detail-description" th:text="${product.description}" id="detailDescriptionTag"></p>
               </div>
             </div>
             <div class="tile buttons-container">

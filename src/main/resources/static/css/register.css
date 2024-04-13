@@ -21,3 +21,8 @@
   border-color: #00d1b2;
   box-shadow: 0 0 0 0.125em rgba(0, 209, 178, 0.25);
 }
+
+.error-message {
+  color: red;
+}
+

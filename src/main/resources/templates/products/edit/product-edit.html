@@ -107,11 +107,11 @@
           <label class="label" for="categorySelectBox">카테고리</label>
           <div class="control">
             <div class="select is-fullwidth">
-              <select id="categorySelectBox" name="category.id">
+              <select id="categorySelectBox" name="categoryId">
                 <option value="">없음</option>
                 <th:block th:each="category : ${categories}">
                   <option th:value="${category.id}"
-                          th:selected="${productDto.categoryId != null and category.id == productDto.categoryId}"
+                          th:selected="${productDto.categoryId == category.id}"
                           th:text="${category.categoryName}">카테고리 이름</option>
                 </th:block>
               </select>
@@ -223,3 +223,21 @@
 </section>
 </body>
 </html>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // 카테고리 선택 상자 요소를 가져옵니다.
+    const categorySelectBox = document.getElementById("categorySelectBox");
+
+    // 카테고리 선택 상자의 변경 사항을 감지하는 이벤트 리스너를 추가합니다.
+    categorySelectBox.addEventListener("change", function() {
+      // 선택된 카테고리의 값과 텍스트를 가져옵니다.
+      const selectedValue = categorySelectBox.value;
+      const selectedText = categorySelectBox.options[categorySelectBox.selectedIndex].text;
+
+      // 콘솔에 선택된 카테고리의 값을 로깅합니다.
+      console.log("선택된 카테고리 ID: " + selectedValue);
+      console.log("선택된 카테고리 이름: " + selectedText);
+    });
+  });
+</script>

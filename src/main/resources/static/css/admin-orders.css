@@ -1,4 +1,4 @@
-/* 헤더  */
+/* 헤더 */
 .header-search-input {
   width: 20rem;
 }
@@ -46,6 +46,13 @@
 .modal .box {
   text-align: center;
 }
+
 .modal .buttons {
+  justify-content: center;
+}
+
+/* 수정된 부분 */
+.orders-item .column {
+  display: flex;
   justify-content: center;
 }

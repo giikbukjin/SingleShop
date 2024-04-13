@@ -1,7 +1,10 @@
 package com.elice.team4.singleShop.order.controller;
 
+import com.elice.team4.singleShop.order.dto.DeliveryInfoDto;
 import com.elice.team4.singleShop.order.dto.OrderDto;
 import com.elice.team4.singleShop.order.dto.OrderHistDto;
+import com.elice.team4.singleShop.order.entity.DeliveryInfo;
+import com.elice.team4.singleShop.order.service.DeliveryInfoService;
 import com.elice.team4.singleShop.order.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,10 +28,12 @@ import java.util.Optional;
 public class OrderController {
 
     private final OrderService orderService;
+    private final DeliveryInfoService deliveryInfoService;
 
     // 주문 처리
     @PostMapping(value = "/order")
     public @ResponseBody ResponseEntity order (@RequestBody @Valid OrderDto orderDto,
+                                               @RequestBody @Valid DeliveryInfoDto deliveryInfoDto,
                                                BindingResult bindingResult, Principal principal) {
         // 데이터 바인딩 시 에러 있는지 검사
         if (bindingResult.hasErrors()) {
@@ -48,21 +53,27 @@ public class OrderController {
         } catch(Exception e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST); // 예외 벌생 시 예외 메시지와 BAD_REQUEST 상태코드 반환
         }
+
+        // 주문에 배송 정보 추가
+        DeliveryInfo createdDeliveryInfo = deliveryInfoService.createDeliveryInfo(deliveryInfoDto);
+        // 주문에 새로운 배송 정보 연결
+        orderService.addDeliveryInfo(orderId, createdDeliveryInfo);
+
         return new ResponseEntity<Long>(orderId, HttpStatus.OK); // 생성된 주문 번호와 요청 성공 HTTP 응답 상태 코드
     }
 
     // 주문 내역 조회
-    @GetMapping(value = {"/orders", "/orders/{page}"})
-    public String orderHist(@PathVariable("page")Optional<Integer> page, Principal principal, Model model) {
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 4);
+    @GetMapping(value = {"/order", "/order/{page}"})
+    public String orderHist(@PathVariable(value = "page", required = false) Integer page, Principal principal, Model model) {
+        Pageable pageable = PageRequest.of(page != null ? page : 0, 4);
 
         Page<OrderHistDto> orderHistDtoList = orderService.getOrderList(principal.getName(), pageable);
 
-        model.addAttribute("orders", orderHistDtoList);
+        model.addAttribute("order", orderHistDtoList);
         model.addAttribute("page", pageable.getPageNumber());
         model.addAttribute("maxPage", 5);
 
-        return "order/orderHist";
+        return "account-orders/account-orders";
     }
 
     // 주문 취소 처리

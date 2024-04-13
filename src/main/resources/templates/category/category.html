@@ -55,7 +55,7 @@
             <div class="navbar-brand">
                 <a class="navbar-item" href="/">
                     <img src="/images/elice-rabbit.png" width="30" height="30" />
-                    <span class="has-text-link">Shopping Mall</span>
+                    <span class="has-text-link">Single Shop</span>
                 </a>
 
                 <a
@@ -117,7 +117,7 @@
                 </div>
             </form>
             <a
-                    th:href="@{/posts/create(boardId=${board.id})}"
+                    th:href="@{/seller/new}"
                     class="btn btn-primary"
             >상품 추가</a
             >
@@ -127,7 +127,7 @@
                     class="board-item list-group-item p-3 list-group-item-action"
                     th:unless="${productPage.isEmpty()}"
                     th:each="product : ${productPage}"
-                    th:href="@{/posts/{postId}(postId=${post.id})}"
+                    th:href="@{/products/{productId}(productId=${product.id})}"
             >
                 <h4 class="fw-bold mb-1" th:text="${product.name}">상품명</h4>
                 <small class="text-secondary" th:text="${product.createdAt}"

@@ -11,7 +11,7 @@
       sizes="16x16"
       href="/images/elice-rabbit-favicon.png"
     />
-    <!-- bulma css 관련 -->
+    <!-- bulma css -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
@@ -22,11 +22,12 @@
       src="https://kit.fontawesome.com/9daa42bcef.js"
       crossorigin="anonymous"
     ></script>
-    <!-- AWS S3 사용하기 위한 파일 -->
-    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.410.0.min.js"></script>
+    <!-- Daum 주소 API 사용하기 위한 파일 -->
+<!--    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>-->
     <!-- 커스텀 css, js -->
-    <link rel="stylesheet" href="/templates/products/detail/product-detail.css" />
-    <script src="/templates/products/detail/product-detail.js" type="module" defer></script>
+    <link rel="stylesheet" href="/css/account-orders.css" />
+    <script src="/js/account-orders.js" type="module" defer></script>
+    <script src="../../templates/admin-users/admin-users.js"></script>
   </head>
   <body>
     <!-- 헤더 -->
@@ -66,41 +67,58 @@
       </div>
     </nav>
 
-    <!-- 제품 상세 설명 카드 -->
+    <!-- 주문조회 -->
     <section class="section">
       <div class="container">
-        <div class="tile is-ancestor product-detail-card">
-          <div class="tile is-6 is-parent">
-            <div class="tile is-child box product-image">
-              <figure class="image is-sqaure">
-                <img id="productImageTag" src="" />
-              </figure>
-            </div>
-          </div>
-          <div class="tile is-parent is-vertical">
-            <div class="tile is-child box product-detail">
-              <div class="tabs">
-                <ul>
-                  <li id="manufacturerTag"></li>
-                </ul>
-              </div>
-              <div class="content">
-                <p class="subtitle is-3 is-family-monospace" id="titleTag"></p>
-                <h1 id="priceTag"></h1>
-                <p class="detail-description" id="detailDescriptionTag"></p>
-              </div>
-            </div>
-            <div class="tile is-child box buttons-container">
-              <button class="button is-warning" id="addToCartButton">
-                장바구니 추가하기
-              </button>
-              <button class="button is-info ml-2" id="purchaseButton">
-                바로 구매하기
-              </button>
-            </div>
+        <div class="block account-header">
+          <h1 class="subtitle is-4">주문조회</h1>
+        </div>
+        <div class="container orders-container" id="ordersContainer">
+          <div
+            class="columns notification is-info is-light is-mobile orders-top"
+          >
+            <div class="column is-2">날짜</div>
+            <div class="column is-6">주문정보</div>
+            <div class="column is-2">상태</div>
+            <div class="column is-2">신청</div>
           </div>
         </div>
       </div>
     </section>
+
+    <!-- 주문을 정말 취소할 지 묻는 Modal 창 -->
+    <div id="modal" class="modal">
+      <div class="modal-background" id="modalBackground"></div>
+      <div class="modal-content">
+        <div class="box">
+          <p class="mb-3">
+            주문 취소 시 복구할 수 없습니다. 정말로 취소하시겠습니까?
+          </p>
+
+          <div class="buttons">
+            <button
+              class="button mt-5"
+              id="deleteCompleteButton"
+              aria-label="close"
+            >
+              네
+            </button>
+            <button
+              class="button is-primary mt-5"
+              id="deleteCancelButton"
+              aria-label="close"
+            >
+              아니오
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <button
+        class="modal-close is-large"
+        id="modalCloseButton"
+        aria-label="close"
+      ></button>
+    </div>
   </body>
 </html>

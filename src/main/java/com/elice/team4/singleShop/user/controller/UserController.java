@@ -62,10 +62,18 @@ public class UserController {
             log.info("[logIn] 정상적으로 로그인되었습니다. id : {}, token : {}", id,
                     logInResultDto.getToken());
         }
-        var cookie = new Cookie("Authorization", URLEncoder.encode("Bearer " + logInResultDto.getToken(), StandardCharsets.UTF_8));
-        cookie.setPath("/");
-        cookie.setMaxAge(60 * 60);
-        response.addCookie(cookie);
+        var cookie1 = new Cookie("Authorization", URLEncoder.encode("Bearer " + logInResultDto.getToken(), StandardCharsets.UTF_8));
+        var cookie2 = new Cookie("Refresh", URLEncoder.encode("Bearer " + logInResultDto.getRefreshToken(), StandardCharsets.UTF_8));
+        cookie1.setPath("/");
+        cookie1.setMaxAge(60 * 60);
+        cookie2.setPath("/");
+        cookie2.setMaxAge(60 * 60 * 24 * 7);
+        response.addCookie(cookie1);
+        response.addCookie(cookie2);
+
+        if(String.valueOf(logInResultDto.getRole()).equals("ADMIN")){
+            return "redirect:/admin";
+        }
         return "redirect:/home";
     }
 
@@ -82,7 +90,7 @@ public class UserController {
         signService.signUp(name, password, email, role);
 
         log.info("[signUp] 회원가입을 완료했습니다. id : {}", name);
-        return "redirect:/auth/signup";
+        return "redirect:/auth/login";
     }
 
     @PostMapping(value = "/user/{id}/edit")

@@ -8,9 +8,10 @@ import com.elice.team4.singleShop.product.dto.ProductDto;
 import com.elice.team4.singleShop.product.mapper.ProductMapper;
 import com.elice.team4.singleShop.product.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.List;
 import java.util.Optional;
@@ -62,6 +63,15 @@ public class ProductService {
         return productRepository.findById(productId);
     }
 
+    // 카테고리 페이지에서 키워드로 제품 조회
+    public Page<Product> findProductsByCategoryAndKeyword(Category category, String keyword, PageRequest pageRequest) {
+        if (keyword != null && !keyword.isEmpty()) {
+            return productRepository.findAllByCategoryAndNameContaining(category, keyword, pageRequest);
+        } else {
+            return productRepository.findAllByCategoryOrderByCreatedAtDesc(category, pageRequest);
+        }
+    }
+
     // 제품 정보 수정
     @Transactional
     public void updateProduct(Long productId, ProductDto productDto) {
@@ -77,16 +87,18 @@ public class ProductService {
                     .orElseThrow(() -> new IllegalArgumentException("Invalid category ID: " + productDto.getCategoryId()));
             product.setCategory(category);
         } else {
-            product.setCategory(null); // 카테고리가 선택되지 않은 경우
+            // 카테고리 ID가 null이거나 "없음"으로 선택된 경우
+            product.setCategory(null);
         }
 
         productRepository.save(product);
     }
 
-
-    // 카테고리 서비스에서 모든 카테고리 조회
-    @ModelAttribute("categories")
-    public List<Category> categories() {
-        return categoryService.findCategories();
+    @Transactional
+    public void deleteProduct(Long productId) {
+        // 상품이 존재하는지 확인하고, 존재한다면 삭제
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid product ID: " + productId));
+        productRepository.delete(product);
     }
 }

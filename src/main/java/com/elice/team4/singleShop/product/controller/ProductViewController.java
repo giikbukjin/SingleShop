@@ -30,7 +30,7 @@ public class ProductViewController {
         return "products/add/product-add";
     }
 
-    @GetMapping("/products")
+    @GetMapping("/seller/products")
     public String list(Model model) {
         List<Product> products = productService.findAllProducts();
         model.addAttribute("products", products);
@@ -59,4 +59,13 @@ public class ProductViewController {
             return "redirect:/products";
         }
     }
+
+    @GetMapping("/products/{productId}")
+    public String showProductDetail(@PathVariable Long productId, Model model) {
+        Product product = productService.findProductById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found!"));
+        model.addAttribute("product", product);
+        return "products/detail/product-detail"; // 상품 상세 페이지의 HTML 파일 이름
+    }
+
 }

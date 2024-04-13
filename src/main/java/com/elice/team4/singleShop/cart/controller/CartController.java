@@ -1,80 +1,117 @@
 package com.elice.team4.singleShop.cart.controller;
 
-import org.springframework.ui.Model;
-import com.elice.team4.singleShop.cart.entity.Cart;
-import com.elice.team4.singleShop.cart.entity.CartItem;
-import com.elice.team4.singleShop.cart.service.CartService;
-import com.elice.team4.singleShop.product.domain.Product;
-import com.elice.team4.singleShop.product.repository.ProductRepository;
-import com.elice.team4.singleShop.product.service.ProductService;
 import com.elice.team4.singleShop.user.entity.User;
 import com.elice.team4.singleShop.user.repository.UserRepository;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import com.elice.team4.singleShop.cart.entity.CartItem;
+import com.elice.team4.singleShop.cart.service.CartService;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.util.List;
 
-
 @Controller
-@RequestMapping("/cart")
 @RequiredArgsConstructor
 public class CartController {
 
     private final CartService cartService;
-
-    // 사용자의 장바구니 생성
-    @PostMapping("/{id}")
-    public String createCart(@PathVariable("id") Long userId) {
-        // 사용자 ID를 이용하여 장바구니를 생성하는 메서드를 호출합니다.
-        cartService.createCart(userId);
-        // 장바구니 화면으로 이동합니다. 임시
-        return "redirect:/cart/" + userId + "/view";
-    }
+    private final UserRepository userRepository;
 
     // 장바구니에 상품 추가
-    @PostMapping("/{id}/add")
+    @PostMapping("/cart/{id}/add")
     public String addProductToCart(@PathVariable("id") Long userId,
-                                   @RequestParam Long productId,
-                                   @RequestParam int count) {
-        // 사용자 ID, 상품 ID, 수량을 이용하여 상품을 장바구니에 추가하는 메서드를 호출합니다.
-        cartService.addCart(userId, productId, count);
-        // 해당 상품의 상세 페이지로 리다이렉션합니다.
-        return "redirect:/item/view/" + productId;
-    }
+                                   @RequestParam("productId") Long productId,
+                                   @RequestParam("count") int count,
+                                   RedirectAttributes redirectAttributes) {
+        // 현재 사용자 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName(); // 현재 사용자의 이름 가져오기
+        User user = userRepository.getByName(username); // UserRepository를 사용하여 사용자 정보 가져오기
 
-    // 사용자의 장바구니 조회
-    @GetMapping("/{id}/view")
-    public String viewCart(@PathVariable("id") Long userId, Model model) {
-        // 사용자 ID를 이용하여 해당 사용자의 장바구니를 조회하는 메서드를 호출합니다.
-        List<CartItem> cartItems = cartService.viewCart(userId);
-        // 모델에 장바구니 아이템을 추가합니다.
-        model.addAttribute("cartItems", cartItems);
-        // 장바구니 화면으로 리다이렉션합니다.
-        return "redirect:/cart/" + userId + "/view";
+        // 장바구니에 상품 추가
+        cartService.addCart(userId, productId, count);
+
+        // 장바구니 추가 메시지를 리다이렉트 시에 전달
+        redirectAttributes.addFlashAttribute("message", "상품이 장바구니에 추가되었습니다.");
+
+        // 상품 상세 페이지로 리다이렉트
+        return "redirect:/products/" + productId;
+    }
+    // 장바구니 보기
+    @GetMapping("/cart")
+    public String viewCart(Model model) {
+        // 현재 사용자 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName(); // 현재 사용자의 이름 가져오기
+        User user = userRepository.getByName(username); // UserRepository를 사용하여 사용자 정보 가져오기
+
+        // 현재 사용자의 ID로 장바구니 조회
+        List<CartItem> cartItems = cartService.viewCart(user.getId());
+
+        model.addAttribute("cartItemList", cartItems);
+        return "cart/cart";
     }
 
     // 장바구니에서 상품 삭제
-    @DeleteMapping("/{id}/delete/{cartItemId}")
-    public String deleteCartItem(@PathVariable("id") Long userId,
-                                 @PathVariable("cartItemId") Long cartItemId) {
-        // 사용자 ID와 카트 아이템 ID를 이용하여 장바구니에서 상품을 삭제하는 메서드를 호출합니다.
-        cartService.deleteCartItem(cartItemId);
-        // 사용자의 정보 페이지로 리다이렉션합니다.
-        return "redirect:/cart/" + userId + "/view";
+    @GetMapping("/cart/{cartItemId}/delete") //html로 구현하기위해 일단 겟 매핑으로 수정
+    public String deleteCartItem(@PathVariable("cartItemId") Long cartItemId) {
+        // 현재 사용자 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName(); // 현재 사용자의 이름 가져오기
+        User user = userRepository.getByName(username); // UserRepository를 사용하여 사용자 정보 가져오기
+
+        // 현재 사용자의 ID로 장바구니에서 상품 삭제
+        cartService.deleteCartItem(user.getId(), cartItemId);
+        return "redirect:/cart";
     }
 
-    // 장바구니에서 결제
-    @PostMapping("/{id}/checkout")
-    public String checkoutCart(@PathVariable("id") Long userId) {
-        // 사용자 ID를 이용하여 해당 사용자의 장바구니를 결제하는 메서드를 호출합니다.
-        cartService.checkoutCart(userId);
-        // 메인 페이지로 리다이렉션합니다.
-        return "redirect:/main";
+    // 장바구니에서 선택한 상품 전체 삭제
+    @PostMapping("/cart/SelectedItems")
+    public String deleteSelectedItems(@RequestBody List<Long> cartItemIds) {
+        // 현재 사용자 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName(); // 현재 사용자의 이름 가져오기
+        User user = userRepository.getByName(username); // UserRepository를 사용하여 사용자 정보 가져오기
+
+        // 현재 사용자의 ID로 장바구니에서 선택된 상품들 삭제
+        cartService.deleteSelectedItems(user.getId(), cartItemIds);
+        return "redirect:/cart";
     }
+
+    @PostMapping("/user/{id}/cart/checkout")
+    public String myCartPayment(@PathVariable("id") Long id, Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userRepository.getByName(username);
+
+        cartService.cartPayment(id); // 결제처리
+        //    cartService.deleteSelectedItems(id, cartItemIds); // 장바구니 비우기
+
+        return "redirect:/cart";
+    }
+
+    // 선택한 상품들로 구매하기
+    @PostMapping("/cart/buy")
+    public String purchaseSelectedItems(Model model, @RequestBody List<Long> cartItemIds) {
+        // 현재 사용자 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userRepository.getByName(username);
+
+        // 선택한 상품들로 주문 생성하고 장바구니에서 삭제
+        Long orderId = cartService.createOrderFromSelectedItems(user.getId(), cartItemIds);
+
+        // 주문 ID를 모델에 추가하여 오더 페이지로 이동
+        model.addAttribute("orderId", orderId);
+
+        return "redirect:/order"; // 주문 완료 페이지로 리다이렉트
+    }
+
 }
+

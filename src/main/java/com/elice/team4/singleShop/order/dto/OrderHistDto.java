@@ -9,7 +9,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter @Setter
+@Getter
+@Setter
 public class OrderHistDto {
 
     public OrderHistDto(Order order) {

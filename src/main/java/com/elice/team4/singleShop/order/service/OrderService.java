@@ -7,6 +7,7 @@ import com.elice.team4.singleShop.order.dto.OrderItemDto;
 import com.elice.team4.singleShop.order.entity.DeliveryInfo;
 import com.elice.team4.singleShop.order.entity.Order;
 import com.elice.team4.singleShop.order.entity.OrderItem;
+import com.elice.team4.singleShop.order.repository.DeliveryInfoRepository;
 import com.elice.team4.singleShop.product.domain.Product;
 import com.elice.team4.singleShop.product.repository.ProductRepository;
 import com.elice.team4.singleShop.user.entity.User;
@@ -34,6 +35,8 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
+    private final DeliveryInfoRepository deliveryInfoRepository;
+
 
     // 하나의 상품 주문 생성 & 저장
     public Long order(OrderDto orderDto, String email) {
@@ -48,6 +51,7 @@ public class OrderService {
 
         // 회원 정보와 주문 상품 리스트 이용해 주문 엔티티 생성
         Order order = Order.createOrder(user, orderItemList);
+
         orderRepository.save(order); // 생성한 주문 저장
 
         return order.getId();
@@ -72,6 +76,27 @@ public class OrderService {
         orderRepository.save(order); // 주문 데이터 저장
 
         return order.getId(); // 생성된 주문 ID
+    }
+
+    // 주문에 배송 정보 추가
+    public void addDeliveryInfo(Long orderId, DeliveryInfo deliveryInfoDto) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        // 배송 정보 생성
+        DeliveryInfo deliveryInfo = new DeliveryInfo();
+        deliveryInfo.setReceiverName(deliveryInfoDto.getReceiverName());
+        deliveryInfo.setReceiverPhoneNumber(deliveryInfoDto.getReceiverPhoneNumber());
+        deliveryInfo.setPostalCode(deliveryInfoDto.getPostalCode());
+        deliveryInfo.setAddress1(deliveryInfoDto.getAddress1());
+        deliveryInfo.setAddress2(deliveryInfoDto.getAddress2());
+        deliveryInfo.setDeliveryRequest(deliveryInfoDto.getDeliveryRequest());
+
+        // 주문에 배송 정보 연결
+        order.setDeliveryInfo(deliveryInfo);
+
+        // 배송 정보 저장
+        deliveryInfoRepository.save(deliveryInfo);
     }
 
     // 주문 목록 조회
@@ -120,6 +145,31 @@ public class OrderService {
         order.cancelOrder(); // 주문 취소 메서드 호출
     }
 
+    // 주문 정보 수정
+    @Transactional
+    public DeliveryInfo updateDeliveryInfo(Long orderId, DeliveryInfoDto deliveryInfoDto) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        // 주문과 연결된 배송 정보
+        DeliveryInfo deliveryInfo = order.getDeliveryInfo();
+
+        // 주문과 연결된 배송 정보 없을 경우
+        if (deliveryInfo == null) {
+            throw new EntityNotFoundException("DeliveryInfo not found for order ID: " + orderId);
+        }
+
+        // 배송 정보 업데이트
+        deliveryInfo.setReceiverName(deliveryInfoDto.getReceiverName());
+        deliveryInfo.setReceiverPhoneNumber(deliveryInfoDto.getReceiverPhoneNumber());
+        deliveryInfo.setPostalCode(deliveryInfoDto.getPostalCode());
+        deliveryInfo.setAddress1(deliveryInfoDto.getAddress1());
+        deliveryInfo.setAddress2(deliveryInfoDto.getAddress2());
+        deliveryInfo.setDeliveryRequest(deliveryInfoDto.getDeliveryRequest());
+
+        return deliveryInfoRepository.save(deliveryInfo);
+    }
+
     // 주문 내역 조회 - 관리자
     public List<OrderDto> getAllOrders() {
         List<Order> orders = orderRepository.findAll(); // DB에서 모든 주문 내역 조회
@@ -136,6 +186,15 @@ public class OrderService {
         orderDto.setCount(order.getOrderItems().size()); // orderDto의 count에 주문 상품의 개수를 설정
         // 필요한 정보들을 매핑하여 orderDto에 설정
         return orderDto;
+    }
+
+    // 특정 사용자의 주문 내역 조회 - 관리자
+    @Transactional
+    public List<OrderDto> getUserOrders(String email) {
+        List<Order> orders = orderRepository.findByUserEmail(email);
+        return orders.stream()
+                .map(this::mapToOrderDto)
+                .collect(Collectors.toList());
     }
 
     // 주문 상태 수정 - 관리자

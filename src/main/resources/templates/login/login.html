@@ -17,7 +17,7 @@
 <nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="container mt-3">
     <div class="navbar-brand">
-      <a class="navbar-item" href="/static">
+      <a class="navbar-item" href="/home">
         <img src="/images/elice-rabbit.png" width="30" height="30" alt=""/>
         <span class="has-text-link">Shopping Mall</span>
       </a>
@@ -55,6 +55,7 @@
       <label class="label" for="emailInput">이메일</label>
       <div class="control">
         <input class="input" id="emailInput" th:field="*{email}" type="email" placeholder="abc@example.com" autocomplete="on"/>
+        <p class="help is-danger" id="emailError"></p>
       </div>
     </div>
 
@@ -62,6 +63,7 @@
       <label class="label" for="passwordInput">비밀번호</label>
       <div class="control">
         <input class="input" id="passwordInput" th:field="*{password}" type="password" placeholder="********" autocomplete="on"/>
+        <p class="help is-danger" id="passwordError"></p>
       </div>
     </div>
 
@@ -75,19 +77,25 @@
     const loginForm = document.getElementById('loginForm');
     const emailInput = document.getElementById('emailInput');
     const passwordInput = document.getElementById('passwordInput');
+    const emailError = document.getElementById('emailError');
+    const passwordError = document.getElementById('passwordError');
 
     loginForm.addEventListener('submit', function (event) {
       event.preventDefault(); // Prevent form submission
 
+      // Reset error messages
+      emailError.textContent = '';
+      passwordError.textContent = '';
+
       // Validate email
       if (!validateEmail(emailInput.value.trim())) {
-        alert('유효한 이메일을 입력하세요.');
+        emailError.textContent = '유효한 이메일을 입력하세요.';
         return;
       }
 
       // Validate password
       if (!validatePassword(passwordInput.value.trim())) {
-        alert('비밀번호는 6자 이상이어야 합니다.');
+        passwordError.textContent = '비밀번호는 8자 이상, 15자 이하여야 합니다.';
         return;
       }
 
