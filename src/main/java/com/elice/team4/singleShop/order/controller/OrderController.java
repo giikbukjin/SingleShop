@@ -33,7 +33,6 @@ public class OrderController {
     // 주문 처리
     @PostMapping(value = "/order")
     public @ResponseBody ResponseEntity order (@RequestBody @Valid OrderDto orderDto,
-                                               @RequestBody @Valid DeliveryInfoDto deliveryInfoDto,
                                                BindingResult bindingResult, Principal principal) {
         // 데이터 바인딩 시 에러 있는지 검사
         if (bindingResult.hasErrors()) {
@@ -54,10 +53,10 @@ public class OrderController {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST); // 예외 벌생 시 예외 메시지와 BAD_REQUEST 상태코드 반환
         }
 
-        // 주문에 배송 정보 추가
-        DeliveryInfo createdDeliveryInfo = deliveryInfoService.createDeliveryInfo(deliveryInfoDto);
-        // 주문에 새로운 배송 정보 연결
-        orderService.addDeliveryInfo(orderId, createdDeliveryInfo);
+//        // 주문에 배송 정보 추가
+//        DeliveryInfo createdDeliveryInfo = deliveryInfoService.createDeliveryInfo(deliveryInfoDto);
+//        // 주문에 새로운 배송 정보 연결
+//        orderService.addDeliveryInfo(orderId, createdDeliveryInfo);
 
         return new ResponseEntity<Long>(orderId, HttpStatus.OK); // 생성된 주문 번호와 요청 성공 HTTP 응답 상태 코드
     }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -77,9 +77,9 @@
           <div
             class="columns notification is-info is-light is-mobile orders-top"
           >
-            <div class="column is-2">날짜</div>
-            <div class="column is-6">주문정보</div>
-            <div class="column is-2">상태</div>
+            <div class="column is-2" th:text="${order.date}">날짜</div>
+            <div class="column is-6" th:text="${item.productName}">주문정보</div>
+            <div class="column is-2" th:text="${order.status}">상태</div>
             <div class="column is-2">신청</div>
           </div>
         </div>

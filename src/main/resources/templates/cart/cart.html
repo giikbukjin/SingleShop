@@ -251,6 +251,52 @@
               console.error('There has been a problem with your fetch operation:', error);
             });
   }
+
+  /*function order() {
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+
+    var url = "/cart/orders";
+
+    var dataList = new Array();
+    var paramData = new Object();
+
+    // 체크된 장바구니 상품 아이디 전달 위해 dataList에 장바구니 상품 아이디를 객체로 만들어 저장
+    $("input[name=checkbox]:checked").each(function() {
+      var cartItemId = $(this).val();
+      var data = new Object();
+      data["cartItemId"] = cartItemId;
+      dataList.push(data);
+    });
+
+      paramData['cartDtoList'] = dataList;
+
+      var param = JSON.stringify(paramData);
+
+      $.ajax({
+        url : url,
+        type : "POST",
+        contentType : "application/json",
+        data : param,
+        beforeSend : function(xhr) {
+          xhr.setRequestHeader(header, token);
+        },
+        dataType : "json",
+        cache : false,
+        success : function(result, status) {
+          alert("주문이 완료되었습니다.");
+          location.href='/';
+        },
+        error : function(jqXHR, status, error) {
+          if(jqXHR.status == '401') {
+            alert('로그인 후 이용해주세요.');
+            location.href='/auth/login';
+          } else {
+            alert(jqXHR.responseText);
+          }
+        }
+      });
+  }*/
 </script>
 </body>
 </html>
