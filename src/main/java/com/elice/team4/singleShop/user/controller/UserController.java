@@ -3,6 +3,7 @@ package com.elice.team4.singleShop.user.controller;
 import com.elice.team4.singleShop.user.dto.LogInRequestDto;
 import com.elice.team4.singleShop.user.dto.LogInResultDto;
 import com.elice.team4.singleShop.user.dto.SignUpRequestDto;
+import com.elice.team4.singleShop.user.oauth.KakaoApi;
 import com.elice.team4.singleShop.user.service.SignService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,15 +27,19 @@ import java.util.Map;
 @Slf4j
 public class UserController {
     private final SignService signService;
+    private final KakaoApi kakaoApi;
 
-    public UserController(SignService signService) {
+    public UserController(SignService signService, KakaoApi kakaoApi) {
         this.signService = signService;
+        this.kakaoApi = kakaoApi;
     }
 
     @GetMapping("/login")
     public String showLogInForm(Model model) {
         LogInRequestDto logInRequestDto = new LogInRequestDto();
         model.addAttribute("login", logInRequestDto);
+        model.addAttribute("kakaoApiKey", kakaoApi.getKakaoApiKey());
+        model.addAttribute("redirectUri", kakaoApi.getKakaoRedirectUri());
         return "login/login";
     }
 
