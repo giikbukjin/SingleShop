@@ -111,7 +111,6 @@
             <td>
               <button class="btn btn-danger" th:attr="data-product-id=${product.id}" onclick="openModal(this.getAttribute('data-product-id'), event)">삭제</button>
             </td>
-
           </tr>
           </tbody>
         </table>
@@ -172,7 +171,7 @@
         rows.forEach(row => {
           row.addEventListener("click", function() {
             const productId = this.getAttribute("data-product-id");
-            window.location.href = `/products/${productId}`;
+            window.location.href = `/seller/products/${productId}`;
           });
         });
       });

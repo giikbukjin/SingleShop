@@ -68,4 +68,11 @@ public class ProductViewController {
         return "products/detail/product-detail"; // 상품 상세 페이지의 HTML 파일 이름
     }
 
+    @GetMapping("/seller/products/{productId}")
+    public String showSellerProductDetail(@PathVariable Long productId, Model model) {
+        Product product = productService.findProductById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found!"));
+        model.addAttribute("product", product);
+        return "products/detail/seller-product-detail"; // 상품 상세 페이지의 HTML 파일 이름
+    }
 }
