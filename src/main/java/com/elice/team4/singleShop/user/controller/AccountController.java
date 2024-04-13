@@ -1,5 +1,6 @@
 package com.elice.team4.singleShop.user.controller;
 
+import com.elice.team4.singleShop.user.dto.UserDto;
 import com.elice.team4.singleShop.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,11 @@ public class AccountController {
         return "account/account";
     }
     @GetMapping("/security")
-    public String accountSecurity() {
+    public String accountSecurity(
+            @CookieValue(value = "Authorization") String value,
+            @RequestBody UserDto userDto) {
+
+
         return "account/account-security";
     }
     @GetMapping("/signout")

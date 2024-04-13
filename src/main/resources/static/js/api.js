@@ -3,8 +3,19 @@ async function get(endpoint, params = "") {
   const apiUrl = params ? `${endpoint}/${params}` : endpoint;
   console.log(`%cGET 요청: ${apiUrl} `, "color: #a25cd1;");
 
+  function getCookie(name) {
+        const cookies = document.cookie.split(';');
+        for (const cookie of cookies) {
+          const [cookieName, cookieValue] = cookie.trim().split('=');
+          if (cookieName === name) {
+            return cookieValue;
+          }
+        }
+        return null;
+      }
+
   // 토큰이 있으면 Authorization 헤더를 포함, 없으면 포함하지 않음
-  const token = sessionStorage.getItem("token");
+  const token = getCookie("Authorization");
   const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
   const res = await fetch(apiUrl, { headers });
@@ -27,11 +38,22 @@ async function post(endpoint, data) {
   console.log(`%cPOST 요청: ${apiUrl}`, "color: #296aba;");
   console.log(`%cPOST 요청 데이터: ${bodyData}`, "color: #296aba;");
 
+  function getCookie(name) {
+        const cookies = document.cookie.split(';');
+        for (const cookie of cookies) {
+          const [cookieName, cookieValue] = cookie.trim().split('=');
+          if (cookieName === name) {
+            return cookieValue;
+          }
+        }
+        return null;
+      }
+
   // 토큰이 있으면 Authorization 헤더를 포함, 없으면 포함하지 않음
-  const token = sessionStorage.getItem("token");
+  const token = getCookie("Authorization");
   const headers = {
     "Content-Type": "application/json",
-    ...(token && { Authorization: `Bearer ${token}` }),
+//    ...(token && { Authorization: `Bearer ${token}` }),
   };
 
   const res = await fetch(apiUrl, {
@@ -87,7 +109,7 @@ async function patch(endpoint, params = "", data) {
 
     throw new Error(reason);
   }
-
+  window.location.reload();
   const result = await res.json();
 
   return result;
@@ -95,28 +117,17 @@ async function patch(endpoint, params = "", data) {
 
 // 아래 함수명에 관해, delete 단어는 자바스크립트의 reserved 단어이기에,
 // 여기서는 우선 delete 대신 del로 쓰고 아래 export 시에 delete로 alias 함.
-async function del(endpoint, params = "", data = {}) {
+async function del(endpoint, params = "") {
   const apiUrl = `${endpoint}/${params}`;
-  const bodyData = JSON.stringify(data);
 
   console.log(`DELETE 요청 ${apiUrl}`, "color: #059c4b;");
-  console.log(`DELETE 요청 데이터: ${bodyData}`, "color: #059c4b;");
 
-  const queryParams = new URLSearchParams();
-
-    for (const key in data) {
-        queryParams.append(key, data[key]);
-    }
-
-    const queryString = queryParams.toString();
-
-  const res = await fetch(apiUrl + '?' + queryString, {
+  const res = await fetch(apiUrl, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
 //      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-    },
-    body: bodyData,
+    }
   });
 
   // 응답 코드가 4XX 계열일 때 (400, 403 등)
@@ -127,9 +138,7 @@ async function del(endpoint, params = "", data = {}) {
     throw new Error(reason);
   }
 
-  const result = await res.json();
-
-  return result;
+  return ;
 }
 
 // 아래처럼 export하면, import * as Api 로 할 시 Api.get, Api.post 등으로 쓸 수 있음.

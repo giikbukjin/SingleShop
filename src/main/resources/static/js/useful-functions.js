@@ -32,17 +32,27 @@ export const addCommas = (n) => {
 };
 
 // 로그인 여부(토큰 존재 여부) 확인
-//export const checkLogin = () => {
-//  const token = sessionStorage.getItem("token");
-//  if (!token) {
-//    // 현재 페이지의 url 주소 추출하기
-//    const pathname = window.location.pathname;
-//    const search = window.location.search;
-//
-//    // 로그인 후 다시 지금 페이지로 자동으로 돌아가도록 하기 위한 준비작업임.
-//    window.location.replace(`/login?previouspage=${pathname + search}`);
-//  }
-//};
+export const checkLogin = () => {
+  function getCookie(name) {
+      const cookies = document.cookie.split(';');
+      for (const cookie of cookies) {
+        const [cookieName, cookieValue] = cookie.trim().split('=');
+        if (cookieName === name) {
+          return cookieValue;
+        }
+      }
+      return null;
+    }
+  const token = getCookie("Authorization");
+  if (!token) {
+    // 현재 페이지의 url 주소 추출하기
+    const pathname = window.location.pathname;
+    const search = window.location.search;
+
+    // 로그인 후 다시 지금 페이지로 자동으로 돌아가도록 하기 위한 준비작업임.
+    window.location.replace(`/login?previouspage=${pathname + search}`);
+  }
+};
 
 // 관리자 여부 확인
 // export const checkAdmin = async () => {

@@ -12,10 +12,13 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long> {
     User getByName(String name);
     User findByEmail(String email);
+    User findByPassword(String password);
     List<User> findByRoleIn(List<String> role);
     Page<User> findAll(Pageable pageable);
 
     boolean existsByEmail(String email);
 
     boolean existsByName(String name);
+
+    User findByName(String username);
 }
