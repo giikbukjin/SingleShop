@@ -1,9 +1,8 @@
 package com.elice.team4.singleShop.user.controller;
 
 import com.elice.team4.singleShop.user.oauth.KakaoApi;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -18,7 +17,7 @@ public class KakaoController {
         this.kakaoApi = kakaoApi;
     }
 
-    @RequestMapping("/카카오 developer에서 발급받은 리다이렉트 url")
+    @RequestMapping("${kakao.redirect_shortUri}")
     public String kakaoLogin(@RequestParam String code){
         String accessToken = kakaoApi.getAccessToken(code);
         Map<String, Object> userInfo = kakaoApi.getUserInfo(accessToken);
