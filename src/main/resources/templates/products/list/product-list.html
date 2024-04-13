@@ -109,10 +109,7 @@
               <a href="#" th:href="@{/seller/{productId}(productId=${product.id})}" class="btn btn-primary" role="button">수정</a>
             </td>
             <td>
-              <form th:action="@{/seller/{productId}/delete(productId=${product.id})}" method="post">
-                <input type="hidden" name="_method" value="DELETE">
-                <button type="submit" class="btn btn-danger">삭제</button>
-              </form>
+              <button class="btn btn-danger" data-product-id="${product.id}" onclick="openModal(event)">삭제</button>
             </td>
 
           </tr>
@@ -121,7 +118,53 @@
       </div>
     </section>
 
+    <!-- 삭제 확인 모달 -->
+    <div class="modal" id="deleteModal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">제품 삭제 확인</p>
+          <button class="delete" aria-label="close" onclick="closeModal()"></button>
+        </header>
+        <section class="modal-card-body">
+          제품을 삭제하시겠습니까?
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-danger" id="confirmDelete">삭제</button>
+          <button class="button" onclick="closeModal()">취소</button>
+        </footer>
+      </div>
+    </div>
+
     <script>
+      <!-- JavaScript -->
+      function closeModal() {
+        document.getElementById('deleteModal').classList.remove('is-active');
+      }
+
+      function openModal(event) {
+        event.stopPropagation(); // 이벤트 버블링 중지
+        const productId = event.target.getAttribute('data-product-id');
+        document.getElementById('deleteModal').classList.add('is-active');
+        document.getElementById('confirmDelete').onclick = function() {
+          submitDelete(productId);
+        };
+      }
+
+      function submitDelete(productId) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/seller/${productId}/delete`;
+        const methodInput = document.createElement('input');
+        methodInput.type = 'hidden';
+        methodInput.name = '_method';
+        methodInput.value = 'DELETE';
+        form.appendChild(methodInput);
+        document.body.appendChild(form);
+        form.submit();
+        closeModal(); // 모달 닫기
+      }
+
       document.addEventListener("DOMContentLoaded", function() {
         const rows = document.querySelectorAll(".clickable-row");
         rows.forEach(row => {
