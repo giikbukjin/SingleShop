@@ -75,11 +75,9 @@ async function insertProductData() {
   purchaseButton.addEventListener("click", async () => {
     try {
       await insertDb(product);
-
-      window.location.href = "/order";
+      window.location.href = "/order"; // 주문 페이지로 이동
     } catch (err) {
       console.log(err);
-
       //insertDb가 에러가 되는 경우는 이미 제품이 장바구니에 있던 경우임
       //따라서 다시 추가 안 하고 바로 order 페이지로 이동함
       window.location.href = "/order";

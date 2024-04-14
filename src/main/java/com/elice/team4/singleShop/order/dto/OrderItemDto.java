@@ -1,6 +1,7 @@
 package com.elice.team4.singleShop.order.dto;
 
 import com.elice.team4.singleShop.order.entity.OrderItem;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,12 +24,16 @@ public class OrderItemDto {
 
     private String image; // 상품 이미지 경로
 
+    @NotBlank(message = "이름은 필수입니다.")
     private String receiverName;
 
+    @NotBlank(message = "연락처는 필수입니다.")
     private String receiverPhoneNumber;
 
+    @NotBlank(message = "우편번호는 필수입니다.")
     private String postalCode;
 
+    @NotBlank(message = "주소는 필수입니다.")
     private String address1;
 
     private String address2;

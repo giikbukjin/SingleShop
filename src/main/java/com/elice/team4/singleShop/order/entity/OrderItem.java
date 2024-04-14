@@ -49,6 +49,18 @@ public class OrderItem {
 
     @LastModifiedDate
     private String modifiedBy; // 수정자
+
+    private String receiverName; // 수령인 이름
+
+    private String receiverPhoneNumber; // 연락처
+
+    private String postalCode; // 우편번호
+
+    private String address1; // 주소
+
+    private String address2; // 상세 주소
+
+    private String deliveryRequest; // 배송 요청 사항
     
     public static OrderItem createOrderItem(Product product, int count) {
         OrderItem orderItem = new OrderItem();

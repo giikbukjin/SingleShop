@@ -27,10 +27,4 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     List<Order> findByUserEmail(String email); // 사용자 이메일로 주문 내역 조회
 
-    // 주문 삭제 시 연관된 배송 정보도 삭제
-    @Transactional
-    @Modifying
-    @Query("delete from DeliveryInfo d " +
-            "where d.order.id = :orderId")
-    void deleteDeliveryInfoByOrderId(@Param("orderId") Long orderId);
 }
