@@ -102,7 +102,12 @@ function toggleTargets(e) {
 // 나중에 사용자가 데이터를 변경했는지 확인하기 위해, 전역 변수로 userData 설정
 let userData;
 async function insertUserData() {
-  userData = await Api.get("/api/users", { id });
+
+  var id = window.location.pathname.match(/\d+/)[0];
+
+  console.log({id});
+
+  userData = await Api.get("/api/users", id);
 
   // 객체 destructuring
   const { name, email, address, phoneNumber } = userData;
@@ -259,7 +264,7 @@ async function saveUserData(e) {
     const { id } = userData;
     console.log(data)
     // db에 수정된 정보 저장
-    await Api.patch("/api/users", id, data);
+    await Api.patch("/api/users/edit", id, data);
 
     alert("회원정보가 안전하게 저장되었습니다.");
     disableForm();

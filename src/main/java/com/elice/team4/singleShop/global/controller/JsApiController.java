@@ -1,7 +1,9 @@
 package com.elice.team4.singleShop.global.controller;
 
+import com.elice.team4.singleShop.user.dto.ModiRoleDto;
 import com.elice.team4.singleShop.user.dto.PasswordDto;
 import com.elice.team4.singleShop.user.dto.UserDto;
+import com.elice.team4.singleShop.user.dto.UserModifyDto;
 import com.elice.team4.singleShop.user.entity.User;
 import com.elice.team4.singleShop.user.jwt.JwtTokenProvider;
 import com.elice.team4.singleShop.user.repository.UserRepository;
@@ -36,7 +38,15 @@ public class JsApiController {
         return ResponseEntity.ok(users);
     }
 
-    // 왜 password와 findUser.getPassword가 맞지 않을까?
+    @GetMapping("/users/{id}")
+    public ResponseEntity<UserModifyDto> getById(@PathVariable Long id) {
+
+        User findUser = userRepository.findById(id).orElseThrow();
+        UserModifyDto getUser = new UserModifyDto(findUser);
+
+        return ResponseEntity.ok(getUser);
+    }
+
     @PostMapping("/users/password-check")
     public ResponseEntity<User> checkPassword (
             @CookieValue(value = "Authorization") String value,
@@ -57,11 +67,39 @@ public class JsApiController {
 
 
     @PatchMapping("/users/{id}")
-    public ResponseEntity<User> updateUsersRole(@PathVariable(name="id") Long id, @RequestParam(name = "role") User.Role role) {
+    public ResponseEntity<User> updateUsersRole(@PathVariable(name="id") Long id, @RequestBody ModiRoleDto modiRoleDto) {
         User findUser = userRepository.findById(id).orElseThrow();
-        findUser.setRole(role);
+        findUser.setRole(modiRoleDto.getRole());
         userRepository.save(findUser);
         return ResponseEntity.ok(findUser);
+    }
+
+    @PatchMapping("/users/edit/{id}")
+    public ResponseEntity<UserModifyDto> modifyUser(
+            @PathVariable(name = "id") Long id,
+            @RequestBody UserModifyDto userModifyDto) {
+        User getUserById = userRepository.findById(id).orElseThrow();
+
+        if(!passwordEncoder.matches(userModifyDto.getCurrentPassword(), getUserById.getPassword())) {
+            throw new RuntimeException("현재 비밀번호가 일치하지 않습니다.");
+        }
+        if(userModifyDto.getName()!=null) {
+            getUserById.setName(userModifyDto.getName());
+        }
+        if(userModifyDto.getPassword()!=null) {
+            getUserById.setPassword(passwordEncoder.encode(userModifyDto.getPassword()));
+        }
+        if(userModifyDto.getAddress()!=null) {
+            getUserById.setAddress(userModifyDto.mapToString(userModifyDto.getAddress()));
+        }
+        if(userModifyDto.getPhoneNumber()!=null) {
+            getUserById.setPhoneNumber(userModifyDto.getPhoneNumber());
+        }
+
+        User savedUser = userRepository.save(getUserById);
+        UserModifyDto newModifiedUserDto = new UserModifyDto(getUserById);
+
+        return ResponseEntity.ok(newModifiedUserDto);
     }
 
     @DeleteMapping("/users/{id}")

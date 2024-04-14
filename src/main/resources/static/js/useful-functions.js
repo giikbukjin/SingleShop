@@ -45,6 +45,7 @@ export const checkLogin = () => {
     }
   const token = getCookie("Authorization");
   if (!token) {
+
     // 현재 페이지의 url 주소 추출하기
     const pathname = window.location.pathname;
     const search = window.location.search;

@@ -50,6 +50,12 @@ public class User implements UserDetails {
     private String email;
 
     @Column
+    private String address;
+
+    @Column
+    private String phoneNumber;
+
+    @Column
     @CreatedDate
     private LocalDateTime createdAt;
 
