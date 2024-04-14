@@ -70,7 +70,7 @@ public class SecurityConfig {
         // 페이지 별 권한 설정
         http.authorizeHttpRequests((auth)->auth
                 .requestMatchers("auth/**","/", "/home/**", "/cart/**", "/delivery/**",
-                        "/order/**", "/orders/**", "/products/**", "/login/**", "/logout/**")
+                        "/order/**", "/orders/**", "/products/**","api/**", "account/**")
                         .permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/seller/**").hasAnyRole("ADMIN", "SELLER")
