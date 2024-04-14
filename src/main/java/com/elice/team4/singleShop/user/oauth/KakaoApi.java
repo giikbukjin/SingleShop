@@ -30,6 +30,9 @@ public class KakaoApi {
     @Value("${kakao.redirect_uri}")
     private String kakaoRedirectUri;
 
+    @Value("${kakao.logoutRedirect_uri}")
+    private String kakaoLogoutRedirectUri;
+
     @Value("${kakao.code_uri}")
     private String reqUrl;
 
@@ -84,7 +87,7 @@ public class KakaoApi {
             br.close();
             bw.close();
 
-            var cookie1 = new Cookie("Authorization", URLEncoder.encode("Bearer " + accessToken, StandardCharsets.UTF_8));
+            var cookie1 = new Cookie("kakao", URLEncoder.encode("Bearer " + accessToken, StandardCharsets.UTF_8));
             cookie1.setPath("/");
             cookie1.setMaxAge(60 * 60);
             cookie1.setHttpOnly(true);

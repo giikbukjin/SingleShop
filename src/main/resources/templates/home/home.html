@@ -82,6 +82,9 @@
                   로그아웃
                 </span>
           </a>
+          <a th:href="@{'https://kauth.kakao.com/oauth/logout?client_id=' + ${kakaoApiKey} + '&logout_redirect_uri=' + ${redirectLogoutUri}}">
+            <img src="/images/kakao_login_medium_narrow.png">
+          </a>
         </li>
       </ul>
       <script>
