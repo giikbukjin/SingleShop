@@ -14,4 +14,12 @@ public class UserDto {
     private String password;
     private String email;
     private User.Role role;
+
+    public UserDto(User user) {
+        this.id = user.getId();
+        this.name = user.getName();
+        this.password = user.getPassword();
+        this.email = user.getEmail();
+        this.role = user.getRole();
+    }
 }
