@@ -1,6 +1,7 @@
 package com.elice.team4.singleShop.user.controller;
 
 import com.elice.team4.singleShop.user.oauth.KakaoApi;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,14 +19,22 @@ public class KakaoController {
     }
 
     @RequestMapping("${kakao.redirect_shortUri}")
-    public String kakaoLogin(@RequestParam String code){
-        String accessToken = kakaoApi.getAccessToken(code);
+    public String kakaoLogin(@RequestParam String code, HttpServletResponse response){
+        String accessToken = kakaoApi.getAccessToken(code, response);
         Map<String, Object> userInfo = kakaoApi.getUserInfo(accessToken);
 
         String nickname = (String)userInfo.get("nickname");
         System.out.println("nickname = " + nickname);
         System.out.println("accessToken = " + accessToken);
 
+        return "redirect:/home";
+    }
+
+    @RequestMapping("${kakao.logoutRedirect_shortUri}")
+    public String kakaoLogout(@RequestParam String code, HttpServletResponse response){
+        String accessToken = kakaoApi.getAccessToken(code, response);
+        System.out.println(accessToken);
+        kakaoApi.kakaoLogout(accessToken);
         return "redirect:/home";
     }
 }

@@ -3,6 +3,8 @@ package com.elice.team4.singleShop.user.oauth;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +16,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 @Slf4j
@@ -35,7 +39,7 @@ public class KakaoApi {
     @Value("${kakao.logout_uri}")
     private String reqUrl2;
 
-    public String getAccessToken(String code) {
+    public String getAccessToken(String code, HttpServletResponse response) {
         String accessToken = "";
 
         try{
@@ -79,6 +83,12 @@ public class KakaoApi {
 
             br.close();
             bw.close();
+
+            var cookie1 = new Cookie("Authorization", URLEncoder.encode("Bearer " + accessToken, StandardCharsets.UTF_8));
+            cookie1.setPath("/");
+            cookie1.setMaxAge(60 * 60);
+            cookie1.setHttpOnly(true);
+            response.addCookie(cookie1);
         }catch (Exception e){
             e.printStackTrace();
         }
