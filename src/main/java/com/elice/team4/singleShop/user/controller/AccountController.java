@@ -18,11 +18,7 @@ public class AccountController {
         return "account/account";
     }
     @GetMapping("/security")
-    public String accountSecurity(
-            @CookieValue(value = "Authorization") String value,
-            @RequestBody UserDto userDto) {
-
-
+    public String accountSecurity() {
         return "account/account-security";
     }
     @GetMapping("/signout")

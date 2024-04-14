@@ -1,5 +1,6 @@
 package com.elice.team4.singleShop.global.controller;
 
+import com.elice.team4.singleShop.user.dto.PasswordDto;
 import com.elice.team4.singleShop.user.dto.UserDto;
 import com.elice.team4.singleShop.user.entity.User;
 import com.elice.team4.singleShop.user.jwt.JwtTokenProvider;
@@ -39,22 +40,15 @@ public class JsApiController {
     @PostMapping("/users/password-check")
     public ResponseEntity<User> checkPassword (
             @CookieValue(value = "Authorization") String value,
-            @RequestBody UserDto userDto) {
-        log.info(userDto.getPassword());
-        log.info(passwordEncoder.toString());
-
-        String encodedPw = passwordEncoder.encode(userDto.getPassword());
-        log.info("인코딩된 비밀번호 : {}",encodedPw);
+            @RequestBody PasswordDto passwordDto) {
 
         String token = value.substring(7);
         log.info("토큰 값 : {}",token);
 
         UserDetails userDetailsInfo = jwtTokenProvider.getUserDetailsInfo(token);
         User userFindByName = jwtTokenProvider.getUserInfo(userDetailsInfo.getUsername());
-        log.info("{}, {}", userDetailsInfo.getUsername(), userFindByName.getName());
-        log.info("{}, {}", encodedPw, userFindByName.getPassword());
 
-        if(!passwordEncoder.matches(userFindByName.getPassword(), encodedPw)) {
+        if(!passwordEncoder.matches(passwordDto.getPassword(), userFindByName.getPassword())) {
             throw new RuntimeException();
         }
 
