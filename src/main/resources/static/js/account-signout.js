@@ -46,9 +46,13 @@ async function deleteUserData(e) {
     alert("회원 정보가 안전하게 삭제되었습니다.");
 
     // 토큰 삭제
-    sessionStorage.removeItem("token");
+//    function deleteCookie(name) {
+//    	document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+//    }
+//    deleteCookie("Refresh");
+//    deleteCookie("Authorization")
 
-    window.location.href = "/home";
+    window.location.href = "/auth/logout";
   } catch (err) {
     alert(`회원정보 삭제 과정에서 오류가 발생하였습니다: ${err}`);
 
