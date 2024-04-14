@@ -57,7 +57,7 @@ public class OrderController {
     }
 
     // 주문 내역 조회
-    @GetMapping(value = {"/order", "/order/{page}"})
+    @GetMapping(value = {"/orders", "/orders/{page}"})
     public String orderHist(@PathVariable(value = "page", required = false) Integer page, Principal principal, Model model) {
         Pageable pageable = PageRequest.of(page != null ? page : 0, 4);
 
