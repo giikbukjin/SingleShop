@@ -32,9 +32,9 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    /*@OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "delivery_info_id")
-    private DeliveryInfo deliveryInfo;
+    private DeliveryInfo deliveryInfo;*/
 
     @CreatedDate
     @Column(updatable = false)
@@ -50,6 +50,17 @@ public class Order {
     @LastModifiedDate
     private String modifiedBy; // 수정자
 
+    private String receiverName; // 수령인 이름
+
+    private String receiverPhoneNumber; // 연락처
+
+    private String postalCode; // 우편번호
+
+    private String address1; // 주소
+
+    private String address2; // 상세 주소
+
+    private String deliveryRequest; // 배송 요청 사항
 
     @ManyToOne
     @JoinColumn(name = "user_id")
