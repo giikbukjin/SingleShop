@@ -38,7 +38,7 @@ public class Category {
     @Column(nullable = false, updatable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", cascade = CascadeType.REMOVE)
     private List<Product> products = new ArrayList<>();
 
     public Category(String categoryName, String categoryContent) {
