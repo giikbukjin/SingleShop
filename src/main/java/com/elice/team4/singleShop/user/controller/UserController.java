@@ -77,7 +77,7 @@ public class UserController {
         response.addCookie(cookie2);
 
         if(String.valueOf(logInResultDto.getRole()).equals("ADMIN")){
-            return "redirect:/admin";
+            return "redirect:/home";
         }
         return "redirect:/home";
     }
