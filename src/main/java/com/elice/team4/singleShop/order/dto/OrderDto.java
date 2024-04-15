@@ -2,6 +2,7 @@ package com.elice.team4.singleShop.order.dto;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,4 +16,20 @@ public class OrderDto {
 
     @Min(value = 1, message = "최소 주문 수량은 1개 입니다.")
     private int count;
+
+    @NotBlank(message = "이름은 필수입니다.")
+    private String receiverName;
+
+    @NotBlank(message = "연락처는 필수입니다.")
+    private String receiverPhoneNumber;
+
+    @NotBlank(message = "우편번호는 필수입니다.")
+    private String postalCode;
+
+    @NotBlank(message = "주소는 필수입니다.")
+    private String address1;
+
+    private String address2;
+
+    private String deliveryRequest;
 }

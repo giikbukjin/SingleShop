@@ -47,7 +47,7 @@ public class SecurityConfig {
 
     // 패스워드 부호화
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 

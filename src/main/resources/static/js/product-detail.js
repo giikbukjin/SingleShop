@@ -52,8 +52,8 @@ async function insertProductData() {
 
   if (isRecommended) {
     titleTag.insertAdjacentHTML(
-      "beforeend",
-      '<span class="tag is-success is-rounded">추천</span>'
+        "beforeend",
+        '<span class="tag is-success is-rounded">추천</span>'
     );
   }
 

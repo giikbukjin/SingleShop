@@ -1,13 +1,10 @@
 package com.elice.team4.singleShop.order.service;
 
-import com.elice.team4.singleShop.order.dto.DeliveryInfoDto;
 import com.elice.team4.singleShop.order.dto.OrderDto;
 import com.elice.team4.singleShop.order.dto.OrderHistDto;
 import com.elice.team4.singleShop.order.dto.OrderItemDto;
-import com.elice.team4.singleShop.order.entity.DeliveryInfo;
 import com.elice.team4.singleShop.order.entity.Order;
 import com.elice.team4.singleShop.order.entity.OrderItem;
-import com.elice.team4.singleShop.order.repository.DeliveryInfoRepository;
 import com.elice.team4.singleShop.product.domain.Product;
 import com.elice.team4.singleShop.product.repository.ProductRepository;
 import com.elice.team4.singleShop.user.entity.User;
@@ -35,7 +32,6 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
-    private final DeliveryInfoRepository deliveryInfoRepository;
 
 
     // 하나의 상품 주문 생성 & 저장
@@ -79,7 +75,7 @@ public class OrderService {
     }
 
     // 주문에 배송 정보 추가
-    public void addDeliveryInfo(Long orderId, DeliveryInfo deliveryInfoDto) {
+    /*public void addDeliveryInfo(Long orderId, DeliveryInfo deliveryInfoDto) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(EntityNotFoundException::new);
 
@@ -97,7 +93,7 @@ public class OrderService {
 
         // 배송 정보 저장
         deliveryInfoRepository.save(deliveryInfo);
-    }
+    }*/
 
     // 주문 목록 조회
     @Transactional
@@ -147,28 +143,22 @@ public class OrderService {
 
     // 주문 정보 수정
     @Transactional
-    public DeliveryInfo updateDeliveryInfo(Long orderId, DeliveryInfoDto deliveryInfoDto) {
+    public void updateDeliveryInfo(Long orderId, OrderDto orderDto) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(EntityNotFoundException::new);
 
-        // 주문과 연결된 배송 정보
-        DeliveryInfo deliveryInfo = order.getDeliveryInfo();
+        // 주문 정보 업데이트
+        order.setReceiverName(orderDto.getReceiverName());
+        order.setReceiverPhoneNumber(orderDto.getReceiverPhoneNumber());
+        order.setPostalCode(orderDto.getPostalCode());
+        order.setAddress1(orderDto.getAddress1());
+        order.setAddress2(orderDto.getAddress2());
+        order.setDeliveryRequest(orderDto.getDeliveryRequest());
 
-        // 주문과 연결된 배송 정보 없을 경우
-        if (deliveryInfo == null) {
-            throw new EntityNotFoundException("DeliveryInfo not found for order ID: " + orderId);
-        }
-
-        // 배송 정보 업데이트
-        deliveryInfo.setReceiverName(deliveryInfoDto.getReceiverName());
-        deliveryInfo.setReceiverPhoneNumber(deliveryInfoDto.getReceiverPhoneNumber());
-        deliveryInfo.setPostalCode(deliveryInfoDto.getPostalCode());
-        deliveryInfo.setAddress1(deliveryInfoDto.getAddress1());
-        deliveryInfo.setAddress2(deliveryInfoDto.getAddress2());
-        deliveryInfo.setDeliveryRequest(deliveryInfoDto.getDeliveryRequest());
-
-        return deliveryInfoRepository.save(deliveryInfo);
+        // 주문 정보 저장
+        orderRepository.save(order);
     }
+
 
     // 주문 내역 조회 - 관리자
     public List<OrderDto> getAllOrders() {

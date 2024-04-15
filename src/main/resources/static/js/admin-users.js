@@ -141,6 +141,7 @@ async function deleteUserData(e) {
     userIdToDelete = "";
 
     closeModal();
+    window.location.reload();
   } catch (err) {
     alert(`회원정보 삭제 과정에서 오류가 발생하였습니다: ${err}`);
   }
