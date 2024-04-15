@@ -52,7 +52,7 @@ async function deleteUserData(e) {
 //    deleteCookie("Refresh");
 //    deleteCookie("Authorization")
 
-    window.location.href = "/auth/logout";
+    window.location.href = "/auth/login";
   } catch (err) {
     alert(`회원정보 삭제 과정에서 오류가 발생하였습니다: ${err}`);
 
