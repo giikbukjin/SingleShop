@@ -77,6 +77,7 @@
         <div class="register-category-form-container">
           <form
             th:action="@{/admin/category/add}" method="post"
+            enctype="multipart/form-data"
             class="box register-category-form-box"
             id="registerCategoryForm"
           >
@@ -117,8 +118,9 @@
                     class="file-input"
                     id="imageInput"
                     type="file"
-                    name="image-file"
+                    name="files"
                     accept=".png, .jpeg, .jpg"
+                    multiple
                   />
                   <span class="file-cta">
                     <span class="file-icon">

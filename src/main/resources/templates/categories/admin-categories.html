@@ -40,6 +40,7 @@
                             class="board-item pe-auto p-3 link-underline link-underline-opacity-0 d-flex"
                             th:href="@{/admin/category/{id}(id=${category.id})}"
                     >
+                        <img th:src="@{${uploadPath} + ${category.imageFileName}}" alt="카테고리 이미지">
                         <div>
                             <h6
                                     class="card-title fw-bold text-dark"
