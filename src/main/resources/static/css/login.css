@@ -7,6 +7,7 @@
 
 .login-form-box {
   width: 30rem;
+  box-shadow: 10px 0 15px rgba(0, 0, 0, 0.1);
 }
 
 .login-form-box .title {
@@ -15,4 +16,8 @@
 
 .login-form-box .button {
   font-weight: bold;
+}
+
+.text-center img {
+  box-shadow: 13px 0 15px rgba(0, 0, 0, 0.1);
 }
