@@ -21,4 +21,6 @@ public class CategoryDto {
     @NotBlank(message = "카테고리 설명은 공백일 수 없습니다.")
     @Size(min = 1, max = 200)
     private String categoryContent;
+
+    private String imageFileName;
 }

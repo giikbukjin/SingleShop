@@ -76,6 +76,7 @@ public class CategoryController {
 
     @PostMapping("/add")
     public String createCategoryPost(@ModelAttribute @Validated CategoryDto categoryDto,
+                                     RedirectAttributes redirectAttributes,
                                      BindingResult bindingResult,
                                      @RequestParam("files") MultipartFile[] files) throws IOException {
 
@@ -87,6 +88,7 @@ public class CategoryController {
                     String fileName = uuid + "_" + file.getOriginalFilename();
                     File upFile = new File(uploadPath, fileName);
                     file.transferTo(upFile);
+                    categoryDto.setImageFileName(fileName);
                 }
             }
         }
@@ -98,6 +100,8 @@ public class CategoryController {
         Category category = categoryMapper.CategoryDtoToCategory(categoryDto);
 
         Category savedCategory = categoryService.createCategory(category);
+
+        redirectAttributes.addFlashAttribute("uploadPath", uploadPath);
 
         return "redirect:/admin/category";
     }

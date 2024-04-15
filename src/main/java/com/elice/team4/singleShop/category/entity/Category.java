@@ -31,6 +31,9 @@ public class Category {
     @Column(nullable = false, length = 200)
     private String categoryContent;
 
+    @Column(nullable = true)
+    private String imageFileName;
+
     @CreatedDate
     @Column(nullable = false, updatable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt;
