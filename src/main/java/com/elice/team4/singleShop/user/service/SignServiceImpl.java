@@ -6,10 +6,14 @@ import com.elice.team4.singleShop.user.dto.SignUpResultDto;
 import com.elice.team4.singleShop.user.entity.User;
 import com.elice.team4.singleShop.user.jwt.JwtTokenProvider;
 import com.elice.team4.singleShop.user.repository.UserRepository;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 
@@ -87,17 +91,31 @@ public class SignServiceImpl implements SignService{
         return logInResultDto;
     }
 
-    public void kakaoSignup(String nickname){
+    public void kakaoSignup(String id, String nickname){
         String uid = String.valueOf(UUID.randomUUID()).substring(0,8);
-        String email = nickname+"@singleshop.com";
         User user = User.builder()
                 .name(nickname)
-                .email(email)
+                .email(id+"@singleshop.com")
                 .password(passwordEncoder.encode(uid))
                 .role(User.Role.CONSUMER)
                 .build();
 
         userRepository.save(user);
+    }
+
+    public void kakaoLogin(String nickname, HttpServletResponse response){
+        User user = userRepository.getByName(nickname);
+        String accessToken = jwtTokenProvider.createToken(nickname, user.getRole());
+        String refreshToken = jwtTokenProvider.createRefreshToken(nickname);
+        log.info("[kakaoLogin] 카카오 로그인 Access / Refresh Token 생성");
+        var cookie1 = new Cookie("Authorization", URLEncoder.encode("Bearer " + accessToken, StandardCharsets.UTF_8));
+        var cookie2 = new Cookie("Refresh", URLEncoder.encode("Bearer " + refreshToken, StandardCharsets.UTF_8));
+        cookie1.setPath("/");
+        cookie1.setMaxAge(60 * 60);
+        cookie2.setPath("/");
+        cookie2.setMaxAge(60 * 60 * 24 * 7);
+        response.addCookie(cookie1);
+        response.addCookie(cookie2);
     }
 
     public void updateUser(Long id, String name, String password, String email) {
