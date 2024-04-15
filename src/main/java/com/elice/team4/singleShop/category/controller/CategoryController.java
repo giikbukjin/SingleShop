@@ -7,6 +7,7 @@ import com.elice.team4.singleShop.category.service.CategoryService;
 import com.elice.team4.singleShop.product.domain.Product;
 import com.elice.team4.singleShop.product.service.ProductService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,20 +26,13 @@ import java.util.UUID;
 
 @Controller
 @RequestMapping("/admin/category")
+@RequiredArgsConstructor
 public class CategoryController {
 
     private final CategoryService categoryService;
     private final CategoryMapper categoryMapper;
     private final ProductService productService;
-    private final String uploadPath;
 
-    public CategoryController(CategoryService categoryService, CategoryMapper categoryMapper,
-                              ProductService productService, @Value("${uploadPath}") String uploadPath) {
-        this.categoryService = categoryService;
-        this.categoryMapper = categoryMapper;
-        this.productService = productService;
-        this.uploadPath = uploadPath;
-    }
 
     @GetMapping
     public String getCategories(Model model) {
@@ -81,12 +75,13 @@ public class CategoryController {
                                      @RequestParam("files") MultipartFile[] files) throws IOException {
 
         UUID uuid = UUID.randomUUID();
+        String categoryPicturePath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\images\\categoryPicture";
 
         if (files != null) {
             for(MultipartFile file : files) {
                 if (file != null) {
                     String fileName = uuid + "_" + file.getOriginalFilename();
-                    File upFile = new File(uploadPath, fileName);
+                    File upFile = new File(categoryPicturePath, fileName);
                     file.transferTo(upFile);
                     categoryDto.setImageFileName(fileName);
                 }
@@ -100,8 +95,6 @@ public class CategoryController {
         Category category = categoryMapper.CategoryDtoToCategory(categoryDto);
 
         Category savedCategory = categoryService.createCategory(category);
-
-        redirectAttributes.addFlashAttribute("uploadPath", uploadPath);
 
         return "redirect:/admin/category";
     }
