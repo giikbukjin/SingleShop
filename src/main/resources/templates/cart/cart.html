@@ -148,7 +148,7 @@
             <p class="total-price" id="orderTotal" th:text="${totalPrice}"></p>
           </div>
           <form method="post">
-            <button class="button is-info" id="purchaseButton" onclick="purchaseSelectedItems()">
+            <button class="button is-info" id="purchaseButton" onclick="order()">
               구매하기
             </button>
           </form>
@@ -253,6 +253,43 @@
             .catch(error => {
               console.error('There has been a problem with your fetch operation:', error);
             });
+  }
+
+  function order() {
+    var dataList = []; // 선택된 상품의 ID를 저장할 배열
+
+    // 체크된 장바구니 상품 아이디 전달 위해 dataList에 장바구니 상품 아이디를 객체로 만들어 저장
+    $("input[type=checkbox]:checked").each(function() {
+      var cartItemId = $(this).val();
+      var data = { cartItemId: cartItemId };
+      dataList.push(data);
+    });
+
+    var param = JSON.stringify({ cartDtoList: dataList });
+
+    $.ajax({
+      url: "/order",
+      type: "POST",
+      contentType: "application/json",
+      data: param,
+      beforeSend: function(xhr) {
+        // CSRF 토큰 설정 (필요한 경우)
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        xhr.setRequestHeader(header, token);
+      },
+      success: function(result, status) {
+        // 성공적으로 주문이 완료된 후의 동작 (예: 경고 메시지 표시 등)
+        alert("주문이 성공적으로 완료되었습니다.");
+        // 주문 완료 페이지로 이동
+        window.location.href = '/order-complete';
+      },
+      error: function(jqXHR, status, error) {
+        // 오류 발생 시 처리 (예: 오류 메시지 표시 등)
+        console.error("오류 발생:", error);
+        alert("주문 처리 중 오류가 발생했습니다.");
+      }
+    });
   }
 </script>
 </body>
