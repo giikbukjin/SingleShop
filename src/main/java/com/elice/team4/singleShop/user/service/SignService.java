@@ -9,4 +9,6 @@ public interface SignService {
     LogInResultDto logIn(String name, String password) throws RuntimeException;
 
     void updateUser(Long id, String name, String password, String email);
+
+    void kakaoSignup(String nickname);
 }

@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 
 @Service
 @Slf4j
@@ -83,6 +85,19 @@ public class SignServiceImpl implements SignService{
         setSuccessResult(logInResultDto);
 
         return logInResultDto;
+    }
+
+    public void kakaoSignup(String nickname){
+        String uid = String.valueOf(UUID.randomUUID()).substring(0,8);
+        String email = nickname+"@singleshop.com";
+        User user = User.builder()
+                .name(nickname)
+                .email(email)
+                .password(passwordEncoder.encode(uid))
+                .role(User.Role.CONSUMER)
+                .build();
+
+        userRepository.save(user);
     }
 
     public void updateUser(Long id, String name, String password, String email) {

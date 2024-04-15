@@ -26,4 +26,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         log.info("[loadUserByUsername] loadUserByUsername 수행. username : {}", username);
         return userRepository.getByName(username);
     }
+
+    public boolean checkUserByName(String username){
+        log.info("[checkUserByName] 유저 이름을 통해 유저가 존재하는지 확인합니다.");
+        return userRepository.existsByName(username);
+    }
 }

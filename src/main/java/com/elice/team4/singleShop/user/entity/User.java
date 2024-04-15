@@ -44,7 +44,6 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @Email(message = "이메일 양식을 확인해주세요.")
     @NotBlank(message = "이메일은 비어있을 수 없습니다.")
     @Column(nullable = false)
     private String email;
