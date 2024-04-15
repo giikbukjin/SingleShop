@@ -49,7 +49,7 @@
         <div class="navbar-brand">
           <a class="navbar-item" href="/static">
             <img src="/images/elice-rabbit.png" width="30" height="30" />
-            <span class="has-text-link">Shopping Mall</span>
+            <span class="has-text-link">SINGLE SHOP</span>
           </a>
 
           <a
@@ -80,42 +80,52 @@
       </div>
     </nav>
 
-    <!-- 제품 목록 -->
-    <section class="section">
-      <div class="container product-item-container" id="producItemContainer">
-        <table class="table table-striped">
-          <thead>
-          <tr>
-            <th>상품명</th>
-            <th>요약</th>
-            <th>세부설명</th>
-            <th>이미지</th>
-            <th>가격</th>
-            <th>카테고리</th>
-            <th>수량</th>
-            <th></th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr th:each="product : ${products}" th:data-product-id="${product.id}" class="clickable-row">
-            <td class="summary-cell" th:text="${product.name}">상품명</td>
-            <td class="summary-cell" th:text="${product.summary}">요약</td>
-            <td class="description-cell" th:text="${product.description}">설명</td>
-            <td th:text="${product.image}">이미지 URL</td>
-            <td th:text="${product.price}">가격</td>
-            <td th:text="${product.category != null ? product.category.categoryName : '없음'}">카테고리</td>
-            <td th:text="${product.stock}">수량</td>
-            <td>
-              <a href="#" th:href="@{/seller/{productId}(productId=${product.id})}" class="btn btn-primary" role="button">수정</a>
-            </td>
-            <td>
-              <button class="btn btn-danger" th:attr="data-product-id=${product.id}" onclick="openModal(this.getAttribute('data-product-id'), event)">삭제</button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
+    <div class="container my-5">
+      <div class="header mb-5">
+        <a
+                class="link link-offset-1 link-offset-2-hover text-sm fs-6 mb-2 d-block"
+                style="transition: all 0.1s ease-in-out"
+                th:href="@{/admin}"
+        >&larr; 관리자 페이지</a>
+
+        <!-- 상품 목록 -->
+        <section class="section">
+          <div class="container product-item-container" id="producItemContainer">
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>상품명</th>
+                <th>요약</th>
+                <th>세부설명</th>
+                <th>이미지</th>
+                <th>가격</th>
+                <th>카테고리</th>
+                <th>수량</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="product : ${products}" th:data-product-id="${product.id}" class="clickable-row">
+                <td class="summary-cell" th:text="${product.name}">상품명</td>
+                <td class="summary-cell" th:text="${product.summary}">요약</td>
+                <td class="description-cell" th:text="${product.description}">설명</td>
+                <td th:text="${product.image}">이미지 URL</td>
+                <td th:text="${product.price}">가격</td>
+                <td th:text="${product.category != null ? product.category.categoryName : '없음'}">카테고리</td>
+                <td th:text="${product.stock}">수량</td>
+                <td>
+                  <a href="#" th:href="@{/seller/{productId}(productId=${product.id})}" class="btn btn-primary" role="button">수정</a>
+                </td>
+                <td>
+                  <button class="btn btn-danger" th:attr="data-product-id=${product.id}" onclick="openModal(this.getAttribute('data-product-id'), event)">삭제</button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
       </div>
-    </section>
+    </div>
 
     <!-- 삭제 확인 모달 -->
     <div class="modal" id="deleteModal">
