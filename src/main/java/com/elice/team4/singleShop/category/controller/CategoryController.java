@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/admin/category")
@@ -78,15 +79,14 @@ public class CategoryController {
                                      BindingResult bindingResult,
                                      @RequestParam("files") MultipartFile[] files) throws IOException {
 
+        UUID uuid = UUID.randomUUID();
+
         if (files != null) {
             for(MultipartFile file : files) {
                 if (file != null) {
-                    // 파일 처리 코드 추가
-                    System.out.println("file.getOriginalFilename() = " + file.getOriginalFilename());
-                    System.out.println("file.getSize() = " + file.getSize());
-
-                    File upFile = new File(uploadPath, file.getOriginalFilename());
-                    file.transferTo(upFile);    // 업로드된 파일을 C:/upload 에 저장. IOException throw 처리
+                    String fileName = uuid + "_" + file.getOriginalFilename();
+                    File upFile = new File(uploadPath, fileName);
+                    file.transferTo(upFile);
                 }
             }
         }
