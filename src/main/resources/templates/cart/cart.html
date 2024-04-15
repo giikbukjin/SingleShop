@@ -101,25 +101,28 @@
 
           <!-- 장바구니에 담긴 상품들의 html 요소(카드 형태)가 주입되는 곳 -->
           <div class="cart-item-list">
-          <p th:each="cartItem, i : ${cartItemList}">
-              <td>
-                <input type="checkbox" class="cart-item-checkbox" value="${cartItem.getId()}" th:attr="data-item-id=${cartItem.getId()}" onchange="toggleItemCheckbox(this)">            </td>
-            <td th:text="${i.count}">1</td>
-            <td th:text="${cartItem.getProduct().getId()}">3번상품</td>
-            <td>
-              <a th:href="@{/item/view/{id}(id=${cartItem.Product.id})}"
-                 th:text="${cartItem.getProduct().getName()}"></a>
-            </td>
-            <td th:text="${cartItem.getCount()}">수량</td>
-            <td th:text="${cartItem.getProduct().getPrice() * cartItem.getCount()}">가격</td>
-            <td th:text="${cartItem.getCreatedDateTime()}">날짜</td>
-            <td class="btn btn-outline-dark"><a th:href="@{/cart/{cartItemId}/delete(cartItemId=${cartItem.getId()})}"
-                                                style="text-decoration: none">삭제</a>
-          </p>
+            <table>
+              <tbody>
+              <tr th:each="cartItem, i : ${cartItemList}">
+                <td>
+                  <input type="checkbox" class="cart-item-checkbox" value="${cartItem.getId()}" th:attr="data-item-id=${cartItem.getId()}" onchange="toggleItemCheckbox(this)">
+                </td>
+                <td th:text="${i.count}">1</td>
+                <td th:text="${cartItem.getProduct().getId()}">3번상품</td>
+                <td>
+                  <a th:href="@{/products/{id}(id=${cartItem.Product.id})}" th:text="${cartItem.getProduct().getName()}"></a>
+                </td>
+                <td th:text="${cartItem.getCount()}">수량</td>
+                <td th:text="${cartItem.getProduct().getPrice() * cartItem.getCount()}">가격</td>
+                <td class="btn btn-outline-dark">
+                  <a th:href="@{/cart/{cartItemId}/delete(cartItemId=${cartItem.getId()})}" style="text-decoration: none">삭제</a>
+                </td>
+              </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-
       <!-- 선택한 상품 총 요약 -->
       <div class="tile is-parent tile-order-summary">
         <div class="box order-summary">
@@ -129,20 +132,20 @@
           <div class="order-info">
             <div class="info">
               <p>상품수</p>
-              <p id="productsCount"></p>
+              <p id="productsCount" th:text="${cartItemList.size()}"></p>
             </div>
             <div class="info">
               <p>상품금액</p>
-              <p id="productsTotal"></p>
+              <p id="productsTotal" th:text="${totalPrice}" ></p>
             </div>
             <div class="info">
               <p>배송비</p>
-              <p id="deliveryFee"></p>
+              <p id="deliveryFee">0</p>
             </div>
           </div>
           <div class="total">
             <p class="total-label">총 결제금액</p>
-            <p class="total-price" id="orderTotal"></p>
+            <p class="total-price" id="orderTotal" th:text="${totalPrice}"></p>
           </div>
           <form method="post">
             <button class="button is-info" id="purchaseButton" onclick="purchaseSelectedItems()">
@@ -250,52 +253,6 @@
             .catch(error => {
               console.error('There has been a problem with your fetch operation:', error);
             });
-  }
-
-  function order() {
-    var token = $("meta[name='_csrf']").attr("content");
-    var header = $("meta[name='_csrf_header']").attr("content");
-
-    var url = "/cart/orders";
-
-    var dataList = new Array();
-    var paramData = new Object();
-
-    // 체크된 장바구니 상품 아이디 전달 위해 dataList에 장바구니 상품 아이디를 객체로 만들어 저장
-    $("input[name=checkbox]:checked").each(function() {
-      var cartItemId = $(this).val();
-      var data = new Object();
-      data["cartItemId"] = cartItemId;
-      dataList.push(data);
-    });
-
-      paramData['cartDtoList'] = dataList;
-
-      var param = JSON.stringify(paramData);
-
-      $.ajax({
-        url : url,
-        type : "POST",
-        contentType : "application/json",
-        data : param,
-        beforeSend : function(xhr) {
-          xhr.setRequestHeader(header, token);
-        },
-        dataType : "json",
-        cache : false,
-        success : function(result, status) {
-          alert("주문이 완료되었습니다.");
-          location.href='/';
-        },
-        error : function(jqXHR, status, error) {
-          if(jqXHR.status == '401') {
-            alert('로그인 후 이용해주세요.');
-            location.href='/auth/login';
-          } else {
-            alert(jqXHR.responseText);
-          }
-        }
-      });
   }
 </script>
 </body>

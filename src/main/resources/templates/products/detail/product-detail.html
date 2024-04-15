@@ -1,104 +1,145 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>SINGLE SHOP</title>
-    <!-- 아이콘 -->
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="/images/elice-rabbit-favicon.png"
-    />
-    <!-- bulma css 관련 -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
-    />
-    <!-- 폰트 어썸: 아이콘 -->
-    <script
-      defer
-      src="https://kit.fontawesome.com/9daa42bcef.js"
-      crossorigin="anonymous"
-    ></script>
-    <!-- AWS S3 사용하기 위한 파일 -->
-    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.410.0.min.js"></script>
-    <!-- 커스텀 css, js -->
-    <link rel="stylesheet" href="/css/product-detail.css" />
-    <script src="/js/product-detail.js" type="module" defer></script>
-  </head>
-  <body>
-    <!-- 헤더 -->
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-      <div class="container mt-3">
-        <div class="navbar-brand">
-          <a class="navbar-item" href="/static">
-            <img src="/images/elice-rabbit.png" width="30" height="30" />
-            <span class="has-text-link">Shopping Mall</span>
-          </a>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SINGLE SHOP</title>
+  <!-- 아이콘 -->
+  <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/images/elice-rabbit-favicon.png"
+  />
+  <!-- bulma css 관련 -->
+  <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
+  />
+  <!-- 폰트 어썸: 아이콘 -->
+  <script
+          defer
+          src="https://kit.fontawesome.com/9daa42bcef.js"
+          crossorigin="anonymous"
+  ></script>
+  <!-- AWS S3 사용하기 위한 파일 -->
+  <script src="https://sdk.amazonaws.com/js/aws-sdk-2.410.0.min.js"></script>
+  <!-- 커스텀 css, js -->
+  <link rel="stylesheet" href="/css/product-detail.css" />
+  <script src="/js/product-detail.js" type="module" defer></script>
+</head>
+<body>
+<!-- 헤더 -->
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="container mt-3">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/home">
+        <img src="/images/elice-rabbit.png" width="30" height="30" />
+        <span class="has-text-link">Shopping Mall</span>
+      </a>
 
-          <a
-            role="button"
-            class="navbar-burger"
-            aria-label="menu"
-            aria-expanded="false"
-            data-target="navbarBasicExample"
-          >
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-          </a>
-        </div>
+      <a
+              role="button"
+              class="navbar-burger"
+              aria-label="menu"
+              aria-expanded="false"
+              data-target="navbarBasicExample"
+      >
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
 
-        <div class="navbar-end breadcrumb my-auto" aria-label="breadcrumbs">
-          <ul id="navbar">
-            <li>
-              <a href="/cart" aria-current="page">
+    <div class="navbar-end breadcrumb my-auto" aria-label="breadcrumbs">
+      <ul id="navbar">
+        <li>
+          <a href="/cart" aria-current="page">
                 <span class="icon">
                   <i class="fas fa-cart-shopping"></i>
                 </span>
-                <span>카트</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+            <span>카트</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
 
-    <!-- 제품 상세 설명 카드 -->
-    <section class="section">
-      <div class="container">
-        <div class="tile is-ancestor product-detail-card">
-          <div class="tile is-6 is-parent">
-            <div class="tile is-child box product-image">
-              <figure class="image is-square">
-                <img th:src="@{${product.image}}" alt="Product Image" id="productImageTag"/>
-              </figure>
-            </div>
-          </div>
-          <div class="tile is-parent is-vertical">
-            <div class="tile is-child box product-detail">
-              <div class="tabs">
-                <p class="detail-description" th:text="${product.summary}" id="manufacturerTag"></p>
-              </div>
-              <div class="content">
-                <p class="subtitle is-3 is-family-monospace" th:text="${product.name}" id="titleTag"></p>
-                <h1 th:text="${product.price + '원'}" id="priceTag"></h1>
-                <p class="detail-description" th:text="${product.description}" id="detailDescriptionTag"></p>
-              </div>
-            </div>
-            <div class="tile buttons-container">
-              <button class="button is-warning" id="addToCartButton">
-                장바구니 추가하기
-              </button>
-              <button class="button is-info ml-2" id="purchaseButton">
-                바로 구매하기
-              </button>
-            </div>
-          </div>
+<!-- 제품 상세 설명 카드 -->
+<section class="section">
+  <div class="container">
+    <div class="tile is-ancestor product-detail-card">
+      <div class="tile is-6 is-parent">
+        <div class="tile is-child box product-image">
+          <figure class="image is-square">
+            <img th:src="@{${product.image}}" alt="Product Image" id="productImageTag"/>
+          </figure>
         </div>
       </div>
-    </section>
-  </body>
+      <div class="tile is-parent is-vertical">
+        <div class="tile is-child box product-detail">
+          <div class="tabs">
+            <p class="detail-description" th:text="${product.summary}" id="manufacturerTag"></p>
+          </div>
+          <div class="content">
+            <p class="subtitle is-3 is-family-monospace" th:text="${product.name}" id="titleTag"></p>
+            <h1 th:text="${product.price + '원'}" id="priceTag"></h1>
+            <p class="detail-description" th:text="${product.description}" id="detailDescriptionTag"></p>
+          </div>
+        </div>
+        <div class="product-quantity">
+          <button class="button is-info" onclick="decreaseQuantity()">-</button>
+          <span id="quantity">1</span>
+          <button class="button is-info" onclick="increaseQuantity()">+</button>
+        </div>
+        <div class="tile buttons-container">
+          <button class="button is-warning" id="addToCartButton" th:onclick="'addToCart(' + ${currentUser.id} + ', ' + ${product.id} + ', ' + quantity + ')'">
+            장바구니 추가하기
+          </button>
+          <button class="button is-info ml-2" id="purchaseButton">
+            바로 구매하기
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<SCRIPT>
+  function addToCart(userId, productId, quantity) {
+    // POST 요청을 보내는 JavaScript 코드 작성
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST','/cart/' + userId + '/add?productId=' + productId + '&count=' + quantity, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        // 요청이 성공했을 때 처리할 작업
+        alert('상품이 장바구니에 추가되었습니다.');
+      } else {
+        // 요청이 실패했을 때 처리할 작업
+        alert('상품을 장바구니에 추가하는데 실패했습니다.');
+      }
+    };
+    xhr.send();
+  }
+
+  var quantity = 1; // 초기 수량 설정
+
+  function decreaseQuantity() {
+    if (quantity > 1) {
+      quantity--;
+      updateQuantity();
+    }
+  }
+
+  function increaseQuantity() {
+    quantity++;
+    updateQuantity();
+  }
+
+  function updateQuantity() {
+    document.getElementById("quantity").innerText = quantity;
+  }
+</SCRIPT>
+</body>
 </html>
