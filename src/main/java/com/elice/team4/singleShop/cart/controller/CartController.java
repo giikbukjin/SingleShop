@@ -2,6 +2,7 @@ package com.elice.team4.singleShop.cart.controller;
 
 import com.elice.team4.singleShop.user.entity.User;
 import com.elice.team4.singleShop.user.repository.UserRepository;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
@@ -48,12 +49,23 @@ public class CartController {
     public String viewCart(Model model) {
         // 현재 사용자 정보 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
+            // 로그인하지 않은 경우 로그인 페이지로 리디렉션
+            return "redirect:/cart/login";
+        }
+
         String username = authentication.getName(); // 현재 사용자의 이름 가져오기
         User user = userRepository.getByName(username); // UserRepository를 사용하여 사용자 정보 가져오기
 
         // 현재 사용자의 ID로 장바구니 조회
         List<CartItem> cartItems = cartService.viewCart(user.getId());
 
+        int totalPrice = 0;
+        for (CartItem cartItem : cartItems) {
+            totalPrice += cartItem.getProduct().getPrice() * cartItem.getCount();
+        }
+
+        model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("cartItemList", cartItems);
         return "cart/cart";
     }
