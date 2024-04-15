@@ -96,7 +96,7 @@
           <button class="button is-warning" id="addToCartButton" th:onclick="'addToCart(' + ${currentUser.id} + ', ' + ${product.id} + ', ' + quantity + ')'">
             장바구니 추가하기
           </button>
-          <button class="button is-info ml-2" id="purchaseButton">
+          <button class="button is-info ml-2" id="purchaseButton" th:onclick="'order(' + ${currentUser.id} + ', ' + ${product.id} + ')'">
             바로 구매하기
           </button>
         </div>
@@ -138,6 +138,30 @@
 
   function updateQuantity() {
     document.getElementById("quantity").innerText = quantity;
+  }
+
+  function order(userId, productId) {
+    // POST 요청을 보내는 JavaScript 코드 작성
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/order/' + userId + '/add?productId=' + productId, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    // 요청의 상태 변화를 감지하여 처리
+    xhr.onload = function() {
+      if (xhr.status === 401) {
+        // 로그인이 필요한 경우
+        alert('로그인 후 이용해주세요.');
+        location.href = '/auth/login'; // 로그인 페이지로 이동
+      } else if (xhr.status === 200) {
+        // 요청이 성공했을 때 처리할 작업
+        // 주문 완료 페이지로 이동하거나 다른 작업을 수행할 수 있음
+        location.href = '/order-complete';
+      } else {
+        // 요청이 실패했을 때 처리할 작업
+        alert(xhr.responseText);
+      }
+    };
+    xhr.send(); // 요청을 보냄
   }
 </SCRIPT>
 </body>
