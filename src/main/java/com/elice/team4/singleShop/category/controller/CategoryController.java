@@ -7,6 +7,8 @@ import com.elice.team4.singleShop.category.service.CategoryService;
 import com.elice.team4.singleShop.product.domain.Product;
 import com.elice.team4.singleShop.product.service.ProductService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
@@ -14,18 +16,23 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
-@AllArgsConstructor
 @RequestMapping("/admin/category")
+@RequiredArgsConstructor
 public class CategoryController {
 
     private final CategoryService categoryService;
     private final CategoryMapper categoryMapper;
     private final ProductService productService;
+
 
     @GetMapping
     public String getCategories(Model model) {
@@ -63,7 +70,24 @@ public class CategoryController {
 
     @PostMapping("/add")
     public String createCategoryPost(@ModelAttribute @Validated CategoryDto categoryDto,
-                                     BindingResult bindingResult) {
+                                     RedirectAttributes redirectAttributes,
+                                     BindingResult bindingResult,
+                                     @RequestParam("files") MultipartFile[] files) throws IOException {
+
+        UUID uuid = UUID.randomUUID();
+        String categoryPicturePath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\images\\categoryPicture";
+
+        if (files != null) {
+            for(MultipartFile file : files) {
+                if (file != null) {
+                    String fileName = uuid + "_" + file.getOriginalFilename();
+                    File upFile = new File(categoryPicturePath, fileName);
+                    file.transferTo(upFile);
+                    categoryDto.setImageFileName(fileName);
+                }
+            }
+        }
+
         if(bindingResult.hasErrors()) {
             return "category-error/category-add-error";
         }

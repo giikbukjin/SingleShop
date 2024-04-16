@@ -10,6 +10,9 @@ src/main/resources/application.properties
 .idea
 application.yml
 
+# Paths for uploaded image files
+src/main/resources/static/images/categoryPicture/**
+
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml

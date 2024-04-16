@@ -35,7 +35,7 @@
     <div class="navbar-brand">
       <a class="navbar-item" href="/static">
         <img src="/images/elice-rabbit.png" width="30" height="30" />
-        <span class="has-text-link">Shopping Mall</span>
+        <span class="has-text-link">SINGLE SHOP</span>
       </a>
 
       <a
@@ -72,16 +72,12 @@
 <!-- 제품 추가 폼(Form) -->
 <section class="section">
   <div class="container">
-<!--    <div th:if="${success}">-->
-<!--      <div class="notification is-primary">-->
-<!--        <button class="delete"></button>-->
-<!--        <p th:text="${success}"></p>-->
-<!--      </div>-->
-<!--    </div>-->
+    <a
+            class="link link-offset-1 link-offset-2-hover text-sm fs-6 mb-2 d-block"
+            style="transition: all 0.1s ease-in-out"
+            th:href="@{/admin}"
+    >&larr; 관리자 페이지</a>
 
-    <div class="block account-header">
-      <h1 class="subtitle is-4">제품 등록</h1>
-    </div>
     <div class="register-product-form-container">
       <form class="box register-product-form-box"
             id="registerProductForm"
