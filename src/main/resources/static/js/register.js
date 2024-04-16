@@ -10,8 +10,8 @@ document.getElementById('registerUserForm').addEventListener('submit', function(
     let isValid = true;
 
     // 이름 길이 유효성 검사 (5자 이상, 15자 이하)
-    if (nameInput.value.length < 5 || nameInput.value.length > 15) {
-        nameErrorMessage.textContent = '이름은 5자 이상, 15자 이하로 입력해주세요.';
+    if (nameInput.value.length > 15) {
+        nameErrorMessage.textContent = '이름은 15자 이하로 입력해주세요.';
         isValid = false;
     } else {
         nameErrorMessage.textContent = '';
