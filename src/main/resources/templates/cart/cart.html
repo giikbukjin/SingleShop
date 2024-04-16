@@ -94,7 +94,7 @@
             <label class="seperator">
               <p class="help help-seperator">&nbsp;&nbsp;|&nbsp;&nbsp;</p>
             </label>
-            <label class="delete-part" id="partialDeleteLabel" onclick="SelectedItems()">
+            <label class="delete-part" id="partialDeleteLabel" onclick="deleteSelectedItems()">
               <p class="help">선택삭제</p>
             </label>
           </div>
@@ -147,11 +147,9 @@
             <p class="total-label">총 결제금액</p>
             <p class="total-price" id="orderTotal" th:text="${totalPrice}"></p>
           </div>
-          <form method="post">
-            <button class="button is-info" id="purchaseButton" onclick="order()">
-              구매하기
-            </button>
-          </form>
+          <a class="button is-info" th:href="@{/order}">
+            <span>구매하기</span>
+          </a>
         </div>
       </div>
     </div>
@@ -213,84 +211,77 @@
   }
 
   // 선택 삭제 버튼 클릭 시 호출되는 함수
+  function deleteSelectedItems() {
+    // 선택된 상품들의 ID를 저장할 배열
+    var selectedItems = [];
 
-  // 선택된 상품들을 구매하는 함수
-  function purchaseSelectedItems() {
-    var selectedItems = []; // 선택된 상품의 ID를 저장할 배열
-
-    // 체크된 체크박스를 찾아서 선택된 상품의 ID를 배열에 추가
-    var checkboxes = document.querySelectorAll('.cart-item-checkbox:checked');
+    // 선택된 상품들의 ID를 가져와 배열에 추가
+    var checkboxes = document.querySelectorAll('.cart-item-checkbox');
     checkboxes.forEach(function(checkbox) {
-      selectedItems.push(checkbox.value);
-    });
-
-    // 선택된 상품이 없으면 알림 표시
-    if (selectedItems.length === 0) {
-      alert("구매할 상품을 선택해주세요.");
-      return;
-    }
-
-    // 선택된 상품의 ID를 서버로 전송하여 구매 처리
-    fetch('/cart/buy', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(selectedItems)
-    })
-            .then(response => {
-              if (!response.ok) {
-                throw new Error('Network response was not ok');
-              }
-              return response.json();
-            })
-            .then(data => {
-              // 서버 응답에 따라 처리 (예: 성공적으로 구매됨을 알리는 메시지 표시 등)
-              alert("상품이 성공적으로 구매되었습니다.");
-              // 페이지 새로고침
-              window.location.reload();
-            })
-            .catch(error => {
-              console.error('There has been a problem with your fetch operation:', error);
-            });
-  }
-
-  function order() {
-    var dataList = []; // 선택된 상품의 ID를 저장할 배열
-
-    // 체크된 장바구니 상품 아이디 전달 위해 dataList에 장바구니 상품 아이디를 객체로 만들어 저장
-    $("input[type=checkbox]:checked").each(function() {
-      var cartItemId = $(this).val();
-      var data = { cartItemId: cartItemId };
-      dataList.push(data);
-    });
-
-    var param = JSON.stringify({ cartDtoList: dataList });
-
-    $.ajax({
-      url: "/order",
-      type: "POST",
-      contentType: "application/json",
-      data: param,
-      beforeSend: function(xhr) {
-        // CSRF 토큰 설정 (필요한 경우)
-        var token = $("meta[name='_csrf']").attr("content");
-        var header = $("meta[name='_csrf_header']").attr("content");
-        xhr.setRequestHeader(header, token);
-      },
-      success: function(result, status) {
-        // 성공적으로 주문이 완료된 후의 동작 (예: 경고 메시지 표시 등)
-        alert("주문이 성공적으로 완료되었습니다.");
-        // 주문 완료 페이지로 이동
-        window.location.href = '/order-complete';
-      },
-      error: function(jqXHR, status, error) {
-        // 오류 발생 시 처리 (예: 오류 메시지 표시 등)
-        console.error("오류 발생:", error);
-        alert("주문 처리 중 오류가 발생했습니다.");
+      if (checkbox.checked) {
+        var itemId = checkbox.getAttribute('data-item-id');
+        selectedItems.push(itemId);
       }
     });
+
+    // 선택된 상품들이 있는지 확인 후 삭제 작업 수행
+    if (selectedItems.length > 0) {
+      // AJAX를 사용하여 선택된 상품들을 서버로 전송하여 삭제
+      fetch('/cart/SelectedItems', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(selectedItems)
+      })
+              .then(response => {
+                if (response.ok) {
+                  // 성공적으로 삭제된 경우 페이지를 새로고침하여 장바구니를 갱신
+                  window.location.reload();
+                } else {
+                  // 오류가 발생한 경우 적절한 처리를 수행
+                  console.error('Failed to delete selected items');
+                }
+              })
+              .catch(error => {
+                console.error('Error:', error);
+              });
+    } else {
+      // 선택된 상품이 없는 경우 알림 또는 처리할 작업 수행
+      console.log('No selected items to delete');
+    }
   }
+  /*
+    function purchaseSelectedItems() {
+      var selectedItems = [];
+      var checkboxes = document.querySelectorAll('.cart-item-checkbox:checked');
+      checkboxes.forEach(function(checkbox) {
+        selectedItems.push(checkbox.getAttribute('data-item-id'));
+      });
+      // 서버로 데이터를 전송하기 전에 JSON 문자열로 변환
+      var jsonData = JSON.stringify(selectedItems);
+
+      // AJAX를 사용하여 서버로 데이터 전송
+      fetch('/cart/purchaseSelectedItems', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: jsonData
+      })
+              .then(response => {
+                if (response.ok) {
+                  // 성공적으로 처리된 경우
+                  console.log('Purchase request sent successfully');
+                  // 필요한 처리를 수행
+                } else {
+                  // 오류가 발생한 경우
+                  console.error('Failed to send purchase request');
+                }
+              })
+              .catch(error => {
+                console.error('Error:', error);
+              });*/
 </script>
 </body>
 </html>

@@ -65,7 +65,7 @@ public class ProductViewController {
     }
 
     @GetMapping("/products/{productId}")
-    public String getProductDetail(@PathVariable Long productId, Model model, Principal principal) {
+    public String getProductDetail(@PathVariable("productId") Long productId, Model model, Principal principal) {
 
         Optional<Product> productOptional = productService.findProductById(productId);
 
