@@ -140,16 +140,18 @@
             </div>
             <div class="info">
               <p>배송비</p>
-              <p id="deliveryFee">0</p>
+              <p id="deliveryFee">2500</p>
             </div>
           </div>
           <div class="total">
             <p class="total-label">총 결제금액</p>
-            <p class="total-price" id="orderTotal" th:text="${totalPrice}"></p>
+            <p class="total-price" id="orderTotal" th:text="${totalPrice + 2500}"></p>
           </div>
-          <a class="button is-info" th:href="@{/order}">
-            <span>구매하기</span>
-          </a>
+          <form id="buyForm" method="post" th:action="@{/order/create}">
+            <button type="submit" class="button is-info">
+              <span>구매하기</span>
+            </button>
+          </form>
         </div>
       </div>
     </div>
@@ -251,6 +253,21 @@
       console.log('No selected items to delete');
     }
   }
+
+  document.getElementById("buyForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // 기본 동작 방지
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/order/create", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        // 성공적으로 처리되었을 때의 동작
+        window.location.href = "/order"; // 주문 페이지로 리다이렉트
+      }
+    };
+    xhr.send();
+  });
+
   /*
     function purchaseSelectedItems() {
       var selectedItems = [];
