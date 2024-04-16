@@ -9,7 +9,7 @@
           rel="icon"
           type="image/png"
           sizes="16x16"
-          href="/elice-rabbit-favicon.png"
+          th:href="@{/images/elice-rabbit-favicon.png}"
   />
   <!-- bulma css 관련 -->
   <link
@@ -94,12 +94,12 @@
               <div class="field">
                 <p class="control">
                   <input
-                          clxxass="input"
+                          class="input"
                           id="receiverName"
                           type="text"
                           placeholder="받는 분 이름을 입력해 주세요."
                           autocomplete="on"
-                          th:value="${receiverName}"
+                          th:text="${orderItem.receiverName}"
                   />
                 </p>
               </div>
@@ -119,7 +119,7 @@
                           type="number"
                           placeholder="- 없이 입력해 주세요."
                           autocomplete="on"
-                          th:value="${receiverPhoneNumber}"
+                          th:text="${receiverPhoneNumber}"
                   />
                 </p>
               </div>
@@ -139,7 +139,7 @@
                           type="text"
                           placeholder="주소찾기를 클릭해 주세요."
                           readonly
-                          th:value="${postalCode}"
+                          th:text="${postalCode}"
                   />
                 </p>
               </div>
@@ -166,7 +166,7 @@
                           placeholder=""
                           autocomplete="on"
                           readonly
-                          th:value="${address1}"
+                          th:text="${address1}"
                   />
                 </p>
               </div>
@@ -184,7 +184,7 @@
                           type="text"
                           placeholder=""
                           autocomplete="on"
-                          th:value="${address2}"
+                          th:text="${address2}"
                   />
                 </p>
               </div>
@@ -238,6 +238,7 @@
                           maxlength="50"
                           placeholder="최대 50자 입력이 가능합니다."
                           autocomplete="on"
+                          th:text="${deliveryRequest}"
                   />
                 </p>
               </div>
@@ -254,31 +255,48 @@
           </div>
           <div class="order-info">
             <div class="info">
-              <p>주문상품</p>
-              <p class="products-title" id="productsTitle"></p>
+              <div class="info" th:each="cartItem, i : ${cartItemList}">
+                <p th:text="${cartItem.getProduct().name}"></p>
+              </div>
             </div>
             <div class="info">
               <p>상품총액</p>
-              <p id="productsTotal"></p>
+              <p id="productsTotal" th:text="${totalPrice}" ></p>
             </div>
             <div class="info">
               <p>배송비</p>
-              <p id="deliveryFee"></p>
+              <p id="deliveryFee">2500</p>
             </div>
           </div>
           <div class="total">
             <p class="total-label">총 결제금액</p>
-            <p class="total-price" id="orderTotal"></p>
+            <p class="total-price" id="orderTotal" th:text="${totalPrice + 2500}"></p>
           </div>
           <div class="purchase">
-            <button class="button is-info" id="checkoutButton" href="/order-complete">
-              결제하기
+            <button class="button is-info" id="checkoutButton">
+              <span>결제하기</span>
             </button>
           </div>
         </div>
       </div>
     </div>
   </div>
+  </div>
 </section>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("checkoutButton").addEventListener("click", function() {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "/order/checkout", true); // GET 요청으로 변경
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          // 성공적으로 처리되었을 때의 동작
+          window.location.href = "/order/order-complete"; // 혹은 다른 페이지로 리다이렉트
+        }
+      };
+      xhr.send();
+    });
+  });
+</script>
 </body>
 </html>
