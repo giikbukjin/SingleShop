@@ -97,7 +97,7 @@
           <button class="button is-warning" id="addToCartButton" th:onclick="'addToCart(' + ${currentUser.id} + ', ' + ${product.id} + ', ' + quantity + ')'">
             장바구니 추가하기
           </button>
-          <button class="button is-info ml-2" id="purchaseButton">
+          <button class="button is-info ml-2" id="purchaseButton" onclick="order()">
             바로 구매하기
           </button>
         </div>
@@ -140,6 +140,11 @@
   function updateQuantity() {
     document.getElementById("quantity").innerText = quantity;
   }
+
+  function order() {
+    window.location.href = "/order";
+  }
+
 </SCRIPT>
 </body>
 </html>
