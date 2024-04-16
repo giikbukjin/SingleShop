@@ -16,44 +16,57 @@ async function addAllElements() {
   createNavbar();
 }
 
-  document.addEventListener('DOMContentLoaded', function () {
-    const loginForm = document.getElementById('loginForm');
-    const emailInput = document.getElementById('emailInput');
-    const passwordInput = document.getElementById('passwordInput');
-    const emailError = document.getElementById('emailError');
-    const passwordError = document.getElementById('passwordError');
+document.addEventListener('DOMContentLoaded', function () {
+  const loginForm = document.getElementById('loginForm');
+  const emailInput = document.getElementById('emailInput');
+  const passwordInput = document.getElementById('passwordInput');
+  const emailError = document.getElementById('emailError');
+  const passwordError = document.getElementById('passwordError');
 
-    loginForm.addEventListener('submit', function (event) {
-      event.preventDefault(); // Prevent form submission
+  loginForm.addEventListener('submit', function (event) {
+    event.preventDefault();
 
-      // Reset error messages
-      emailError.textContent = '';
-      passwordError.textContent = '';
+    emailError.textContent = '';
+    passwordError.textContent = '';
 
-      // Validate email
-      if (!validateEmail(emailInput.value.trim())) {
-        emailError.textContent = '유효한 이메일을 입력하세요.';
-        return;
-      }
-
-      // Validate password
-      if (!validatePassword(passwordInput.value.trim())) {
-        passwordError.textContent = '비밀번호는 8자 이상, 15자 이하여야 합니다.';
-        return;
-      }
-
-      // If both email and password are valid, submit the form
-      loginForm.submit();
-    });
-
-    // Function to validate email
-    function validateEmail(email) {
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return re.test(String(email).toLowerCase());
+    if (!validateEmail(emailInput.value.trim())) {
+      emailError.textContent = '유효한 이메일을 입력하세요.';
+      return;
     }
 
-    // Function to validate password
-    function validatePassword(password) {
-      return password.length >= 8 && password.length <= 15;
+    if (!validatePassword(passwordInput.value.trim())) {
+      passwordError.textContent = '비밀번호는 8자 이상, 15자 이하여야 합니다.';
+      return;
     }
+
+    fetch(loginForm.action, {
+      method: 'POST',
+      body: new FormData(loginForm),
+    })
+        .then(response => {
+          if (response.ok) {
+            window.location.href = response.url;
+          } else {
+            return response.json();
+          }
+        })
+        .then(errorData => {
+          if (errorData && errorData.message) {
+            alert(errorData.message);
+          }
+        })
+        .catch(error => {
+          console.error('Error occurred during login:', error);
+          alert('로그인 중 오류가 발생했습니다. 다시 시도해주세요.');
+        });
   });
+
+  function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  }
+
+  function validatePassword(password) {
+    return password.length >= 8 && password.length <= 15;
+  }
+});

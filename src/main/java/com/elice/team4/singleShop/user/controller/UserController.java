@@ -77,7 +77,7 @@ public class UserController {
         response.addCookie(cookie2);
 
         if(String.valueOf(logInResultDto.getRole()).equals("ADMIN")){
-            return "redirect:/home";
+            return "redirect:/admin";
         }
         return "redirect:/home";
     }
@@ -121,9 +121,8 @@ public class UserController {
         Map<String, String> map = new HashMap<>();
         map.put("error type", httpStatus.getReasonPhrase());
         map.put("code", "400");
-        map.put("message", "에러 발생");
+        map.put("message", "잘못된 이메일 혹은 비밀번호를 입력하셨습니다, 다시 입력해주세요.");
 
         return new ResponseEntity<>(map, responseHeaders, httpStatus);
     }
-
 }
