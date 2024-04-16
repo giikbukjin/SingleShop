@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -102,28 +103,26 @@ public class CartController {
         String username = authentication.getName();
         User user = userRepository.getByName(username);
 
-        cartService.cartPayment(id); // 결제처리
-        //    cartService.deleteSelectedItems(id, cartItemIds); // 장바구니 비우기
+        // 결제처리 및 장바구니 비우기
+        cartService.cartPayment(id);
 
-        return "redirect:/cart";
+        return "redirect:/order";
     }
-
+/*
     // 선택한 상품들로 구매하기
     @PostMapping("/cart/buy")
-    public String purchaseSelectedItems(Model model, @RequestBody List<Long> cartItemIds) {
+    public String createOrderFromSelectedItems(@RequestBody List<Long> cartItemIds) {
         // 현재 사용자 정보 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userRepository.getByName(username);
 
-        // 선택한 상품들로 주문 생성하고 장바구니에서 삭제
+        // 선택된 카트 아이템들로 주문 생성
         Long orderId = cartService.createOrderFromSelectedItems(user.getId(), cartItemIds);
 
-        // 주문 ID를 모델에 추가하여 오더 페이지로 이동
-        model.addAttribute("orderId", orderId);
-
-        return "redirect:/order"; // 주문 완료 페이지로 리다이렉트
+        // 생성된 주문 ID를 반환하거나 적절한 처리를 수행
+        return "redirect:/order/" + orderId;
     }
-
+ */
 }
 
