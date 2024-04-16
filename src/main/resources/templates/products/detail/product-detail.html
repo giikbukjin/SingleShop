@@ -9,7 +9,7 @@
           rel="icon"
           type="image/png"
           sizes="16x16"
-          href="/images/elice-rabbit-favicon.png"
+          th:href="@{/images/elice-rabbit-favicon.png}"
   />
   <!-- bulma css 관련 -->
   <link
@@ -140,10 +140,6 @@
   function updateQuantity() {
     document.getElementById("quantity").innerText = quantity;
   }
-
-  /*function order() {
-    window.location.href = "/order";
-  }*/
 
   function order(productId, quantity) {
     // 주문 생성을 위한 POST 요청
