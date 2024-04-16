@@ -117,8 +117,12 @@ public class CartService {
 
 
     @Transactional
-    public void cartPayment(Long userId) {
+    public void cartPaymentAndClear(Long userId) {
         Cart cart = cartRepository.findByUserId(userId);
+        if (cart == null) {
+            throw new IllegalArgumentException("Cart not found for user with ID: " + userId);
+        }
+
         List<CartItem> cartItems = cartItemRepository.findByCart(cart);
         for (CartItem cartItem : cartItems) {
             int stock = cartItem.getProduct().getStock();
@@ -129,7 +133,7 @@ public class CartService {
             cartItem.getProduct().setStock(stock);
         }
 
-        // 장바구니 비우는 부분 활성화
+        // 장바구니 비우기
         cartItemRepository.deleteByCart(cart);
     }
 /*
@@ -159,4 +163,3 @@ public class CartService {
         return order.getId();
     }*/
 }
-
