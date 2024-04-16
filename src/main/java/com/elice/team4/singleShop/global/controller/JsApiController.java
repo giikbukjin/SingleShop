@@ -39,7 +39,7 @@ public class JsApiController {
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<UserModifyDto> getById(@PathVariable Long id) {
+    public ResponseEntity<UserModifyDto> getById(@PathVariable(name = "id") Long id) {
 
         User findUser = userRepository.findById(id).orElseThrow();
         UserModifyDto getUser = new UserModifyDto(findUser);
@@ -85,7 +85,7 @@ public class JsApiController {
 
 
     @PatchMapping("/users/{id}")
-    public ResponseEntity<User> updateUsersRole(@PathVariable(name="id") Long id, @RequestBody ModiRoleDto modiRoleDto) {
+    public ResponseEntity<User> updateUsersRole(@PathVariable(name = "id") Long id, @RequestBody ModiRoleDto modiRoleDto) {
         User findUser = userRepository.findById(id).orElseThrow();
         findUser.setRole(modiRoleDto.getRole());
         userRepository.save(findUser);
@@ -121,7 +121,7 @@ public class JsApiController {
     }
 
     @DeleteMapping("/users/{id}")
-    public ResponseEntity deleteUser(@PathVariable(name="id") Long id) {
+    public ResponseEntity deleteUser(@PathVariable(name = "id") Long id) {
         userRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }

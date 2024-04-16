@@ -75,7 +75,6 @@ const addNavElements = (keyString) => {
 
   const container = document.querySelector("#navbar");
   const isLogin = getCookie("Authorization") ? true : false;
-  console.log("여기 까진 옴?")
   var isAdmin = false;
   (async () => {
       try {
@@ -122,7 +121,7 @@ const addNavElements = (keyString) => {
   };
 
   const itemsForAdmin = {
-    admin: '<li><a href="/admin">관리</a></li>',
+    admin: '<li><a href="/admin">관리 페이지</a></li>',
   };
 
   // 로그아웃 요소만 유일하게, 클릭 이벤트를 필요로 함 (나머지는 href로 충분함)
@@ -133,9 +132,9 @@ const addNavElements = (keyString) => {
       if (logoutElem) {
         logoutElem.addEventListener('click', () => {
 //           토큰 삭제
-              function deleteCookie(name) {
-              	document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-              }
+//              function deleteCookie(name) {
+//              	document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+//              }
 //              deleteCookie("Refresh");
 //              deleteCookie("Authorization")
 //                deleteCoo
