@@ -4,6 +4,9 @@ import com.elice.team4.singleShop.cart.entity.CartItem;
 import com.elice.team4.singleShop.cart.service.CartService;
 import com.elice.team4.singleShop.order.dto.OrderDto;
 import com.elice.team4.singleShop.order.dto.OrderHistDto;
+import com.elice.team4.singleShop.order.entity.Order;
+import com.elice.team4.singleShop.order.entity.OrderItem;
+import com.elice.team4.singleShop.order.repository.OrderRepository;
 import com.elice.team4.singleShop.order.service.OrderService;
 import com.elice.team4.singleShop.user.entity.User;
 import com.elice.team4.singleShop.user.repository.UserRepository;
@@ -26,12 +29,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
 public class OrderController {
 
     private final OrderService orderService;
+    private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final CartService cartService;
 
@@ -64,6 +69,40 @@ public class OrderController {
         return "redirect:/order-complete";
     }
 
+    @PostMapping("/order/create")
+    public String createOrder(Model model) {
+        // 현재 사용자 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userRepository.getByName(username);
+
+        // 장바구니에서 주문에 포함될 상품들 가져오기
+        List<CartItem> cartItems = cartService.viewCart(user.getId());
+
+        // 주문 리스트 생성 및 주문에 상품들 추가
+        Order order = new Order(); // 주문 객체 생성
+        List<OrderItem> orderItems = cartItems.stream()
+                .map(cartItem -> {
+                    OrderItem orderItem = new OrderItem();
+                    orderItem.setProduct(cartItem.getProduct());
+                    orderItem.setCount(cartItem.getCount());
+                    orderItem.setOrderPrice(cartItem.getProduct().getPrice()); // 상품의 가격 설정
+                    orderItem.setOrder(order); // 주문 아이템에 주문 설정
+                    return orderItem;
+                })
+                .collect(Collectors.toList());
+
+        order.setOrderItems(orderItems); // 주문에 주문 아이템들 설정
+        order.setUser(user); // 주문에 사용자 설정
+
+        // 주문 저장
+        orderRepository.save(order);
+
+
+
+        // 주문 페이지로 이동
+        return "redirect:/order";
+    }
     @GetMapping("/order")
     public String viewOrder(Model model) {
         // 현재 사용자 정보 가져오기
@@ -73,8 +112,21 @@ public class OrderController {
 
         List<CartItem> cartItems = cartService.viewCart(user.getId());
 
+        int totalPrice = 0;
+        for (CartItem cartItem : cartItems) {
+            totalPrice += cartItem.getProduct().getPrice() * cartItem.getCount();
+        }
+
+        model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("cartItemList", cartItems);
+
         return "order/order";
+    }
+
+    @GetMapping("/order/order-complete")
+    public String orderCompletePage() {
+        // 주문 완료 페이지로 이동
+        return "order/order-complete"; // order-complete.html에 대한 뷰로 이동
     }
 
     // 주문 내역 조회
