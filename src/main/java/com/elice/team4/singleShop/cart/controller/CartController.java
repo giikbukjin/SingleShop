@@ -97,16 +97,16 @@ public class CartController {
         return "redirect:/cart";
     }
 
-    @PostMapping("/user/{id}/cart/checkout")
-    public String myCartPayment(@PathVariable("id") Long id, Model model){
+
+
+    //구매하기누르면 장바구니 삭제
+    @GetMapping("order/checkout")
+    public String myCartPaymentAndClear(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userRepository.getByName(username);
-
-        // 결제처리 및 장바구니 비우기
-        cartService.cartPayment(id);
-
-        return "redirect:/order";
+        cartService.cartPaymentAndClear(user.getId());
+        return "order/order-complete";
     }
 /*
     // 선택한 상품들로 구매하기
@@ -125,4 +125,3 @@ public class CartController {
     }
  */
 }
-

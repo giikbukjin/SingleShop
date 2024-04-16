@@ -1,4 +1,4 @@
-import * as Api from "./api.js";
+import * as Api from "../../static/js/api.js";
 import {
   checkLogin,
   addCommas,
@@ -6,8 +6,8 @@ import {
   navigate,
   randomPick,
   createNavbar,
-} from "./useful-functions.js";
-import { deleteFromDb, getFromDb, putToDb } from "./indexed-db.js";
+} from "../../static/js/useful-functions.js";
+import { deleteFromDb, getFromDb, putToDb } from "../../static/js/indexed-db.js";
 
 // 요소(element), input 혹은 상수
 const subtitleCart = document.querySelector("#subtitleCart");
@@ -266,7 +266,7 @@ async function doCheckout() {
     await Api.post("/api/user/deliveryinfo", data);
 
     alert("결제 및 주문이 정상적으로 완료되었습니다.\n감사합니다.");
-    window.location.href = "/order/complete";
+    window.location.href = "/order-complete";
   } catch (err) {
     console.log(err);
     alert(`결제 중 문제가 발생하였습니다: ${err.message}`);
