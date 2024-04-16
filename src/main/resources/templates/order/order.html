@@ -9,7 +9,7 @@
           rel="icon"
           type="image/png"
           sizes="16x16"
-          th:href="@{/images/elice-rabbit-favicon.png}"
+          href="/elice-rabbit-favicon.png"
   />
   <!-- bulma css 관련 -->
   <link
@@ -94,12 +94,12 @@
               <div class="field">
                 <p class="control">
                   <input
-                          class="input"
+                          clxxass="input"
                           id="receiverName"
                           type="text"
                           placeholder="받는 분 이름을 입력해 주세요."
                           autocomplete="on"
-                          th:text="${orderItem.receiverName}"
+                          th:value="${receiverName}"
                   />
                 </p>
               </div>
@@ -119,7 +119,7 @@
                           type="number"
                           placeholder="- 없이 입력해 주세요."
                           autocomplete="on"
-                          th:text="${receiverPhoneNumber}"
+                          th:value="${receiverPhoneNumber}"
                   />
                 </p>
               </div>
@@ -139,7 +139,7 @@
                           type="text"
                           placeholder="주소찾기를 클릭해 주세요."
                           readonly
-                          th:text="${postalCode}"
+                          th:value="${postalCode}"
                   />
                 </p>
               </div>
@@ -166,7 +166,7 @@
                           placeholder=""
                           autocomplete="on"
                           readonly
-                          th:text="${address1}"
+                          th:value="${address1}"
                   />
                 </p>
               </div>
@@ -184,7 +184,7 @@
                           type="text"
                           placeholder=""
                           autocomplete="on"
-                          th:text="${address2}"
+                          th:value="${address2}"
                   />
                 </p>
               </div>
@@ -238,7 +238,6 @@
                           maxlength="50"
                           placeholder="최대 50자 입력이 가능합니다."
                           autocomplete="on"
-                          th:text="${deliveryRequest}"
                   />
                 </p>
               </div>
@@ -265,12 +264,12 @@
             </div>
             <div class="info">
               <p>배송비</p>
-              <p id="deliveryFee">2500</p>
+              <p id="deliveryFee">0</p>
             </div>
           </div>
           <div class="total">
             <p class="total-label">총 결제금액</p>
-            <p class="total-price" id="orderTotal" th:text="${totalPrice + 2500}"></p>
+            <p class="total-price" id="orderTotal" th:text="${totalPrice}"></p>
           </div>
           <div class="purchase">
             <button class="button is-info" id="checkoutButton">
