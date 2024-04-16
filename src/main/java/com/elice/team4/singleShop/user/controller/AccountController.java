@@ -41,10 +41,4 @@ public class AccountController {
         return "account/account-signout";
     }
 
-    // TODO : JS 고쳐지면, 비밀번호를 받아서, 리턴 값을 준 다음에 삭제 시킬 유저를 반납한다.
-//    @ResponseBody
-//    @PostMapping("users/password-check")
-//    public User checkPassword(@RequestParam(name="data") String password) {
-//
-//    }
 }
