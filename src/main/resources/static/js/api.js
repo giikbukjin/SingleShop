@@ -4,15 +4,15 @@ async function get(endpoint, params = "") {
   console.log(`%cGET 요청: ${apiUrl} `, "color: #a25cd1;");
 
   function getCookie(name) {
-        const cookies = document.cookie.split(';');
-        for (const cookie of cookies) {
-          const [cookieName, cookieValue] = cookie.trim().split('=');
-          if (cookieName === name) {
-            return cookieValue;
-          }
-        }
-        return null;
+    const cookies = document.cookie.split(';');
+    for (const cookie of cookies) {
+      const [cookieName, cookieValue] = cookie.trim().split('=');
+      if (cookieName === name) {
+        return cookieValue;
       }
+    }
+    return null;
+  }
 
   // 토큰이 있으면 Authorization 헤더를 포함, 없으면 포함하지 않음
   const token = getCookie("Authorization");
@@ -38,26 +38,25 @@ async function post(endpoint, data) {
   console.log(`%cPOST 요청 데이터: ${bodyData}`, "color: #296aba;");
 
   function getCookie(name) {
-        const cookies = document.cookie.split(';');
-        for (const cookie of cookies) {
-          const [cookieName, cookieValue] = cookie.trim().split('=');
-          if (cookieName === name) {
-            return cookieValue;
-          }
-        }
-        return null;
+    const cookies = document.cookie.split(';');
+    for (const cookie of cookies) {
+      const [cookieName, cookieValue] = cookie.trim().split('=');
+      if (cookieName === name) {
+        return cookieValue;
       }
+    }
+    return null;
+  }
 
   // 토큰이 있으면 Authorization 헤더를 포함, 없으면 포함하지 않음
   const token = getCookie("Authorization");
   const headers = {
     "Content-Type": "application/json"
   };
-
   const res = await fetch (apiUrl, {
     method: "POST",
     headers,
-    body: bodyData,
+    body: bodyData
   });
 
   // 응답 코드가 4XX 계열일 때 (400, 403 등)
