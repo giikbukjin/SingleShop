@@ -87,7 +87,7 @@ export const checkLogin = () => {
    }
 
    //관리자 토큰 여부 확인
-   const res = await fetch("api/users/admin-check");
+   const res = await fetch("/api/users/admin-check");
 
    const result = await res.json();
    console.log(result);

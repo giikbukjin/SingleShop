@@ -1,33 +1,20 @@
-// 원래 쓰려던 isAdmin 방식
-// const isAdmin = {
-//    checkAd: false,
-//  }
-//  async function checkAdmin() {
-//    try {
-//        const res = await fetch("/api/users/admin-check");
-//        const result = await res.json();
-//
-//    } catch (error) {
-//        console.error("Admin check failed:", isAdmin.checkAd);
-//    }
-//
-//  }
-//  console.log("isAdmin, if 구문 밖에서 :", isAdmin.checkAd);
-//
-
 export const createNavbar = () => {
-  const pathname = window.location.pathname;
+function aaaaaa(str) {
+    const pattern = /^\/account\/security\//;
+    return pattern.test(str);
+}
 
-// account/security/**?
+const pathname = aaaaaa(window.location.pathname) ? "/account/security" : window.location.pathname;
 
+console.log("pathname: ", pathname, aaaaaa(pathname));
   switch (pathname) {
     case "/home":
-      addNavElements("admin register login cart account logout");
+      addNavElements("cart admin register login account logout");
       break;
-    case "/account/orders":
-      addNavElements("admin account logout");
+    case "/orders":
+      addNavElements("cart admin account logout");
       break;
-    case "/account/security/*":
+    case "/account/security":
       addNavElements("admin account logout");
       break;
     case "/account/signout":
@@ -58,27 +45,28 @@ export const createNavbar = () => {
       addNavElements("admin account logout");
       break;
     case "/order":
-      addNavElements("admin account logout");
+      addNavElements("cart admin account logout");
       break;
     case "/product/add":
       addNavElements("admin account logout");
       break;
     case "/product/detail":
-      addNavElements("admin register login account logout");
+      addNavElements("cart admin register login account logout");
       break;
     case "/product/list":
-      addNavElements("admin register login account logout");
+      addNavElements("cart admin register login account logout");
       break;
     case "/auth/signup":
       addNavElements("login");
       break;
 
     default:
+    console.log("default");
   }
 };
 
 // navbar ul 태그에, li 태그들을 삽입함)
-const addNavElements = (keyString) => {
+const addNavElements = async (keyString) => {
   const keys = keyString.split(" ");
   const container = document.querySelector("#navbar");
 
@@ -154,30 +142,26 @@ const addNavElements = (keyString) => {
       }
   `;
 
+let isAdmin = await (async () => {
+      try {
+          const res = await fetch("api/users/admin-check");
+          const result = await res.json();
 
-// 비동기 함수로 하니까 isAdmin값을 넣을 수가 없습니다. 안 되서 아래 방법 사용했는데, 함수 안에서는 true로 바뀌나,
-// isAdmin이 밖에서는 내용이 바뀌지 않습니다. 왜 그럴까요?
+          console.log("result.stauts in if: ", result.status);
 
-  var isAdmin = false;
+           if (result.status === "success") {
+            return true;
+            console.log(isAdmin);
+          };
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/api/users/admin-check', true); // GET 요청을 보냄
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === XMLHttpRequest.DONE) { // 요청이 완료되면
-        if (xhr.status === 200) { // 요청이 성공했을 때
-            console.log("요청이 성공 했는가? ", xhr.status);
-            console.log("텍스트가 무엇인가? ", xhr.responseText);
-          if (xhr.responseText == "{\"status\": \"success\"}") {
-              isAdmin = true;
-              console.log("if 안쪽의 isAdmin 값: ", isAdmin);
-          }
+          return false;
 
-        } else {
-          console.error('Request failed with status:', xhr.status); // 요청이 실패했을 때
-        }
+      } catch (error) {
+          console.error("Admin check failed:", error);
+          // 에러 처리 코드를 추가할 수 있습니다.
       }
-    };
-    xhr.send(); // 요청 보내기
+
+  })();
 
     console.log("요청 보내고 난 후의 isAdmin: ", isAdmin);
 
@@ -200,14 +184,3 @@ const addNavElements = (keyString) => {
   // append, after 등의 함수로 script 객체 요소를 삽입해 주어야 실행함.
   container.after(logoutScript);
 };
-
-// function getCookie(name) {
-//              const cookies = document.cookie.split(';');
-//              for (const cookie of cookies) {
-//                const [cookieName, cookieValue] = cookie.trim().split('=');
-//                if (cookieName === name) {
-//                  return cookieValue;
-//                }
-//              }
-//              return null;
-//            }
