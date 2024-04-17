@@ -98,11 +98,10 @@ public class OrderController {
         // 주문 저장
         orderRepository.save(order);
 
-
-
         // 주문 페이지로 이동
         return "redirect:/order";
     }
+
     @GetMapping("/order")
     public String viewOrder(Model model) {
         // 현재 사용자 정보 가져오기
