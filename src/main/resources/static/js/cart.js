@@ -1,12 +1,12 @@
-import { getImageUrl } from "../js/aws-s3.js";
+import { getImageUrl } from "./aws-s3.js";
 import {
   addCommas,
   convertToNumber,
   navigate,
   compressString,
   createNavbar,
-} from "../js/useful-functions.js";
-import { deleteFromDb, getFromDb, putToDb } from "../js/indexed-db.js";
+} from "./useful-functions.js";
+import { deleteFromDb, getFromDb, putToDb } from "./indexed-db.js";
 
 // 요소(element), input 혹은 상수
 const cartProductsContainer = document.querySelector("#cartProductsContainer");
@@ -44,8 +44,7 @@ async function insertProductsfromCart() {
 
   products.forEach(async (product) => {
     // 객체 destructuring
-    const { _id, title, quantity, imageKey, price } = product;
-    const imageUrl = await getImageUrl(imageKey);
+    const { _id, title, quantity, price } = product;
 
     const isSelected = selectedIds.includes(_id);
 
@@ -63,13 +62,6 @@ async function insertProductsfromCart() {
               <i class="fas fa-trash-can"></i>
             </span>
           </button>
-          <figure class="image is-96x96">
-            <img
-              id="image-${_id}"
-              src="${imageUrl}"
-              alt="product-image"
-            />
-          </figure>
           <div class="content">
             <p id="title-${_id}">${compressString(title)}</p>
             <div class="quantity">

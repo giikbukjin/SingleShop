@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SINGLE SHOP</title>
+  <title>Shopping Mall</title>
   <!-- 아이콘 -->
   <link
           rel="icon"
           type="image/png"
           sizes="16x16"
-          th:href="@{/images/elice-rabbit-favicon.png}"
+          href="/elice-rabbit-favicon.png"
   />
   <!-- bulma css 관련 -->
   <link
@@ -25,8 +25,8 @@
   <!-- Daum 주소 API 사용하기 위한 파일 -->
   <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <!-- 커스텀 css, js -->
-  <link rel="stylesheet" href="/css/order.css" />
-  <script src="/js/order.js" type="module" defer></script>
+  <link rel="stylesheet" th:href="@{/css/order.css}" />
+  <script th:src="@{/js/order.js}" type="module" defer></script>
 </head>
 <body>
 <!-- 헤더 -->
@@ -34,7 +34,7 @@
   <div class="container mt-3">
     <div class="navbar-brand">
       <a class="navbar-item" href="/">
-        <img src="/images/elice-rabbit.png" width="30" height="30" />
+        <img src="/elice-rabbit.png" width="30" height="30" />
         <span class="has-text-link">Shopping Mall</span>
       </a>
 
@@ -53,14 +53,6 @@
 
     <div class="navbar-end breadcrumb my-auto" aria-label="breadcrumbs">
       <ul id="navbar">
-        <li>
-          <a href="/cart" aria-current="page">
-                <span class="icon">
-                  <i class="fas fa-cart-shopping"></i>
-                </span>
-            <span>카트</span>
-          </a>
-        </li>
       </ul>
     </div>
   </div>
@@ -85,7 +77,7 @@
       <div class="tile is-parent cart-products">
         <div class="box delivery-info">
           <!-- 배송지 정보 -->
-          <p class="subtitle is-4">배송지 정보</p>
+          <p class="subtitle is-4">배송지정보</p>
           <div class="field is-horizontal">
             <div class="field-label is-normal">
               <label class="label" for="receiverName">이름</label>
@@ -99,7 +91,6 @@
                           type="text"
                           placeholder="받는 분 이름을 입력해 주세요."
                           autocomplete="on"
-                          th:value="${receiverName}"
                   />
                 </p>
               </div>
@@ -119,7 +110,6 @@
                           type="number"
                           placeholder="- 없이 입력해 주세요."
                           autocomplete="on"
-                          th:value="${receiverPhoneNumber}"
                   />
                 </p>
               </div>
@@ -139,7 +129,6 @@
                           type="text"
                           placeholder="주소찾기를 클릭해 주세요."
                           readonly
-                          th:value="${postalCode}"
                   />
                 </p>
               </div>
@@ -166,7 +155,6 @@
                           placeholder=""
                           autocomplete="on"
                           readonly
-                          th:value="${address1}"
                   />
                 </p>
               </div>
@@ -184,7 +172,6 @@
                           type="text"
                           placeholder=""
                           autocomplete="on"
-                          th:value="${address2}"
                   />
                 </p>
               </div>
@@ -225,7 +212,6 @@
           <div
                   class="field is-horizontal custom-request"
                   id="customRequestContainer"
-                  th:if="${requestType == '6'}"
           >
             <div class="field-label is-normal no-label"></div>
             <div class="field-body">
@@ -254,49 +240,31 @@
           </div>
           <div class="order-info">
             <div class="info">
-              <div class="info" th:each="cartItem, i : ${cartItemList}">
-                <p th:text="${cartItem.getProduct().name}"></p>
-              </div>
+              <p>주문상품</p>
+              <p class="products-title" id="productsTitle"></p>
             </div>
             <div class="info">
               <p>상품총액</p>
-              <p id="productsTotal" th:text="${totalPrice}" ></p>
+              <p id="productsTotal"></p>
             </div>
             <div class="info">
               <p>배송비</p>
-              <p id="deliveryFee">2500</p>
+              <p id="deliveryFee"></p>
             </div>
           </div>
           <div class="total">
             <p class="total-label">총 결제금액</p>
-            <p class="total-price" id="orderTotal" th:text="${totalPrice + 2500}"></p>
+            <p class="total-price" id="orderTotal"></p>
           </div>
           <div class="purchase">
             <button class="button is-info" id="checkoutButton">
-              <span>결제하기</span>
+              결제하기
             </button>
           </div>
         </div>
       </div>
     </div>
   </div>
-  </div>
 </section>
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("checkoutButton").addEventListener("click", function() {
-      var xhr = new XMLHttpRequest();
-      xhr.open("GET", "/order/checkout", true); // GET 요청으로 변경
-      xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          // 성공적으로 처리되었을 때의 동작
-          window.location.href = "/order/order-complete"; // 혹은 다른 페이지로 리다이렉트
-        }
-      };
-      xhr.send();
-    });
-  });
-
-</script>
 </body>
 </html>

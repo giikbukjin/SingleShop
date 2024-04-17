@@ -99,8 +99,8 @@ public class CartController {
 
 
 
-    //구매하기누르면 장바구니 삭제
-    @GetMapping("order/checkout")
+    // 구매하기누르면 장바구니 삭제
+    @GetMapping("/order/checkout")
     public String myCartPaymentAndClear(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();

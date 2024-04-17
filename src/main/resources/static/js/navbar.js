@@ -109,7 +109,7 @@ const addNavElements = (keyString) => {
   // 로그인 완료된 상태에서만 보이게 될 navbar 요소들
   const itemsAfterLogin = {
     account: '<li><a href="/account">계정관리</a></li>',
-    logout = '<li><a href="/auth/logout" id="logout">로그아웃</a></li>',
+    logout: '<li><a href="/auth/logout" id="logout">로그아웃</a></li>',
 //    logout: logoutPath,
     productAdd: '<li><a href="/product/add">제품 추가</a></li>',
     categoryAdd: '<li><a href="/category/add">카테고리 추가</a></li>',
@@ -134,27 +134,27 @@ const addNavElements = (keyString) => {
 
 // 비동기 함수로 하니까 안 되서 아래 방법 사용했는데, 함수 안에 내용이 바뀌지 않습니다. 왜 그럴까요?
 
-//  var isAdmin = false;
-//
-//    var xhr = new XMLHttpRequest();
-//    xhr.open('GET', '/api/users/admin-check', true); // GET 요청을 보냄
-//    xhr.onreadystatechange = function () {
-//      if (xhr.readyState === XMLHttpRequest.DONE) { // 요청이 완료되면
-//        if (xhr.status === 200) { // 요청이 성공했을 때
-//          console.log(xhr.responseText); // 응답 데이터를 출력
-//          console.log("\"status\": \"success\"");
-//          if (xhr.responseText == "{\"status\": \"success\"}") {
-//              isAdmin = true;
-//              console.log("checkAdmin, if 구문 안에서 :", isAdmin);
-//          }
-//
-//        } else {
-//          console.error('Request failed with status:', xhr.status); // 요청이 실패했을 때
-//        }
-//      }
-//    };
-//    xhr.send(); // 요청 보내기
-//    console.log("요청 보내고 난 후,", isAdmin);
+  var isAdmin = false;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/api/users/admin-check', true); // GET 요청을 보냄
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE) { // 요청이 완료되면
+        if (xhr.status === 200) { // 요청이 성공했을 때
+          console.log(xhr.responseText); // 응답 데이터를 출력
+          console.log("\"status\": \"success\"");
+          if (xhr.responseText == "{\"status\": \"success\"}") {
+              isAdmin = true;
+              console.log("checkAdmin, if 구문 안에서 :", isAdmin);
+          }
+
+        } else {
+          console.error('Request failed with status:', xhr.status); // 요청이 실패했을 때
+        }
+      }
+    };
+    xhr.send(); // 요청 보내기
+    console.log("요청 보내고 난 후,", isAdmin);
 
   let items = "";
   for (const key of keys) {

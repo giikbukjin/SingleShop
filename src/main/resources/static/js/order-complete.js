@@ -1,4 +1,4 @@
-import { checkLogin, navigate, createNavbar } from "../../useful-functions.js";
+import { checkLogin, navigate, createNavbar } from "./useful-functions.js";
 
 // 요소(element), input 혹은 상수
 const orderDetailButton = document.querySelector("#orderDetailButton");

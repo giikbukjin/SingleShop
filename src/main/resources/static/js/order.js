@@ -58,6 +58,7 @@ function addAllEvents() {
 
 // Daum 주소 API (사용 설명 https://postcode.map.daum.net/guide)
 function searchAddress() {
+    console.log("주소찾기 버튼이 눌렸을 때, 해당 함수가 호출이 되긴 함.");
   new daum.Postcode({
     oncomplete: function (data) {
       let addr = "";
@@ -145,8 +146,14 @@ async function insertOrderSummary() {
 }
 
 async function insertUserData() {
-  const userData = await Api.get("/user");
-  const { fullName, phoneNumber, address } = userData;
+  var id = window.location.pathname.match(/\d+/)[0];
+
+    console.log({id});
+
+    userData = await Api.get("/api/users", id);
+
+    // 객체 destructuring
+    const { name, email, address, phoneNumber } = userData;
 
   // 만약 db에 데이터 값이 있었다면, 배송지정보에 삽입
   if (fullName) {
@@ -263,6 +270,7 @@ async function doCheckout() {
         address2,
       },
     };
+    console.log(data);
     await Api.post("/api/user/deliveryinfo", data);
 
     alert("결제 및 주문이 정상적으로 완료되었습니다.\n감사합니다.");

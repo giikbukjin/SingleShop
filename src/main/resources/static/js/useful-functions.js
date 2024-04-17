@@ -14,16 +14,18 @@ export const validateEmail = (email) => {
 
 // 주소창의 url로부터 params를 얻어 객체로 만듦
 export const getUrlParams = () => {
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
+  const queryString = window.location.pathname.match(/\d+/)[0];
+//  const queryString = window.location.pathname;
+//  console.log(queryString);
+//  const urlParams = new URLSearchParams(queryString);
+//
+//  const result = {};
+//
+//  for (const [key, value] of urlParams) {
+//    result[key] = value;
+//  }
 
-  const result = {};
-
-  for (const [key, value] of urlParams) {
-    result[key] = value;
-  }
-
-  return result;
+  return queryString;
 };
 
 // 숫자에 쉼표를 추가함. (10000 -> 10,000)
@@ -155,7 +157,7 @@ export const checkUrlParams = (key) => {
   const { [key]: params } = getUrlParams();
 
   if (!params) {
-    window.location.replace("/page-not-found");
+//    window.location.replace("/page-not-found");
   }
 };
 

@@ -1,12 +1,12 @@
-import { getImageUrl } from "../../aws-s3.js";
-import * as Api from "../../api.js";
+import { getImageUrl } from "./aws-s3.js";
+import * as Api from "./api.js";
 import {
   getUrlParams,
   addCommas,
   checkUrlParams,
   createNavbar,
-} from "../../useful-functions.js";
-import { addToDb, putToDb } from "../../indexed-db.js";
+} from "./useful-functions.js";
+import { addToDb, putToDb } from "./indexed-db.js";
 
 // 요소(element), input 혹은 상수
 const productImageTag = document.querySelector("#productImageTag");
@@ -30,21 +30,23 @@ function addAllElements() {
 function addAllEvents() {}
 
 async function insertProductData() {
-  const { id } = getUrlParams();
-  const product = await Api.get(`/products/${id}`);
+  const id = getUrlParams();
+  console.log(getUrlParams());
+  const product = await Api.get(`api/products/${id}`);
 
   // 객체 destructuring
   const {
     title,
     detailDescription,
     menufacturer,
-    imageKey,
+//    imageKey,
     isRecommended,
     price,
   } = product;
-  const imageUrl = await getImageUrl(imageKey);
+//  console.log(imageKey);
+//  const imageUrl = await getImageUrl(imageKey);
 
-  productImageTag.src = imageUrl;
+//  productImageTag.src = imageUrl;
   titleTag.innerText = title;
   detailDescriptionTag.innerText = detailDescription;
   manufacturerTag.innerText = menufacturer;
@@ -60,7 +62,7 @@ async function insertProductData() {
   addToCartButton.addEventListener("click", async () => {
     try {
       await insertDb(product);
-
+      console.log(product);
       alert("장바구니에 추가되었습니다.");
     } catch (err) {
       // Key already exists 에러면 아래와 같이 alert함

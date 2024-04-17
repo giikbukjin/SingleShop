@@ -9,9 +9,11 @@ import com.elice.team4.singleShop.order.entity.OrderItem;
 import com.elice.team4.singleShop.order.repository.OrderRepository;
 import com.elice.team4.singleShop.order.service.OrderService;
 import com.elice.team4.singleShop.user.entity.User;
+import com.elice.team4.singleShop.user.jwt.JwtTokenProvider;
 import com.elice.team4.singleShop.user.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,14 +36,16 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class OrderController {
 
     private final OrderService orderService;
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final CartService cartService;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    @PostMapping(value = "/order")
+    @PostMapping("/order")
     public String order(@ModelAttribute("orderDto") @Valid OrderDto orderDto,
                         BindingResult bindingResult, Principal principal, RedirectAttributes redirectAttributes) {
         // 데이터 바인딩 시 에러 있는지 검사
@@ -70,14 +75,16 @@ public class OrderController {
     }
 
     @PostMapping("/order/create")
-    public String createOrder(Model model) {
+    public String createOrder(@CookieValue(value = "Authorization") String value, Model model) {
         // 현재 사용자 정보 가져오기
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        User user = userRepository.getByName(username);
+        String token = value.substring(7);
+        log.info("토큰 값 : {}",token);
+
+        UserDetails userDetailsInfo = jwtTokenProvider.getUserDetailsInfo(token);
+        User userFindByName = jwtTokenProvider.getUserInfo(userDetailsInfo.getUsername());
 
         // 장바구니에서 주문에 포함될 상품들 가져오기
-        List<CartItem> cartItems = cartService.viewCart(user.getId());
+        List<CartItem> cartItems = cartService.viewCart(userFindByName.getId());
 
         // 주문 리스트 생성 및 주문에 상품들 추가
         Order order = new Order(); // 주문 객체 생성
@@ -93,23 +100,27 @@ public class OrderController {
                 .collect(Collectors.toList());
 
         order.setOrderItems(orderItems); // 주문에 주문 아이템들 설정
-        order.setUser(user); // 주문에 사용자 설정
+        order.setUser(userFindByName); // 주문에 사용자 설정
 
         // 주문 저장
         orderRepository.save(order);
 
         // 주문 페이지로 이동
-        return "redirect:/order";
+        return "order/order";
     }
 
     @GetMapping("/order")
-    public String viewOrder(Model model) {
+    public String viewOrder(@CookieValue(value = "Authorization") String value, Model model) {
         // 현재 사용자 정보 가져오기
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        User user = userRepository.getByName(username);
+        String token = value.substring(7);
+        log.info("토큰 값 : {}",token);
 
-        List<CartItem> cartItems = cartService.viewCart(user.getId());
+        UserDetails userDetailsInfo = jwtTokenProvider.getUserDetailsInfo(token);
+        User userFindByName = jwtTokenProvider.getUserInfo(userDetailsInfo.getUsername());
+
+        log.info("order에서 주문정보가지고 만든 user {}", userFindByName);
+
+        List<CartItem> cartItems = cartService.viewCart(userFindByName.getId());
 
         int totalPrice = 0;
         for (CartItem cartItem : cartItems) {
