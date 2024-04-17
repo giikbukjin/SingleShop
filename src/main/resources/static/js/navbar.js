@@ -18,30 +18,32 @@
 export const createNavbar = () => {
   const pathname = window.location.pathname;
 
+// account/security/**?
+
   switch (pathname) {
     case "/home":
-      addNavElements("admin register login account logout");
+      addNavElements("admin register login cart account logout");
       break;
     case "/account/orders":
       addNavElements("admin account logout");
       break;
-    case "/account/security/${id}":
+    case "/account/security/*":
       addNavElements("admin account logout");
       break;
     case "/account/signout":
       addNavElements("admin account logout");
       break;
     case "/account":
-      addNavElements("admin logout");
+      addNavElements("admin cart logout");
       break;
     case "/admin/orders":
       addNavElements("admin account logout");
       break;
     case "/admin/users":
-      addNavElements("admin account logout");
+      addNavElements("admin logout");
       break;
     case "/admin":
-      addNavElements("account logout");
+      addNavElements("logout");
       break;
     case "/cart":
       addNavElements("admin register login account logout");
@@ -130,10 +132,11 @@ const addNavElements = (keyString) => {
   // 로그인 완료된 상태에서만 보이게 될 navbar 요소들
   const itemsAfterLogin = {
     account: '<li><a href="/account">계정관리</a></li>',
-    logout = '<li><a href="/auth/logout" id="logout">로그아웃</a></li>',
+    logout: '<li><a href="/auth/logout" id="logout">로그아웃</a></li>',
 //    logout: logoutPath,
     productAdd: '<li><a href="/product/add">제품 추가</a></li>',
     categoryAdd: '<li><a href="/category/add">카테고리 추가</a></li>',
+    cart: '<li><a href="/cart"><span class="icon"><i class="fas fa-cart-shopping"></i></span>카트</a></li>',
   };
 
   const itemsForAdmin = {
