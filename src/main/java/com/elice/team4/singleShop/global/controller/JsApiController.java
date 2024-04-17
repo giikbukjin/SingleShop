@@ -46,25 +46,6 @@ public class JsApiController {
 
         return ResponseEntity.ok(getUser);
     }
-
-    @GetMapping("/users/admin-check")
-    public ResponseEntity<String> checkAdmin(
-            @CookieValue(value = "Authorization") String value
-    ) {
-        String token = value.substring(7);
-        log.info("토큰 값 : {}",token);
-
-        UserDetails userDetailsInfo = jwtTokenProvider.getUserDetailsInfo(token);
-        User userFindByName = jwtTokenProvider.getUserInfo(userDetailsInfo.getUsername());
-
-        if(!String.valueOf(userFindByName.getRole()).equals("ADMIN")){
-            return ResponseEntity.ok("{\"status\": \"fail\"}");
-        }
-
-        String ok = "{\"status\": \"success\"}";
-        return ResponseEntity.ok(ok);
-    }
-
     @PostMapping("/users/password-check")
     public ResponseEntity<User> checkPassword (
             @CookieValue(value = "Authorization") String value,

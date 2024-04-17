@@ -1,4 +1,4 @@
-import { addCommas, createNavbar } from "./useful-functions.js"; // TODO : checkAdmin, 추가 예정
+import { checkAdmin, addCommas, createNavbar } from "./useful-functions.js";
 import * as Api from "./api.js";
 
 // 요소(element), input 혹은 상수
@@ -12,7 +12,7 @@ const modalCloseButton = document.querySelector("#modalCloseButton");
 const deleteCompleteButton = document.querySelector("#deleteCompleteButton");
 const deleteCancelButton = document.querySelector("#deleteCancelButton");
 
-//checkAdmin();
+checkAdmin();
 addAllElements();
 addAllEvents();
 
