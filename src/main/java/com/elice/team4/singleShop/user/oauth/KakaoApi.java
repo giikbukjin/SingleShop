@@ -90,7 +90,6 @@ public class KakaoApi {
             var cookie1 = new Cookie("kakao", URLEncoder.encode("Bearer " + accessToken, StandardCharsets.UTF_8));
             cookie1.setPath("/");
             cookie1.setMaxAge(60 * 60);
-            cookie1.setHttpOnly(true);
             response.addCookie(cookie1);
         }catch (Exception e){
             e.printStackTrace();
