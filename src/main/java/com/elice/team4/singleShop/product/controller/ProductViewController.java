@@ -66,26 +66,20 @@ public class ProductViewController {
 
     @GetMapping("/products/{productId}")
     public String getProductDetail(@PathVariable("productId") Long productId, Model model, Principal principal) {
-
         Optional<Product> productOptional = productService.findProductById(productId);
 
         if (productOptional.isPresent()) {
-
             Product product = productOptional.get();
             model.addAttribute("product", product);
 
-
-            String currentUserName = principal.getName();
-
-            User currentUser = (User) userService.loadUserByUsername(currentUserName);
-            model.addAttribute("currentUser", currentUser);
-
-            return "products/detail/product-detail"; // product-detail은 상품 상세 정보 페이지의 이름입니다. 실제로는 해당하는 템플릿이 존재해야 합니다.
-        } else {
-
-            model.addAttribute("errorMessage", "상품을 찾을 수 없습니다.");
-            return "error-page"; // error-page는 오류 페이지의 이름입니다. 실제로는 해당하는 템플릿이 존재해야 합니다.
+            // Principal 객체가 존재하는 경우에만 사용자 정보를 추가합니다.
+            if (principal != null) {
+                String currentUserName = principal.getName();
+                User currentUser = (User) userService.loadUserByUsername(currentUserName);
+                model.addAttribute("currentUser", currentUser);
+            }
         }
+        return "products/detail/product-detail";
     }
 
     @GetMapping("/seller/products/{productId}")

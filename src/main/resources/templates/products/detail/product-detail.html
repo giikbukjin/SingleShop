@@ -94,7 +94,7 @@
           <button class="button is-info" onclick="increaseQuantity()">+</button>
         </div>
         <div class="tile buttons-container">
-          <button class="button is-warning" id="addToCartButton" th:onclick="'addToCart(' + ${currentUser.id} + ', ' + ${product.id} + ', ' + quantity + ')'">
+          <button class="button is-warning" id="addToCartButton" th:data-user-id="${currentUser != null ? currentUser.id : ''}" th:data-product-id="${product.id}" th:data-quantity="${quantity}" onclick="addToCart(this)">
             장바구니 추가하기
           </button>
           <button class="button is-info ml-2" id="purchaseButton">
@@ -106,7 +106,11 @@
   </div>
 </section>
 <SCRIPT>
-  function addToCart(userId, productId, quantity) {
+  function addToCart(button) {
+    var userId = button.getAttribute("data-user-id");
+    var productId = button.getAttribute("data-product-id");
+    var quantity = button.getAttribute("data-quantity");
+
     // POST 요청을 보내는 JavaScript 코드 작성
     var xhr = new XMLHttpRequest();
     xhr.open('POST','/cart/' + userId + '/add?productId=' + productId + '&count=' + quantity, true);
