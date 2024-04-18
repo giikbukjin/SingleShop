@@ -34,6 +34,13 @@ public class AdminCheckController {
         return ResponseEntity.ok(ok);
     }
 
+    @GetMapping("/auth/api/users/admin-check")
+    public ResponseEntity<String> adminAuthCheckAdmin(
+    ) {
+        String fail = "{\"status\": \"fail\"}";
+        return ResponseEntity.ok(fail);
+    }
+
     @GetMapping("/admin/api/users/admin-check")
     public ResponseEntity<String> adminCheckAdmin(
             @CookieValue(value = "Authorization") String value

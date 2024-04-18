@@ -105,8 +105,6 @@ async function insertUserData() {
 
   var id = window.location.pathname.match(/\d+/)[0];
 
-  console.log({id});
-
   userData = await Api.get("/api/users", id);
 
   // 객체 destructuring
@@ -262,7 +260,6 @@ async function saveUserData(e) {
 
   try {
     const { id } = userData;
-    console.log(data)
     // db에 수정된 정보 저장
     await Api.patch("/api/users/edit", id, data);
 

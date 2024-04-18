@@ -86,15 +86,21 @@ export const checkLogin = () => {
      window.location.replace(`/auth/login?previouspage=${pathname + search}`);
    }
 
-   //관리자 토큰 여부 확인
-   const res = await fetch("/api/users/admin-check");
+   //관리자 확인
+  if (((typeof token != "undefined") && (typeof token.valueOf() == "string")) && (token.length > 0)) {
+  const res = await fetch("/api/users/admin-check");
 
-   const result = await res.json();
-   console.log(result);
+     const result = await res.json();
+     console.log(result);
 
-   if (result.status === "success") {
-     return;
-   } else {
+     if (result.status === "success") {
+       return;
+     } else {
+            alert("관리자 전용 페이지입니다.");
+
+            window.location.replace("/home");
+          }
+  } else {
      alert("관리자 전용 페이지입니다.");
 
      window.location.replace("/home");
