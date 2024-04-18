@@ -1,6 +1,5 @@
 package com.elice.team4.singleShop.product.controller;
 
-import com.elice.team4.singleShop.product.domain.Product;
 import com.elice.team4.singleShop.product.dto.ProductDto;
 import com.elice.team4.singleShop.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -8,8 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -18,8 +15,8 @@ public class ProductApiController {
     private final ProductService productService;
 
     @PostMapping("/seller/new")
-    public String create(@ModelAttribute ProductDto productDto, RedirectAttributes redirectAttributes, @RequestParam("imageFile") MultipartFile imgFile) throws Exception {
-        productService.saveProduct(productDto, imgFile);
+    public String create(@ModelAttribute ProductDto productDto, RedirectAttributes redirectAttributes) {
+        productService.saveProduct(productDto);
         redirectAttributes.addFlashAttribute("success", "Product registered successfully!");
         return "redirect:/seller/products";
     }

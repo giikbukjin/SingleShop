@@ -12,12 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
@@ -37,24 +34,7 @@ public class ProductService {
 
     // 제품 저장
     @Transactional
-    public Product saveProduct(ProductDto productDto, MultipartFile imgFile) throws Exception {
-        String oriImgName = imgFile.getOriginalFilename();
-        String imgName = "";
-
-        String projectPath = System.getProperty("user.dir") + "/src/main/resources/static/files/";
-
-        // UUID 를 이용하여 파일명 새로 생성
-        // UUID - 서로 다른 객체들을 구별하기 위한 클래스
-        UUID uuid = UUID.randomUUID();
-
-        String savedFileName = uuid + "_" + oriImgName; // 파일명 -> imgName
-
-        imgName = savedFileName;
-
-        File saveFile = new File(projectPath, imgName);
-
-        imgFile.transferTo(saveFile);
-
+    public Product saveProduct(ProductDto productDto) {
         // 카테고리 ID를 통해 카테고리 엔티티 조회
         Category category = null;
         if (productDto.getCategoryId() != null) {
@@ -66,8 +46,6 @@ public class ProductService {
         Product product = productMapper.productDtoToProduct(productDto);
 
         // 변환된 상품 엔티티에 카테고리 설정
-        product.setImgName(imgName);
-        product.setImgPath("/files/" + imgName);
         product.setCategory(category);
 
         // 상품 엔티티 저장
