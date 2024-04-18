@@ -109,7 +109,7 @@
                 <td class="summary-cell" th:text="${product.name}">상품명</td>
                 <td class="summary-cell" th:text="${product.summary}">요약</td>
                 <td class="description-cell" th:text="${product.description}">설명</td>
-                <td th:text="${product.image}">이미지 URL</td>
+                <td th:text="${product.getImgPath()}">이미지 URL</td>
                 <td th:text="${product.price}">가격</td>
                 <td th:text="${product.category != null ? product.category.categoryName : '없음'}">카테고리</td>
                 <td th:text="${product.stock}">수량</td>

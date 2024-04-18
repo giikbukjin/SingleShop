@@ -2,6 +2,7 @@ package com.elice.team4.singleShop.product.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -16,7 +17,8 @@ public class ProductDto {
 
     private String description;
 
-    private String image;
+    private String imgName;
+    private String imgPath;
 
     private int stock;
 
