@@ -6,7 +6,6 @@ function aaaaaa(str) {
 
 const pathname = aaaaaa(window.location.pathname) ? "/account/security" : window.location.pathname;
 
-console.log("pathname: ", pathname, aaaaaa(pathname));
   switch (pathname) {
     case "/home":
       addNavElements("cart admin register login account logout");
@@ -61,7 +60,6 @@ console.log("pathname: ", pathname, aaaaaa(pathname));
       break;
 
     default:
-    console.log("default");
   }
 };
 
@@ -114,8 +112,6 @@ const addNavElements = async (keyString) => {
   if (cookieCheck("kakao")) { logoutPath = '<li><a href="https://kauth.kakao.com/oauth/logout?client_id=1fa06f949c45fbf2a3e893c494263777&logout_redirect_uri=http://localhost:8080/auth/logout" id="logout">로그아웃</a></li>' }
       else { logoutPath = '<li><a href="/auth/logout" id="logout">로그아웃</a></li>' };
 
-      console.log(logoutPath);
-
   // 로그인 완료된 상태에서만 보이게 될 navbar 요소들
   const itemsAfterLogin = {
     account: '<li><a href="/account">계정관리</a></li>',
@@ -147,11 +143,8 @@ let isAdmin = await (async () => {
           const res = await fetch("api/users/admin-check");
           const result = await res.json();
 
-          console.log("result.stauts in if: ", result.status);
-
            if (result.status === "success") {
             return true;
-            console.log(isAdmin);
           };
 
           return false;
@@ -162,8 +155,6 @@ let isAdmin = await (async () => {
       }
 
   })();
-
-    console.log("요청 보내고 난 후의 isAdmin: ", isAdmin);
 
   let items = "";
   for (const key of keys) {

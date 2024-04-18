@@ -34,8 +34,6 @@ async function get(endpoint, params = "") {
 async function post(endpoint, data) {
   const apiUrl = endpoint;
   const bodyData = JSON.stringify(data);
-  console.log(`%cPOST 요청: ${apiUrl}`, "color: #296aba;");
-  console.log(`%cPOST 요청 데이터: ${bodyData}`, "color: #296aba;");
 
   function getCookie(name) {
     const cookies = document.cookie.split(';');
@@ -78,8 +76,6 @@ async function patch(endpoint, params = "", data) {
   const apiUrl = params ? `${endpoint}/${params}` : endpoint;
 
   const bodyData = JSON.stringify(data);
-  console.log(`%cPATCH 요청: ${apiUrl}`, "color: #059c4b;");
-  console.log(`%cPATCH 요청 데이터: ${bodyData}`, "color: #059c4b;");
 
 //  const queryParams = new URLSearchParams();
 //
@@ -116,8 +112,6 @@ async function patch(endpoint, params = "", data) {
 // 여기서는 우선 delete 대신 del로 쓰고 아래 export 시에 delete로 alias 함.
 async function del(endpoint, params = "") {
   const apiUrl = `${endpoint}/${params}`;
-
-  console.log(`DELETE 요청 ${apiUrl}`, "color: #059c4b;");
 
   const res = await fetch(apiUrl, {
     method: "DELETE",
