@@ -54,10 +54,17 @@
     <div class="navbar-end breadcrumb my-auto" aria-label="breadcrumbs">
       <ul id="navbar">
         <li>
-          <a href="/cart" aria-current="page">
-                <span class="icon">
-                  <i class="fas fa-cart-shopping"></i>
-                </span>
+          <a th:if="${currentUser != null}" href="/cart" aria-current="page">
+        <span class="icon">
+          <i class="fas fa-cart-shopping"></i>
+        </span>
+            <span>카트</span>
+          </a>
+          <!-- 로그인하지 않았을 경우: 로그인 페이지로 이동 -->
+          <a th:unless="${currentUser != null}" href="/auth/login" aria-current="page">
+        <span class="icon">
+          <i class="fas fa-cart-shopping"></i>
+        </span>
             <span>카트</span>
           </a>
         </li>
@@ -93,11 +100,23 @@
           <span id="quantity">1</span>
           <button class="button is-info" onclick="increaseQuantity()">+</button>
         </div>
-        <div class="tile buttons-container">
-          <button class="button is-warning" id="addToCartButton" th:onclick="'addToCart(' + ${currentUser.id} + ', ' + ${product.id} + ', ' + quantity + ')'">
+
+        <!-- 로그인했을 때 보여줄 버튼 -->
+        <div th:if="${currentUser != null}" class="tile buttons-container">
+          <button class="button is-warning" id="addToCartButton" th:data-user-id="${currentUser != null ? currentUser.id : ''}" th:data-product-id="${product.id}" th:data-quantity="${quantity}" onclick="addToCart(this)">
             장바구니 추가하기
           </button>
           <button class="button is-info ml-2" id="purchaseButton">
+            바로 구매하기
+          </button>
+        </div>
+
+        <!-- 로그인하지 않았을 때 보여줄 버튼 -->
+        <div th:unless="${currentUser != null}" class="tile buttons-container">
+          <button class="button is-warning" onclick="redirectToLogin()">
+            장바구니 추가하기
+          </button>
+          <button class="button is-info ml-2" onclick="redirectToLogin()">
             바로 구매하기
           </button>
         </div>
@@ -106,7 +125,11 @@
   </div>
 </section>
 <SCRIPT>
-  function addToCart(userId, productId, quantity) {
+  function addToCart(button) {
+    var userId = button.getAttribute("data-user-id");
+    var productId = button.getAttribute("data-product-id");
+    var quantity = button.getAttribute("data-quantity");
+
     // POST 요청을 보내는 JavaScript 코드 작성
     var xhr = new XMLHttpRequest();
     xhr.open('POST','/cart/' + userId + '/add?productId=' + productId + '&count=' + quantity, true);
@@ -139,6 +162,10 @@
 
   function updateQuantity() {
     document.getElementById("quantity").innerText = quantity;
+  }
+
+  function redirectToLogin() {
+    window.location.href = '/auth/login'; // 로그인 페이지 URL로 변경하세요.
   }
 </SCRIPT>
 </body>
