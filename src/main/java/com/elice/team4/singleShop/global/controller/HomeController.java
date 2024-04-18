@@ -25,6 +25,9 @@ public class HomeController {
         return "redirect:/home";
     }
 
+    @GetMapping("/page-not-found")
+    public String errorPage(){return "page-not-found/page-not-found";}
+
     @GetMapping("/home")
     public String getMainContents(Model model) {
         // TODO: List<Category> 얻어서 model 에 담기

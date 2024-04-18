@@ -70,13 +70,18 @@ public class SecurityConfig {
         // 페이지 별 권한 설정
         http.authorizeHttpRequests((auth)->auth
                 .requestMatchers("auth/**","/", "/home/**", "/cart/**", "/delivery/**",
-                        "/order/**", "/orders/**", "/products/**","api/**", "account/**", "login/**", "logout/**")
+                        "/order/**", "/orders/**", "/products/**","api/**", "account/**", "login/**", "logout/**", "/page-not-found")
                         .permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/seller/**").hasAnyRole("ADMIN", "SELLER")
 
                 // 그 외의 모든 요청은 인증 필요
         );
+
+        http.exceptionHandling(exceptionConfig ->
+                exceptionConfig.accessDeniedHandler((request, response, accessDeniedException) -> response.sendRedirect("/page-not-found"))
+        );
+
 
         http.logout((logout) -> logout.logoutUrl("/auth/logout")
                         .addLogoutHandler((request, response, auth) -> {
