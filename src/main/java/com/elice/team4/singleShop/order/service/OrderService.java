@@ -109,7 +109,7 @@ public class OrderService {
             OrderHistDto orderHistDto = new OrderHistDto(order);
             List<OrderItem> orderItems = order.getOrderItems();
             for (OrderItem orderItem : orderItems) {
-                String imageUrl = orderItem.getProduct().getImage(); // Product에서 이미지 경로 가져오기
+                String imageUrl = orderItem.getProduct().getImgPath(); // Product에서 이미지 경로 가져오기
                 OrderItemDto orderItemDto = new OrderItemDto(orderItem, imageUrl); // 주문 상품 이미지 조회
                 orderHistDto.addOrderItemDto(orderItemDto);
             }

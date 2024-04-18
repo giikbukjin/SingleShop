@@ -42,7 +42,8 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
-                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+                .requestMatchers("/files/**");  // '/files/**' 경로 추가
     }
 
     // 패스워드 부호화
@@ -70,7 +71,7 @@ public class SecurityConfig {
         // 페이지 별 권한 설정
         http.authorizeHttpRequests((auth)->auth
                 .requestMatchers("auth/**","/", "/home/**", "/cart/**", "/delivery/**",
-                        "/order/**", "/orders/**", "/products/**","api/**", "account/**", "login/**", "logout/**")
+                        "/order/**", "/orders/**", "/products/**","api/**", "account/**", "login/**", "logout/**", "/files/**")
                         .permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/seller/**").hasAnyRole("ADMIN", "SELLER")
