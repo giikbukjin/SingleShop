@@ -22,6 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
@@ -33,8 +34,7 @@ public class Product {
 
     private String description;
 
-    private String imgName;
-    private String imgPath;
+    private String image;
 
     private int stock;
 
@@ -76,11 +76,11 @@ public class Product {
 
     }
 
-    public Product(String name, Long categoryId, String summary, String description, String imgPath, int stock, int price) {
+    public Product(String name, Long categoryId, String summary, String description, String image, int stock, int price) {
         this.name = name;
         this.summary = summary;
         this.description = description;
-        this.imgPath = imgPath;
+        this.image = image;
         this.stock = stock;
         this.price = price;
         this.categoryId = categoryId;

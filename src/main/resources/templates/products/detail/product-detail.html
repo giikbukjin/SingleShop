@@ -80,7 +80,7 @@
       <div class="tile is-6 is-parent">
         <div class="tile is-child box product-image">
           <figure class="image is-square">
-            <img th:src="@{/files/${product.getImgPath()}}" alt="Product Image" id="productImageTag"/>
+            <img th:src="@{${product.image}}" alt="Product Image" id="productImageTag"/>
           </figure>
         </div>
       </div>

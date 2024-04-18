@@ -82,9 +82,7 @@
       <form class="box register-product-form-box"
             id="registerProductForm"
             th:action="@{/seller/new}"
-            method="post"
-            enctype="multipart/form-data"
-      >
+            method="post">
         <p class="title is-5 has-text-primary">제품을 판매해 보세요</p>
         <div class="field">
           <label class="label" for="titleInput">제품 이름</label>
@@ -154,7 +152,7 @@
                       class="file-input"
                       id="imageInput"
                       type="file"
-                      name="imageFile"
+                      name="image"
                       accept=".png, .jpeg, .jpg"
               />
               <span class="file-cta">
