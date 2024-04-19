@@ -115,8 +115,8 @@ public class DataInit {
         ordersRepository.save(new OrdersDto(null, 3760, LocalDateTime.now(), "프리미엄 수제어묵 후랑크 손말이 어묵 160g", OrdersDto.Status.DELIVERY_READY));
         ordersRepository.save(new OrdersDto(null, 11040, LocalDateTime.now(), "오뚜기 X.O.미니군만두 고기 465g", OrdersDto.Status.DELIVERY_COMPLETE));
 
-        orderHistoryRepository.save(new OrderHistoryDto(null, LocalDateTime.now(), "카레용 채소 550g",OrderHistoryDto.Status.DELIVERY_COMPLETE));
+        /*orderHistoryRepository.save(new OrderHistoryDto(null, LocalDateTime.now(), "카레용 채소 550g",OrderHistoryDto.Status.DELIVERY_COMPLETE));
         orderHistoryRepository.save(new OrderHistoryDto(null, LocalDateTime.now(), "오뚜기 X.O.미니군만두 고기 465g",OrderHistoryDto.Status.DELIVERY_COMPLETE));
-        orderHistoryRepository.save(new OrderHistoryDto(null, LocalDateTime.now(), "숯불간장불고기 150g",OrderHistoryDto.Status.DELIVERY_READY));
+        orderHistoryRepository.save(new OrderHistoryDto(null, LocalDateTime.now(), "숯불간장불고기 150g",OrderHistoryDto.Status.DELIVERY_READY));*/
     }
 }

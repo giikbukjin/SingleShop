@@ -239,7 +239,7 @@ async function doCheckout() {
 
     const orderId = orderData._id;
 
-    // 제품별로 주문아이템을 등록함
+    /*// 제품별로 주문아이템을 등록함
     for (const productId of selectedIds) {
       const { quantity, price } = await getFromDb("cart", productId);
       const totalPrice = quantity * price;
@@ -271,7 +271,7 @@ async function doCheckout() {
       },
     };
     console.log(data);
-    await Api.post("/api/user/deliveryinfo", data);
+    await Api.post("/api/user/deliveryinfo", data);*/
 
     alert("결제 및 주문이 정상적으로 완료되었습니다.\n감사합니다.");
     window.location.href = "/order-complete";
