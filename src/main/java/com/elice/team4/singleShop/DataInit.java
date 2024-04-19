@@ -5,7 +5,7 @@ import com.elice.team4.singleShop.cart.repository.CartRepository;
 import com.elice.team4.singleShop.category.entity.Category;
 import com.elice.team4.singleShop.category.repository.CategoryRepository;
 import com.elice.team4.singleShop.order.dto.OrdersDto;
-import com.elice.team4.singleShop.order.entity.OrdersRepository;
+import com.elice.team4.singleShop.order.repository.OrdersRepository;
 import com.elice.team4.singleShop.order.repository.OrderRepository;
 import com.elice.team4.singleShop.product.domain.Product;
 import com.elice.team4.singleShop.product.repository.ProductRepository;

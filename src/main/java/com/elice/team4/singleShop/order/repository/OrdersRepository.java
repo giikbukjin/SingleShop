@@ -1,4 +1,4 @@
-package com.elice.team4.singleShop.order.entity;
+package com.elice.team4.singleShop.order.repository;
 
 import com.elice.team4.singleShop.order.dto.OrdersDto;
 import org.springframework.data.jpa.repository.JpaRepository;

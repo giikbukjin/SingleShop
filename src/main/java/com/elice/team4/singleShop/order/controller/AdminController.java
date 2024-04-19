@@ -1,14 +1,11 @@
 package com.elice.team4.singleShop.order.controller;
 
 import com.elice.team4.singleShop.order.dto.OrderDto;
-import com.elice.team4.singleShop.order.dto.OrderHistDto;
 import com.elice.team4.singleShop.order.dto.OrdersDto;
 import com.elice.team4.singleShop.order.entity.Order;
-import com.elice.team4.singleShop.order.entity.OrdersRepository;
+import com.elice.team4.singleShop.order.repository.OrdersRepository;
 import com.elice.team4.singleShop.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
