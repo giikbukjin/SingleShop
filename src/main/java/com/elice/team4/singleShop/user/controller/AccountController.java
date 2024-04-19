@@ -41,4 +41,9 @@ public class AccountController {
         return "account/account-signout";
     }
 
+    @GetMapping("/orders")
+    public String accountorders() {
+        return "account-orders/account-orders";
+    }
+
 }

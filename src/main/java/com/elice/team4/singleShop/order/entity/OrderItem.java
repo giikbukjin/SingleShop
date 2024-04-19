@@ -43,12 +43,9 @@ public class OrderItem {
     @LastModifiedDate
     private LocalDateTime updateTime; // 수정 시간
 
-    @CreatedBy
-    @Column(updatable = false)
-    private String createdBy; // 등록자
+    private String summaryTitle;
 
-    @LastModifiedDate
-    private String modifiedBy; // 수정자
+    private Integer totalPrice;
 
     private String receiverName; // 수령인 이름
 
@@ -60,14 +57,16 @@ public class OrderItem {
 
     private String address2; // 상세 주소
 
+    private String request;
+
     private String deliveryRequest; // 배송 요청 사항
-    
+
     public static OrderItem createOrderItem(Product product, int count) {
         OrderItem orderItem = new OrderItem();
         orderItem.setProduct(product); // 주문할 상품 세팅
         orderItem.setCount(count); // 주문 수량 세팅
         orderItem.setOrderPrice(product.getPrice()); // 상품 가격을 주문 가격으로 세팅
-        
+
         product.removeStock(count); // 주문 수량만큼 재고 수량 감소
         return orderItem;
     }
