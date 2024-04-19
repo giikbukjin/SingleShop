@@ -35,7 +35,7 @@ public class OrderController {
     private final UserRepository userRepository;
     private final CartService cartService;
 
-    @PostMapping(value = "/order")
+    /*@PostMapping(value = "/order")
     public String order(@ModelAttribute("orderDto") @Valid OrderDto orderDto,
                         BindingResult bindingResult, Principal principal, RedirectAttributes redirectAttributes) {
         // 데이터 바인딩 시 에러 있는지 검사
@@ -62,7 +62,7 @@ public class OrderController {
         }
         // 주문이 성공적으로 이루어지면 주문 완료 페이지로 리다이렉트
         return "redirect:/order-complete";
-    }
+    }*/
 
     @GetMapping("/order")
     public String viewOrder(Model model) {
@@ -78,7 +78,7 @@ public class OrderController {
     }
 
     // 주문 내역 조회
-    @GetMapping(value = {"/orders", "/orders/{page}"})
+  /*  @GetMapping(value = {"/orders", "/orders/{page}"})
     public String orderHist(@PathVariable(value = "page", required = false) Integer page, Principal principal, Model model) {
         Pageable pageable = PageRequest.of(page != null ? page : 0, 4);
 
@@ -89,7 +89,7 @@ public class OrderController {
         model.addAttribute("maxPage", 5);
 
         return "account-orders/account-orders";
-    }
+    }*/
 
     // 주문 취소 처리
     @PostMapping("/order/{orderId}/cancel")
