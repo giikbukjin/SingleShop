@@ -16,7 +16,7 @@ const modalCloseButton = document.querySelector("#modalCloseButton");
 const deleteCompleteButton = document.querySelector("#deleteCompleteButton");
 const deleteCancelButton = document.querySelector("#deleteCancelButton");
 
-// checkAdmin();
+//checkAdmin();
 addAllElements();
 addAllEvents();
 

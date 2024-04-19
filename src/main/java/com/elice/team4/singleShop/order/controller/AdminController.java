@@ -32,7 +32,7 @@ public class AdminController {
         return "admin-orders/admin-orders"; // admin-orders.html 템플릿을 렌더링
     }
 
-    @GetMapping("/user/{email}")
+    /*@GetMapping("/user/{email}")
     public String getUserOrders(@PathVariable String email, Model model) {
         List<OrderDto> orders = orderService.getUserOrders(email);
 
@@ -44,9 +44,9 @@ public class AdminController {
         // 주문 내역이 있는 경우 해당 내역을 모델에 추가하여 HTML 템플릿으로 전달
         model.addAttribute("orders", orders);
         return "account-orders/account-orders"; // user-orders.html 템플릿을 렌더링
-    }
+    }*/
 
-    @PatchMapping("{OrderId}/status")
+    /*@PatchMapping("{OrderId}/status")
     public String updateOrderStatus(@PathVariable Long orderId,
                                     @RequestParam Order.OrderStatus newStatus) {
         // 배송 상태 수정하고 결과 받아옴
@@ -58,7 +58,7 @@ public class AdminController {
             // 주문 존재하지 않거나 수정 실패 시
             return "error"; // 에러 페이지로 리다이렉트
         }
-    }
+    }*/
 
     @DeleteMapping("{orderId}")
     public String deleteOrder(@PathVariable Long orderId) {

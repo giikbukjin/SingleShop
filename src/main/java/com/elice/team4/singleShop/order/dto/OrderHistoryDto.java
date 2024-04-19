@@ -33,9 +33,12 @@ public class OrderHistoryDto {
     private OrderHistoryDto.Status status;
 
     public enum Status {
-        CANCEL,
-        DELIVERY_READY,
-        DELIVERING,
-        DELIVERY_COMPLETE
+        취소,
+
+        배송준비중,
+
+        배송중,
+
+        배송완료
     }
 }

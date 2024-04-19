@@ -1,5 +1,5 @@
-import { checkLogin, createNavbar } from "../../useful-functions.js";
-import * as Api from "../../api.js";
+import { checkLogin, createNavbar } from "./useful-functions.js";
+import * as Api from "./api.js";
 
 
 // 요소(element), input 혹은 상수
@@ -32,7 +32,7 @@ function addAllEvents() {
 // 페이지 로드 시 실행, 삭제할 주문 id를 전역변수로 관리함
 let orderIdToDelete;
 async function insertOrders() {
-  const orders = await Api.get("/orders/orderlist/user");
+  const orders = await Api.get("/api/orderlist");
 
   for (const order of orders) {
     const { id, createdAt, summaryTitle, status } = order;
@@ -70,7 +70,7 @@ async function deleteOrderData(e) {
   e.preventDefault();
 
   try {
-    await Api.delete("/orders", orderIdToDelete);
+    await Api.delete("/api/orders", orderIdToDelete);
 
     // 삭제 성공
     alert("주문 정보가 삭제되었습니다.");
