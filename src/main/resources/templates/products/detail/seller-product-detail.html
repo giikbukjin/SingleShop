@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>SINGLE SHOP</title>
+        <!-- 아이콘 -->
+        <link
+                rel="icon"
+                type="image/png"
+                sizes="16x16"
+                href="/images/elice-rabbit-favicon.png"
+        />
+        <!-- bulma css 관련 -->
+        <link
+                rel="stylesheet"
+                href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
+        />
+        <!-- 폰트 어썸: 아이콘 -->
+        <script
+                defer
+                src="https://kit.fontawesome.com/9daa42bcef.js"
+                crossorigin="anonymous"
+        ></script>
+        <!-- AWS S3 사용하기 위한 파일 -->
+        <script src="https://sdk.amazonaws.com/js/aws-sdk-2.410.0.min.js"></script>
+        <!-- 커스텀 css, js -->
+        <link rel="stylesheet" href="/css/product-detail.css" />
+        <script src="/js/product-detail.js" type="module" defer></script>
+    </head>
+    <body>
+    <!-- 헤더 -->
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="container mt-3">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="/static">
+                    <img src="/images/elice-rabbit.png" width="30" height="30" />
+                    <span class="has-text-link">SINGLE SHOP</span>
+                </a>
+
+                <a
+                        role="button"
+                        class="navbar-burger"
+                        aria-label="menu"
+                        aria-expanded="false"
+                        data-target="navbarBasicExample"
+                >
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
+
+            <div class="navbar-end breadcrumb my-auto" aria-label="breadcrumbs">
+                <ul id="navbar">
+                    <li>
+                        <a href="/cart" aria-current="page">
+                    <span class="icon">
+                      <i class="fas fa-cart-shopping"></i>
+                    </span>
+                            <span>카트</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 제품 상세 설명 카드 -->
+    <section class="section">
+        <div class="container">
+            <div class="tile is-ancestor product-detail-card">
+                <div class="tile is-6 is-parent">
+                    <div class="tile is-child box product-image">
+                        <figure class="image is-square">
+                            <img src="/images/img.png" alt="Product Image" id="productImageTag"/>
+                        </figure>
+                    </div>
+                </div>
+                <div class="tile is-parent is-vertical">
+                    <div class="tile is-child box product-detail">
+                        <div class="tabs">
+                            <p class="detail-description" th:text="${product.summary}" id="manufacturerTag"></p>
+                        </div>
+                        <div class="content">
+                            <p class="subtitle is-3 is-family-monospace" th:text="${product.name}" id="titleTag"></p>
+                            <h1 th:text="${product.price + '원'}" id="priceTag"></h1>
+                            <p class="detail-description" th:text="${product.description}" id="detailDescriptionTag"></p>
+                        </div>
+                    </div>
+                    <div class="tile buttons-container">
+                        <button class="button is-warning" onclick="navigateToProducts()">
+                            목록으로
+                        </button>
+                        <button class="button is-warning"
+                                th:attr="data-url=@{/seller/{productId}(productId=${product.id})}"
+                                onclick="navigateToEditPage(this)">
+                            수정
+                        </button>
+                        <button th:attr="data-product-id=${product.id}" onclick="openModal(this.getAttribute('data-product-id'), event)" class="button is-info ml-2">
+                            삭제
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 삭제 확인 모달 -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">제품 삭제 확인</p>
+                <button class="delete" aria-label="close" onclick="closeModal()"></button>
+            </header>
+            <section class="modal-card-body">
+                제품을 삭제하시겠습니까?
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button is-danger" id="confirmDelete">삭제</button>
+                <button class="button" onclick="closeModal()">취소</button>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        <!-- JavaScript -->
+        document.addEventListener("DOMContentLoaded", function() {
+            const rows = document.querySelectorAll(".clickable-row");
+            rows.forEach(row => {
+                row.addEventListener("click", function() {
+                    const productId = this.getAttribute("data-product-id");
+                    window.location.href = `/seller/products/${productId}`;
+                });
+            });
+        });
+
+        function closeModal() {
+            document.getElementById('deleteModal').classList.remove('is-active');
+        }
+
+        function openModal(productId, event) {
+            event.stopPropagation(); // 이벤트 전파 중단
+            document.getElementById('deleteModal').classList.add('is-active');
+
+            document.getElementById('confirmDelete').onclick = function() {
+                submitDelete(productId);
+            };
+        }
+
+        function submitDelete(productId) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `/seller/${productId}/delete`;
+
+            const methodInput = document.createElement('input');
+            methodInput.type = 'hidden';
+            methodInput.name = '_method';
+            methodInput.value = 'DELETE';
+            form.appendChild(methodInput);
+            document.body.appendChild(form);
+            form.submit();
+
+            closeModal(); // 모달 닫기
+        }
+
+        function navigateToProducts() {
+            window.location.href = '/seller/products';
+        }
+
+        function navigateToEditPage(button) {
+            const url = button.getAttribute('data-url');
+            window.location.href = url;
+        }
+    </script>
+</body>
+</html>

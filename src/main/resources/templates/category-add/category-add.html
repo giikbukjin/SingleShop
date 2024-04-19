@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>카테고리 추가하기</title>
+    <!-- 아이콘 -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/images/elice-rabbit-favicon.png"
+    />
+    <!-- bulma css 관련 -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
+    />
+    <!-- 폰트 어썸: 아이콘 -->
+    <script
+      defer
+      src="https://kit.fontawesome.com/9daa42bcef.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- AWS S3 사용하기 위한 파일 -->
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.410.0.min.js"></script>
+    <!-- 커스텀 css, js -->
+    <link rel="stylesheet" href="/category-add/category-add.css" />
+    <script src="/category-add/category-add.js" type="module" defer></script>
+  </head>
+  <body>
+    <!-- 헤더 -->
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="container mt-3">
+        <div class="navbar-brand">
+          <a class="navbar-item" href="/">
+            <img src="/images/elice-rabbit.png" width="30" height="30" />
+            <span class="has-text-link">Shopping Mall</span>
+          </a>
+
+          <a
+            role="button"
+            class="navbar-burger"
+            aria-label="menu"
+            aria-expanded="false"
+            data-target="navbarBasicExample"
+          >
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+        </div>
+
+        <div id="navbarBasicExample" class="navbar-menu">
+          <div class="navbar-end breadcrumb my-auto" aria-label="breadcrumbs">
+            <ul id="navbar">
+              <li>
+                <a href="/cart" aria-current="page">
+                  <span class="icon">
+                    <i class="fas fa-cart-shopping"></i>
+                  </span>
+                  <span>카트</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- 카테고리 추가 폼(Form) -->
+    <section class="section">
+      <div class="container">
+        <div class="block account-header">
+          <h1 class="subtitle is-4">카테고리 추가</h1>
+        </div>
+        <div class="register-category-form-container">
+          <form
+            th:action="@{/admin/category/add}" method="post"
+            enctype="multipart/form-data"
+            class="box register-category-form-box"
+            id="registerCategoryForm"
+          >
+            <p class="title is-5 has-text-primary">카테고리 추가하기</p>
+            <div class="field">
+              <label class="label" for="categoryName">카테고리 이름</label>
+              <div class="control">
+                <input
+                  class="input"
+                  id="categoryName"
+                  name="categoryName"
+                  type="text"
+                  placeholder="20자 이내로 카테고리명을 입력하세요."
+                  autocomplete="on"
+                />
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label" for="categoryContent">카테고리 설명</label>
+              <div class="control">
+                <input
+                  class="input"
+                  id="categoryContent"
+                  name="categoryContent"
+                  type="text"
+                  placeholder="200자 이내로 카테고리 설명을 입력하세요."
+                  autocomplete="on"
+                />
+              </div>
+            </div>
+
+            <div class="field is-fullwidth mb-5">
+              <label class="label" for="imageInput">카테고리 사진</label>
+              <div class="file has-name is-fullwidth">
+                <label class="file-label">
+                  <input
+                    class="file-input"
+                    id="imageInput"
+                    type="file"
+                    name="files"
+                    accept=".png, .jpeg, .jpg"
+                    multiple
+                  />
+                  <span class="file-cta">
+                    <span class="file-icon">
+                      <i class="fas fa-upload"></i>
+                    </span>
+                    <span class="file-label"> 사진 업로드 </span>
+                  </span>
+                  <span class="file-name" id="fileNameSpan">
+                    사진파일 (png, jpg, jpeg)
+                  </span>
+                </label>
+              </div>
+            </div>
+            <button
+              class="button is-primary is-fullwidth"
+              id="addCategoryButton"
+            >
+              카테고리 추가하기
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
