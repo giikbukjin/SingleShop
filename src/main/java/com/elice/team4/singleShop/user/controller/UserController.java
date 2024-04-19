@@ -99,7 +99,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/user/{id}/edit")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody SignUpRequestDto requestDto) {
+    public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @RequestBody SignUpRequestDto requestDto) {
         String name = requestDto.getName();
         String password = requestDto.getPassword();
         String email = requestDto.getEmail();

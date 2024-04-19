@@ -1,10 +1,10 @@
 export const createNavbar = () => {
-function aaaaaa(str) {
+function checkSecurity(str) {
     const pattern = /^\/account\/security\//;
     return pattern.test(str);
 }
 
-const pathname = aaaaaa(window.location.pathname) ? "/account/security" : window.location.pathname;
+const pathname = checkSecurity(window.location.pathname) ? "/account/security" : window.location.pathname;
 
   switch (pathname) {
     case "/home":

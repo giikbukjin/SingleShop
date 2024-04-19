@@ -33,7 +33,7 @@ public class AccountController {
         return "account/account";
     }
     @GetMapping("/security/{id}")
-    public String accountSecurity(@PathVariable Long id) {
+    public String accountSecurity(@PathVariable("id") Long id) {
         return "account/account-security";
     }
     @GetMapping("/signout")

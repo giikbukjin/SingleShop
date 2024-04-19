@@ -33,7 +33,7 @@ public class AdminController {
     }
 
     /*@GetMapping("/user/{email}")
-    public String getUserOrders(@PathVariable String email, Model model) {
+    public String getUserOrders(@PathVariable("email") String email, Model model) {
         List<OrderDto> orders = orderService.getUserOrders(email);
 
         if (orders.isEmpty()) {
@@ -47,7 +47,7 @@ public class AdminController {
     }*/
 
     /*@PatchMapping("{OrderId}/status")
-    public String updateOrderStatus(@PathVariable Long orderId,
+    public String updateOrderStatus(@PathVariable("orderId") Long orderId,
                                     @RequestParam Order.OrderStatus newStatus) {
         // 배송 상태 수정하고 결과 받아옴
         boolean updated = orderService.updateOrderStatus(orderId, newStatus);
@@ -61,7 +61,7 @@ public class AdminController {
     }*/
 
     @DeleteMapping("{orderId}")
-    public String deleteOrder(@PathVariable Long orderId) {
+    public String deleteOrder(@PathVariable("orderId") Long orderId) {
         // 주문 내역 삭제하고 결과 받아옴
         boolean deleted = orderService.deleteOrder(orderId);
         if (deleted) {

@@ -26,12 +26,7 @@ public class AdminPageController {
     }
 
     @GetMapping("/users")
-    public String showAllUsersList (
-            @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "size", defaultValue = "10") int size,
-            Model model) {
-        Page<User> userList = adminPageService.getUserList(page, size);
-        model.addAttribute("userList", userList);
+    public String showAllUsersList () {
         return "admin-users/admin-users";
     }
 
