@@ -1,5 +1,6 @@
 package com.elice.team4.singleShop.order.entity;
 
+import com.elice.team4.singleShop.order.dto.OrderHistoryDto;
 import com.elice.team4.singleShop.order.dto.OrderRequestDto;
 import com.elice.team4.singleShop.user.entity.User;
 import jakarta.persistence.*;
@@ -29,7 +30,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // order_id
 
-    private LocalDateTime orderDate; // 주문일
+    private LocalDateTime createdAt; // 주문일
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus; // 주문 상태
@@ -37,28 +38,9 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime regTime; // 등록 시간
-
-    @LastModifiedDate
-    private LocalDateTime updateTime; // 수정 시간
-
     private String summaryTitle;
 
     private Integer totalPrice;
-
-    /*private String receiverName; // 수령인 이름
-
-    private String receiverPhoneNumber; // 연락처
-
-    private String postalCode; // 우편번호
-
-    private String address1; // 주소
-
-    private String address2; // 상세 주소
-
-    private String deliveryRequest; // 배송 요청 사항*/
 
     private String request;
 
@@ -69,6 +51,7 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user; // 사용자는 여러 개의 주문내역 존재
+
 
     public enum OrderStatus {
         ORDER,
@@ -82,13 +65,9 @@ public class Order {
     public Order(OrderRequestDto orderRequestDto) {
         this.summaryTitle = orderRequestDto.getSummaryTitle();
         this.totalPrice = orderRequestDto.getTotalPrice();
-        /*this.receiverName = orderRequestDto.getReceiverName();
-        this.receiverPhoneNumber = orderRequestDto.getReceiverPhoneNumber();
-        this.postalCode = orderRequestDto.getPostalCode();
-        this.address1 = orderRequestDto.getAddress1();
-        this.address2 = orderRequestDto.getAddress2();*/
         this.request = orderRequestDto.getRequest();
     }
+
 
     public void addOrderItem(OrderItem orderItem) { // 주문 상품 정보 담기, orderItem 객체를 order 객체의 orderItems에 추가
         orderItems.add(orderItem);
@@ -103,7 +82,7 @@ public class Order {
             order.addOrderItem(orderItem);
         }
         order.setOrderStatus(OrderStatus.ORDER); // 주문 상태를 "ORDER"로 세팅
-        order.setOrderDate(LocalDateTime.now()); // 현재 시간을 주문 시간으로 세팅
+        order.setCreatedAt(LocalDateTime.now()); // 현재 시간을 주문 시간으로 세팅
         return order;
     }
 

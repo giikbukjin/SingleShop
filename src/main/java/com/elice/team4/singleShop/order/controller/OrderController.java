@@ -105,19 +105,21 @@ public class OrderController {
         return "order/order-complete"; // order-complete.html에 대한 뷰로 이동
     }
 
+
     // 주문 내역 조회
-    @GetMapping(value = {"/orders", "/orders/{page}"})
-    public String orderHist(@PathVariable(value = "page", required = false) Integer page, Principal principal, Model model) {
+    /*@GetMapping(value = {"/orders", "/orders/{page}"})
+    public String orderHist(@PathVariable(value = "page", required = false) Integer page,
+                            Principal principal, Model model) {
         Pageable pageable = PageRequest.of(page != null ? page : 0, 4);
 
-        Page<OrderHistDto> orderHistDtoList = orderService.getOrderList(principal.getName(), pageable);
+        //Page<OrderHistDto> orderHistDtoList = orderService.getOrderList(principal.getName(), pageable);
 
         model.addAttribute("order", orderHistDtoList);
         model.addAttribute("page", pageable.getPageNumber());
         model.addAttribute("maxPage", 5);
 
         return "account-orders/account-orders";
-    }
+    }*/
 
     // 주문 취소 처리
     @PostMapping("/order/{orderId}/cancel")

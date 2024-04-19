@@ -1,8 +1,6 @@
 package com.elice.team4.singleShop.order.service;
 
 import com.elice.team4.singleShop.order.dto.OrderDto;
-import com.elice.team4.singleShop.order.dto.OrderHistDto;
-import com.elice.team4.singleShop.order.dto.OrderItemDto;
 import com.elice.team4.singleShop.order.entity.Order;
 import com.elice.team4.singleShop.order.entity.OrderItem;
 import com.elice.team4.singleShop.product.domain.Product;
@@ -13,9 +11,6 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import com.elice.team4.singleShop.order.repository.OrderRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
 
@@ -74,30 +69,9 @@ public class OrderService {
         return order.getId(); // 생성된 주문 ID
     }
 
-    // 주문에 배송 정보 추가
-    /*public void addDeliveryInfo(Long orderId, DeliveryInfo deliveryInfoDto) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(EntityNotFoundException::new);
-
-        // 배송 정보 생성
-        DeliveryInfo deliveryInfo = new DeliveryInfo();
-        deliveryInfo.setReceiverName(deliveryInfoDto.getReceiverName());
-        deliveryInfo.setReceiverPhoneNumber(deliveryInfoDto.getReceiverPhoneNumber());
-        deliveryInfo.setPostalCode(deliveryInfoDto.getPostalCode());
-        deliveryInfo.setAddress1(deliveryInfoDto.getAddress1());
-        deliveryInfo.setAddress2(deliveryInfoDto.getAddress2());
-        deliveryInfo.setDeliveryRequest(deliveryInfoDto.getDeliveryRequest());
-
-        // 주문에 배송 정보 연결
-        order.setDeliveryInfo(deliveryInfo);
-
-        // 배송 정보 저장
-        deliveryInfoRepository.save(deliveryInfo);
-    }*/
-
     // 주문 목록 조회
-    @Transactional
-    public Page<OrderHistDto> getOrderList(String email, Pageable pageable) {
+    /*@Transactional
+    public List<OrderHistoryDto> getOrderList(String email, Pageable pageable) {
 
         List<Order> orders = orderRepository.findOrders(email, pageable); // 유저 이메일, 페이징 조건 이용해 주문 목록 조회
         Long totalCount = orderRepository.countOrder(email); // 주문 총 개수
@@ -116,6 +90,14 @@ public class OrderService {
             orderHistDtos.add(orderHistDto);
         }
         return new PageImpl<OrderHistDto>(orderHistDtos, pageable, totalCount); // 페이지 구현
+    }*/
+
+    @Transactional
+    public List<OrderDto> getOrders() {
+        List<Order> orders = orderRepository.findAll(); // 사용자의 이메일을 기준으로 주문 내역 조회
+        return orders.stream()
+                .map(order -> mapToOrderDto(order))
+                .collect(Collectors.toList()); // 조회된 주문을 OrderDto로 변환
     }
 
     // 주문 취소
@@ -146,15 +128,6 @@ public class OrderService {
     public void updateDeliveryInfo(Long orderId, OrderDto orderDto) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(EntityNotFoundException::new);
-
-//        // 주문 정보 업데이트
-//        order.setReceiverName(orderDto.getReceiverName());
-//        order.setReceiverPhoneNumber(orderDto.getReceiverPhoneNumber());
-//        order.setPostalCode(orderDto.getPostalCode());
-//        order.setAddress1(orderDto.getAddress1());
-//        order.setAddress2(orderDto.getAddress2());
-//        order.setDeliveryRequest(orderDto.getDeliveryRequest());
-
         // 주문 정보 저장
         orderRepository.save(order);
     }
