@@ -19,7 +19,7 @@ const address1Input = document.querySelector("#address1");
 const address2Input = document.querySelector("#address2");
 const requestSelectBox = document.querySelector("#requestSelectBox");
 const customRequestContainer = document.querySelector(
-  "#customRequestContainer"
+    "#customRequestContainer"
 );
 const customRequestInput = document.querySelector("#customRequest");
 const productsTitleElem = document.querySelector("#productsTitle");
@@ -58,6 +58,7 @@ function addAllEvents() {
 
 // Daum 주소 API (사용 설명 https://postcode.map.daum.net/guide)
 function searchAddress() {
+  console.log("주소찾기 버튼이 눌렸을 때, 해당 함수가 호출이 되긴 함.");
   new daum.Postcode({
     oncomplete: function (data) {
       let addr = "";
@@ -75,7 +76,7 @@ function searchAddress() {
         }
         if (data.buildingName !== "" && data.apartment === "Y") {
           extraAddr +=
-            extraAddr !== "" ? ", " + data.buildingName : data.buildingName;
+              extraAddr !== "" ? ", " + data.buildingName : data.buildingName;
         }
         if (extraAddr !== "") {
           extraAddr = " (" + extraAddr + ")";
@@ -94,8 +95,8 @@ function searchAddress() {
 // 페이지 로드 시 실행되며, 결제정보 카드에 값을 삽입함.
 async function insertOrderSummary() {
   const { ids, selectedIds, productsTotal } = await getFromDb(
-    "order",
-    "summary"
+      "order",
+      "summary"
   );
 
   // 구매할 아이템이 없다면 다른 페이지로 이동시킴
@@ -145,8 +146,14 @@ async function insertOrderSummary() {
 }
 
 async function insertUserData() {
-  const userData = await Api.get("/user");
-  const { fullName, phoneNumber, address } = userData;
+  var id = window.location.pathname.match(/\d+/)[0];
+
+  console.log({id});
+
+  const userData = await Api.get("/api/users", id);
+
+  // 객체 destructuring
+  const { name, email, address, phoneNumber } = userData;
 
   // 만약 db에 데이터 값이 있었다면, 배송지정보에 삽입
   if (fullName) {
@@ -232,7 +239,7 @@ async function doCheckout() {
 
     const orderId = orderData._id;
 
-    // 제품별로 주문아이템을 등록함
+    /*// 제품별로 주문아이템을 등록함
     for (const productId of selectedIds) {
       const { quantity, price } = await getFromDb("cart", productId);
       const totalPrice = quantity * price;
@@ -263,10 +270,11 @@ async function doCheckout() {
         address2,
       },
     };
-    await Api.post("/api/user/deliveryinfo", data);
+    console.log(data);
+    await Api.post("/api/user/deliveryinfo", data);*/
 
     alert("결제 및 주문이 정상적으로 완료되었습니다.\n감사합니다.");
-    window.location.href = "/order/complete";
+    window.location.href = "/order-complete";
   } catch (err) {
     console.log(err);
     alert(`결제 중 문제가 발생하였습니다: ${err.message}`);
