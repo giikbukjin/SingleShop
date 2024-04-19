@@ -1,12 +1,12 @@
-import { getImageUrl } from "../js/aws-s3.js";
+import { getImageUrl } from "./aws-s3.js";
 import {
   addCommas,
   convertToNumber,
   navigate,
   compressString,
   createNavbar,
-} from "../js/useful-functions.js";
-import { deleteFromDb, getFromDb, putToDb } from "../js/indexed-db.js";
+} from "./useful-functions.js";
+import { deleteFromDb, getFromDb, putToDb } from "./indexed-db.js";
 
 // 요소(element), input 혹은 상수
 const cartProductsContainer = document.querySelector("#cartProductsContainer");
@@ -44,32 +44,24 @@ async function insertProductsfromCart() {
 
   products.forEach(async (product) => {
     // 객체 destructuring
-    const { _id, title, quantity, imageKey, price } = product;
-    const imageUrl = await getImageUrl(imageKey);
+    const { _id, title, quantity, price } = product;
 
     const isSelected = selectedIds.includes(_id);
 
     cartProductsContainer.insertAdjacentHTML(
-      "beforeend",
-      `
+        "beforeend",
+        `
         <div class="cart-product-item" id="productItem-${_id}">
           <label class="checkbox">
             <input type="checkbox" id="checkbox-${_id}" ${
-        isSelected ? "checked" : ""
-      } />
+            isSelected ? "checked" : ""
+        } />
           </label>
           <button class="delete-button" id="delete-${_id}">
             <span class="icon">
               <i class="fas fa-trash-can"></i>
             </span>
           </button>
-          <figure class="image is-96x96">
-            <img
-              id="image-${_id}"
-              src="${imageUrl}"
-              alt="product-image"
-            />
-          </figure>
           <div class="content">
             <p id="title-${_id}">${compressString(title)}</p>
             <div class="quantity">
@@ -125,32 +117,32 @@ async function insertProductsfromCart() {
 
     // 각종 이벤트 추가
     document
-      .querySelector(`#delete-${_id}`)
-      .addEventListener("click", () => deleteItem(_id));
+        .querySelector(`#delete-${_id}`)
+        .addEventListener("click", () => deleteItem(_id));
 
     document
-      .querySelector(`#checkbox-${_id}`)
-      .addEventListener("change", () => toggleItem(_id));
+        .querySelector(`#checkbox-${_id}`)
+        .addEventListener("change", () => toggleItem(_id));
 
     document
-      .querySelector(`#image-${_id}`)
-      .addEventListener("click", navigate(`/product/detail?id=${_id}`));
+        .querySelector(`#image-${_id}`)
+        .addEventListener("click", navigate(`/product/detail?id=${_id}`));
 
     document
-      .querySelector(`#title-${_id}`)
-      .addEventListener("click", navigate(`/product/detail?id=${_id}`));
+        .querySelector(`#title-${_id}`)
+        .addEventListener("click", navigate(`/product/detail?id=${_id}`));
 
     document
-      .querySelector(`#plus-${_id}`)
-      .addEventListener("click", () => increaseItemQuantity(_id));
+        .querySelector(`#plus-${_id}`)
+        .addEventListener("click", () => increaseItemQuantity(_id));
 
     document
-      .querySelector(`#minus-${_id}`)
-      .addEventListener("click", () => decreaseItemQuantity(_id));
+        .querySelector(`#minus-${_id}`)
+        .addEventListener("click", () => decreaseItemQuantity(_id));
 
     document
-      .querySelector(`#quantityInput-${_id}`)
-      .addEventListener("change", () => handleQuantityInput(_id));
+        .querySelector(`#quantityInput-${_id}`)
+        .addEventListener("change", () => handleQuantityInput(_id));
   });
 }
 
@@ -412,7 +404,7 @@ async function updateOrderSummary(id, type) {
   if (!isDeleteWithoutChecked) {
     productsCountElem.innerText = `${currentCount + countUpdate}개`;
     productsTotalElem.innerText = `${addCommas(
-      currentProductsTotal + priceUpdate
+        currentProductsTotal + priceUpdate
     )}원`;
   }
 
@@ -422,13 +414,13 @@ async function updateOrderSummary(id, type) {
   if (isFeeAddRequired) {
     deliveryFeeElem.innerText = `3000원`;
     orderTotalElem.innerText = `${addCommas(
-      currentOrderTotal + priceUpdate + 3000
+        currentOrderTotal + priceUpdate + 3000
     )}원`;
   }
 
   if (!isFeeAddRequired && !isDeleteWithoutChecked) {
     orderTotalElem.innerText = `${addCommas(
-      currentOrderTotal + priceUpdate
+        currentOrderTotal + priceUpdate
     )}원`;
   }
 

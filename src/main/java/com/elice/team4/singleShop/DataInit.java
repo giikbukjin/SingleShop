@@ -4,6 +4,8 @@ import com.elice.team4.singleShop.cart.repository.CartItemRepository;
 import com.elice.team4.singleShop.cart.repository.CartRepository;
 import com.elice.team4.singleShop.category.entity.Category;
 import com.elice.team4.singleShop.category.repository.CategoryRepository;
+import com.elice.team4.singleShop.order.dto.OrdersDto;
+import com.elice.team4.singleShop.order.entity.OrdersRepository;
 import com.elice.team4.singleShop.order.repository.OrderRepository;
 import com.elice.team4.singleShop.product.domain.Product;
 import com.elice.team4.singleShop.product.repository.ProductRepository;
@@ -14,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.time.LocalDateTime;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,6 +30,7 @@ public class DataInit {
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final PasswordEncoder passwordEncoder;
+    private final OrdersRepository ordersRepository;
 
     @EventListener(ApplicationReadyEvent.class)
     public void init() {
@@ -99,5 +104,8 @@ public class DataInit {
         productRepository.save(new Product("청경채 1개", 3L, "소가족도 부담없이 담는 양", "국내산 농가에서 재배해 믿고 먹을 수 있는 청경채입니다. 무침, 볶음, 샤브샤브 등 다양하게 활용해보세요.", "", 100, 500));
         productRepository.save(new Product("깻잎 10장", 3L, "묶어파는 깻잎, 너무 많고 감당도 안된다면?", "1인 가구가 먹기 좋은 향긋한 국내산 깻잎입니다. 구운 고기와 쌈으로, 상큼하게 무침으로 드셔보세요.", "", 100, 600));
         productRepository.save(new Product("초가집 옥수수 미니 3구", 3L, "전자레인지에 간단히 조리하는 옥수수", "아이들도 안심하고 먹을 수 있는 웰빙 옥수수예요. 한국 고유의 맛 간직을 위해 가마솥에서 삶아 쫄깃하답니다. 무방부제, 천연감미료를 사용해 안심할 수 있어요!", "", 100, 2040));
+
+        ordersRepository.save(new OrdersDto(null, 2500, LocalDateTime.now(), "Sample Summary Title", OrdersDto.Status.DELIVERY_COMPLETE));
+        ordersRepository.save(new OrdersDto(null, 4600, LocalDateTime.now(), "Another Summary Title", OrdersDto.Status.DELIVERY_READY));
     }
 }

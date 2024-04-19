@@ -16,7 +16,7 @@ const modalCloseButton = document.querySelector("#modalCloseButton");
 const deleteCompleteButton = document.querySelector("#deleteCompleteButton");
 const deleteCancelButton = document.querySelector("#deleteCancelButton");
 
-checkAdmin();
+// checkAdmin();
 addAllElements();
 addAllEvents();
 
@@ -38,7 +38,7 @@ function addAllEvents() {
 // 페이지 로드 시 실행, 삭제할 주문 id를 전역변수로 관리함
 let orderIdToDelete;
 async function insertOrders() {
-  const orders = await Api.get("/orders");
+  const orders = await Api.get("api/orders");
 
   const summary = {
     ordersCount: 0,
@@ -55,17 +55,17 @@ async function insertOrders() {
 
     summary.ordersCount += 1;
 
-    if (status === "상품 준비중") {
+    if (status === "DELIVERY_READY") {
       summary.prepareCount += 1;
-    } else if (status === "상품 배송중") {
+    } else if (status === "DELIVERING") {
       summary.deliveryCount += 1;
-    } else if (status === "배송완료") {
+    } else if (status === "DELIVERY_COMPLETE") {
       summary.completeCount += 1;
     }
 
     ordersContainer.insertAdjacentHTML(
-      "beforeend",
-      `
+        "beforeend",
+        `
         <div class="columns orders-item" id="order-${id}">
           <div class="column is-2">${date}</div>
           <div class="column is-4 order-summary">${summaryTitle}</div>
@@ -75,20 +75,20 @@ async function insertOrders() {
               <select id="statusSelectBox-${id}">
                 <option 
                   class="has-background-danger-light has-text-danger"
-                  ${status === "상품 준비중" ? "selected" : ""} 
-                  value="상품 준비중">
+                  ${status === "DELIVERY_READY" ? "selected" : ""} 
+                  value="DELIVERY_READY">
                   상품 준비중
                 </option>
                 <option 
                   class="has-background-primary-light has-text-primary"
-                  ${status === "상품 배송중" ? "selected" : ""} 
-                  value="상품 배송중">
+                  ${status === "DELIVERING" ? "selected" : ""} 
+                  value="DELIVERING">
                   상품 배송중
                 </option>
                 <option 
                   class="has-background-grey-light"
-                  ${status === "배송완료" ? "selected" : ""} 
-                  value="배송완료">
+                  ${status === "DELIVERY_COMPLETE" ? "selected" : ""} 
+                  value="DELIVERY_COMPLETE">
                   배송완료
                 </option>
               </select>
@@ -119,7 +119,7 @@ async function insertOrders() {
       statusSelectBox.className = statusSelectBox[index].className;
 
       // api 요청
-      await Api.patch("/orders", id, data);
+      await Api.patch("api/orders", id, data);
     });
 
     // 이벤트 - 삭제버튼 클릭 시 Modal 창 띄우고, 동시에, 전역변수에 해당 주문의 id 할당
@@ -141,7 +141,7 @@ async function deleteOrderData(e) {
   e.preventDefault();
 
   try {
-    await Api.delete("/orders", orderIdToDelete);
+    await Api.delete("api/orders", orderIdToDelete);
 
     // 삭제 성공
     alert("주문 정보가 삭제되었습니다.");
@@ -154,6 +154,7 @@ async function deleteOrderData(e) {
     orderIdToDelete = "";
 
     closeModal();
+    window.location.reload();
   } catch (err) {
     alert(`주문정보 삭제 과정에서 오류가 발생하였습니다: ${err}`);
   }

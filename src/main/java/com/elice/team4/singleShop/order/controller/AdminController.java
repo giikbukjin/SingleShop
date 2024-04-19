@@ -2,7 +2,9 @@ package com.elice.team4.singleShop.order.controller;
 
 import com.elice.team4.singleShop.order.dto.OrderDto;
 import com.elice.team4.singleShop.order.dto.OrderHistDto;
+import com.elice.team4.singleShop.order.dto.OrdersDto;
 import com.elice.team4.singleShop.order.entity.Order;
+import com.elice.team4.singleShop.order.entity.OrdersRepository;
 import com.elice.team4.singleShop.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,6 +22,7 @@ import java.util.List;
 public class AdminController {
 
     private final OrderService orderService;
+    private final OrdersRepository ordersRepository;
 
     // 주문 내역 조회 페이지로 이동
     @GetMapping("/admin/orders")
@@ -73,37 +76,26 @@ public class AdminController {
         }
     }
 
-    /*@GetMapping("/user/{email}")
-    public ResponseEntity<List<OrderDto>> getUserOrders(@PathVariable String email) {
-        List<OrderDto> orders = orderService.getUserOrders(email);
+    @GetMapping("/admin/api/orders")
+    @ResponseBody
+    public ResponseEntity<List<OrdersDto>> getOrdersList() {
+        List<OrdersDto> ordersDtoList = ordersRepository.findAll();
 
-        if (orders.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(orders);
+        return ResponseEntity.ok(ordersDtoList);
     }
 
-    // 배송 상태 수정
-    @PatchMapping("{OrderId}/status")
-    public ResponseEntity<String> updateOrderStatus(@PathVariable Long orderId,
-                                                    @RequestParam Order.OrderStatus newStatus) {
-        // 배송 상태 수정하고 결과 받아옴
-        boolean updated = orderService.updateOrderStatus(orderId, newStatus);
-        if (updated) {
-            return ResponseEntity.ok("배송 상태가 수정되었습니다."); // 배송 수정 성공
-        } else {
-            return ResponseEntity.badRequest().body("배송 상태 수정에 실패하였습니다."); // 주문 존재하지 않거나 수정 실패
-        }
+    @PatchMapping("/admin/api/orders/{id}")
+    public ResponseEntity<OrdersDto> updateStatus(@PathVariable(name = "id") Long id,
+                                                  @RequestBody OrdersDto ordersDto) {
+        OrdersDto ordersDto1 = ordersRepository.findById(id).orElseThrow();
+        ordersDto1.setStatus(ordersDto.getStatus());
+        ordersRepository.save(ordersDto1);
+        return ResponseEntity.ok(ordersDto1);
     }
 
-    // 주문 내역 삭제
-    public ResponseEntity<String> deleteOrder(@PathVariable Long orderId) {
-        // 주문 내역 삭제하고 결과 받아옴
-        boolean deleted = orderService.deleteOrder(orderId);
-        if (deleted) {
-            return ResponseEntity.ok("주문 내역이 삭제되었습니다."); // 주문 내역 삭제 성공
-        } else {
-            return ResponseEntity.badRequest().body("주문 내역 삭제에 실패하였습니다."); // 주문 내역 존재하지 않거나 삭제 실패
-        }
-    }*/
+    @DeleteMapping("/admin/api/orders/{id}")
+    public ResponseEntity deleteStatus(@PathVariable(name = "id") Long id) {
+        ordersRepository.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }

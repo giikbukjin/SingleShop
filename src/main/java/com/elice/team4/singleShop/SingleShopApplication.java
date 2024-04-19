@@ -3,6 +3,7 @@ package com.elice.team4.singleShop;
 import com.elice.team4.singleShop.cart.repository.CartItemRepository;
 import com.elice.team4.singleShop.cart.repository.CartRepository;
 import com.elice.team4.singleShop.category.repository.CategoryRepository;
+import com.elice.team4.singleShop.order.entity.OrdersRepository;
 import com.elice.team4.singleShop.order.repository.OrderRepository;
 import com.elice.team4.singleShop.product.repository.ProductRepository;
 import com.elice.team4.singleShop.user.repository.UserRepository;
@@ -29,8 +30,9 @@ public class SingleShopApplication {
 								 OrderRepository orderRepository,
 								 CartRepository cartRepository,
 								 CartItemRepository cartItemRepository,
-								 PasswordEncoder passwordEncoder) {
+								 PasswordEncoder passwordEncoder,
+								 OrdersRepository ordersRepository) {
 		return new DataInit(userRepository, categoryRepository, productRepository, orderRepository, cartRepository,
-				cartItemRepository, passwordEncoder);
+				cartItemRepository, passwordEncoder, ordersRepository);
 	}
 }

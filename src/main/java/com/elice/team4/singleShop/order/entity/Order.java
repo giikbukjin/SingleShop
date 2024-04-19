@@ -1,8 +1,11 @@
 package com.elice.team4.singleShop.order.entity;
 
+import com.elice.team4.singleShop.order.dto.OrderRequestDto;
 import com.elice.team4.singleShop.user.entity.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -16,6 +19,8 @@ import java.util.List;
 @Entity
 @Getter @Setter
 @Table(name = "orders")
+@NoArgsConstructor
+@AllArgsConstructor
 //@MappedSuperclass
 //@EntityListeners(value = {AuditingEntityListener.class})
 public class Order {
@@ -32,10 +37,6 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    /*@OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "delivery_info_id")
-    private DeliveryInfo deliveryInfo;*/
-
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime regTime; // 등록 시간
@@ -43,14 +44,11 @@ public class Order {
     @LastModifiedDate
     private LocalDateTime updateTime; // 수정 시간
 
-    @CreatedBy
-    @Column(updatable = false)
-    private String createdBy; // 등록자
+    private String summaryTitle;
 
-    @LastModifiedDate
-    private String modifiedBy; // 수정자
+    private Integer totalPrice;
 
-    private String receiverName; // 수령인 이름
+    /*private String receiverName; // 수령인 이름
 
     private String receiverPhoneNumber; // 연락처
 
@@ -60,7 +58,13 @@ public class Order {
 
     private String address2; // 상세 주소
 
-    private String deliveryRequest; // 배송 요청 사항
+    private String deliveryRequest; // 배송 요청 사항*/
+
+    private String request;
+
+    private String address;
+
+    private String email;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -73,6 +77,17 @@ public class Order {
         DELIVERY_READY,
         DELIVERING,
         DELIVERY_COMPLETE
+    }
+
+    public Order(OrderRequestDto orderRequestDto) {
+        this.summaryTitle = orderRequestDto.getSummaryTitle();
+        this.totalPrice = orderRequestDto.getTotalPrice();
+        /*this.receiverName = orderRequestDto.getReceiverName();
+        this.receiverPhoneNumber = orderRequestDto.getReceiverPhoneNumber();
+        this.postalCode = orderRequestDto.getPostalCode();
+        this.address1 = orderRequestDto.getAddress1();
+        this.address2 = orderRequestDto.getAddress2();*/
+        this.request = orderRequestDto.getRequest();
     }
 
     public void addOrderItem(OrderItem orderItem) { // 주문 상품 정보 담기, orderItem 객체를 order 객체의 orderItems에 추가

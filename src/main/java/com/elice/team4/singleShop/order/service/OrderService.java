@@ -147,13 +147,13 @@ public class OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(EntityNotFoundException::new);
 
-        // 주문 정보 업데이트
-        order.setReceiverName(orderDto.getReceiverName());
-        order.setReceiverPhoneNumber(orderDto.getReceiverPhoneNumber());
-        order.setPostalCode(orderDto.getPostalCode());
-        order.setAddress1(orderDto.getAddress1());
-        order.setAddress2(orderDto.getAddress2());
-        order.setDeliveryRequest(orderDto.getDeliveryRequest());
+//        // 주문 정보 업데이트
+//        order.setReceiverName(orderDto.getReceiverName());
+//        order.setReceiverPhoneNumber(orderDto.getReceiverPhoneNumber());
+//        order.setPostalCode(orderDto.getPostalCode());
+//        order.setAddress1(orderDto.getAddress1());
+//        order.setAddress2(orderDto.getAddress2());
+//        order.setDeliveryRequest(orderDto.getDeliveryRequest());
 
         // 주문 정보 저장
         orderRepository.save(order);
