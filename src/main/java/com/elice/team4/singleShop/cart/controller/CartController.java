@@ -97,7 +97,7 @@ public class CartController {
         return "redirect:/cart";
     }
 
-    @PostMapping("/user/{id}/cart/checkout")
+    /*@PostMapping("/user/{id}/cart/checkout")
     public String myCartPayment(@PathVariable("id") Long id, Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -107,7 +107,7 @@ public class CartController {
         cartService.cartPayment(id);
 
         return "redirect:/order";
-    }
+    }*/
 /*
     // 선택한 상품들로 구매하기
     @PostMapping("/cart/buy")
