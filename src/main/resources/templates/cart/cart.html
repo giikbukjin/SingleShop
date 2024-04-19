@@ -25,7 +25,7 @@
   <!-- AWS S3 사용하기 위한 파일 -->
   <script src="https://sdk.amazonaws.com/js/aws-sdk-2.410.0.min.js"></script>
   <!-- 커스텀 css, js -->
-  <link rel="stylesheet" href="/cart/cart.css" />
+  <link rel="stylesheet" href="/css/cart.css" />
   <script src="/cart/cart.js" type="module" defer></script>
 </head>
 <body>
@@ -101,14 +101,24 @@
 
           <!-- 장바구니에 담긴 상품들의 html 요소(카드 형태)가 주입되는 곳 -->
           <div class="cart-item-list">
-            <table>
-              <tbody>
+            <div class="cart-item-list">
+              <table>
+                <thead>
+                <tr>
+                  <th>선택</th>
+                  <th>번호</th>
+                  <th>이름</th>
+                  <th>수량</th>
+                  <th>가격</th>
+                  <th>   </th>
+                </tr>
+                </thead>
+                <tbody>
               <tr th:each="cartItem, i : ${cartItemList}">
                 <td>
                   <input type="checkbox" class="cart-item-checkbox" value="${cartItem.getId()}" th:attr="data-item-id=${cartItem.getId()}" onchange="toggleItemCheckbox(this)">
                 </td>
                 <td th:text="${i.count}">1</td>
-                <td th:text="${cartItem.getProduct().getId()}">3번상품</td>
                 <td>
                   <a th:href="@{/products/{id}(id=${cartItem.Product.id})}" th:text="${cartItem.getProduct().getName()}"></a>
                 </td>
@@ -122,6 +132,7 @@
             </table>
           </div>
         </div>
+      </div>
       </div>
       <!-- 선택한 상품 총 요약 -->
       <div class="tile is-parent tile-order-summary">

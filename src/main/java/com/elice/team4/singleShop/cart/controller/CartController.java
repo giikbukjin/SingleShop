@@ -52,7 +52,7 @@ public class CartController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
             // 로그인하지 않은 경우 로그인 페이지로 리디렉션
-            return "redirect:/cart/login";
+            return "redirect:/auth/login";
         }
 
         String username = authentication.getName(); // 현재 사용자의 이름 가져오기
